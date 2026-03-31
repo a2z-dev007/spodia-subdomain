@@ -1,0 +1,61 @@
+{
+  "hotels": [
+    {
+      "id": 1,
+      "name": "Grand Plaza Hotel & Spa",
+      "location": "Manhattan, New York",
+      "rating": 4.8,
+      "reviews": 1247,
+      "price": 189,
+      "originalPrice": 250,
+      "images": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
+      "amenities": ["Free WiFi", "Parking", "Restaurant", "Spa", "Pool", "Gym"],
+      "description": "Experience luxury at its finest in the heart of Manhattan. Our hotel offers world-class amenities and exceptional service.",
+      "rooms": [
+        {
+          "type": "Standard Room",
+          "price": 189,
+          "capacity": 2,
+          "amenities": ["Free WiFi", "Air Conditioning", "TV"]
+        },
+        {
+          "type": "Deluxe Suite",
+          "price": 289,
+          "capacity": 4,
+          "amenities": ["Free WiFi", "Air Conditioning", "TV", "Kitchenette"]
+        }
+      ]
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Venice",
+      "country": "Italy",
+      "image": "/placeholder.svg?height=200&width=200",
+      "hotels": 245,
+      "averagePrice": 180
+    },
+    {
+      "name": "Amsterdam",
+      "country": "Netherlands",
+      "image": "/placeholder.svg?height=200&width=200",
+      "hotels": 189,
+      "averagePrice": 165
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "name": "Sara Mohamed",
+      "location": "Jakarta",
+      "rating": 5,
+      "title": "The best booking system",
+      "content": "I've been using this hotel booking system for several years now, and it's become my go-to platform for planning my trips.",
+      "avatar": "/placeholder.svg?height=60&width=60"
+    }
+  ]
+}

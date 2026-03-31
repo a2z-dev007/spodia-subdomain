@@ -1,0 +1,477 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 32 100% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 202 94% 44%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  html {
+    font-family: var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 32 100% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 202 94% 44%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  }
+}
+
+.animate-none {
+  animation: none !important;
+}
+
+.gradient-btn {
+  background: #FF610D;
+  background: linear-gradient(135deg, #FF610D, #EDBA82) !important;
+}
+
+.gradient-orange-bg {
+  background: #FF610D;
+  background: linear-gradient(135deg, #FF610D, #EDBA82) !important;
+}
+
+.blue-gradient-btn {
+  background-image: linear-gradient(90deg, #078ED8 0%, #43C6FF 100%);
+}
+
+.black-gradient-btn {
+  background-color: #003153;
+  background-image: linear-gradient(315deg, #003153 0%, #1B1B1B 74%);
+}
+
+/* Mobile bottom navigation spacing */
+@media (max-width: 1024px) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  main {
+    padding-bottom: 5rem;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+/* Side drawer animation */
+.drawer-enter {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+.drawer-exit {
+  animation: slideOutRight 0.3s ease-in forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Bottom drawer slide-up animation */
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff9530;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e8851c;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Ensure font inheritance */
+*,
+*::before,
+*::after {
+  font-family: inherit;
+}
+
+/* Override for buttons to use custom transition */
+button,
+.btn,
+[type=button],
+[type=submit],
+[type=reset] {
+  transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bg-hero-pattern {
+  background-image: url('/images/hero.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Button press effect */
+button:active:not(:disabled):not([disabled]),
+.btn:active:not(:disabled):not([disabled]),
+[type=button]:active:not(:disabled):not([disabled]),
+[type=submit]:active:not(:disabled):not([disabled]),
+[type=reset]:active:not(:disabled):not([disabled]) {
+  transform: scale(0.96);
+  filter: brightness(0.92);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Override for carousel navigation buttons */
+.carousel-arrow-btn:hover,
+.carousel-arrow-btn:active {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  background: inherit !important;
+  border-color: inherit !important;
+  color: inherit !important;
+}
+
+/* Disable button press effect for specific elements */
+.no-press-effect:active,
+button:disabled:active,
+button[disabled]:active {
+  transform: none !important;
+  filter: none !important;
+}
+
+.footer-text-color {
+  color: #8E8E8E;
+}
+
+.footer-text-color-bold {
+  color: #737373;
+}
+
+.card-text-heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+}
+
+.card-text-subheading {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.375rem;
+  color: #737373;
+}
+
+.hero-text-heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.hero-text-subheading {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.bg-section-color {
+  background: #F2F4F6;
+}
+
+.main-section-heading {
+  font-size: 3.25rem;
+  font-weight: 800;
+  line-height: 4rem;
+  color: #000000;
+}
+
+.main-section-subheading {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: #737373;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .text-align-center {
+    text-align: center !important;
+  }
+
+  .main-section-heading {
+    font-size: 2.25rem;
+    line-height: 2.75rem;
+  }
+
+  .main-section-subheading {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .hero-text-heading {
+    font-size: 1.6rem;
+    line-height: 2.75rem;
+  }
+
+  .hero-text-subheading {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+.border-stroke {
+  border: 1px solid #E5E7EB;
+}
+
+.glassCard-border {
+  border: 1px solid rgba(255, 255, 255, 0.40);
+}
+
+.rounded-20 {
+  border-radius: 20px;
+}
+
+.border-stroke-opacity {
+  border: 1px solid rgba(229, 231, 235, 0.5)
+}
+
+.heading-color {
+  color: #111827;
+}
+
+.heading-text {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  color: #111827;
+}
+
+.subheading-color {
+  color: #374151;
+}
+
+/* Remove animation for react-datepicker */
+.react-datepicker,
+.react-datepicker__portal {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Brand colors */
+.main-color {
+  color: #FF9530 !important;
+}
+
+.main-bg {
+  background-color: #FF9530 !important;
+}
+
+/* Promotional Pricing Popover Animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Custom animations for UX components */
+@layer utilities {
+  @keyframes slide-down {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse-slow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+@layer base {
+  * {
+    transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+}

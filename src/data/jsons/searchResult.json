@@ -1,0 +1,894 @@
+{
+  "status": "success",
+  "records": [
+    {
+      "id": 358,
+      "user_id": 60,
+      "ownerdetails": {
+        "url": "/api/users/60/",
+        "id": 60,
+        "username": "7bfb24d5fa4ab46b67eb4bbfbd94cf3d2199697d0529108a5bf153758c30ddc9",
+        "first_name": "Kaushik",
+        "last_name": "Chatterjee",
+        "mobile": "09999880803",
+        "profile_image": null,
+        "email": "mjfuncity@wchotels.com",
+        "permissions": [
+          "properties.view_ownerpayments",
+          "promotion.change_longstaypromotion",
+          "promotion.add_longstaypromotion",
+          "promotion.view_lastminutepromotion",
+          "promotion.change_basicpromotion",
+          "properties.view_roomplan",
+          "promotion.view_hotelofferpromotionrooms",
+          "properties.view_documents",
+          "restaurant.change_restaurant",
+          "promotion.view_hotelofferpromotion",
+          "promotion.view_basicpromotionrooms",
+          "promotion.add_basicpromotionrooms",
+          "properties.view_paymentdetails",
+          "common.view_plan",
+          "inventory.view_promotionrooms",
+          "promotion.change_hotelofferpromotionrooms",
+          "promotion.change_basicpromotionrooms",
+          "inventory.add_promotion",
+          "properties.view_reservation",
+          "properties.view_listing",
+          "properties.add_bankaccountgst",
+          "properties.view_paymentadjustment",
+          "venues.add_venue",
+          "spa.view_spa",
+          "venues.change_venue",
+          "promotion.add_hotelofferpromotionrooms",
+          "common.change_roomtype",
+          "properties.add_listing",
+          "properties.add_roomplan",
+          "inventory.view_rateinfo",
+          "inventory.add_rates",
+          "promotion.add_hotelofferpromotion",
+          "inventory.change_rates",
+          "promotion.add_earlybirdpromotionrooms",
+          "properties.view_servicesfacilities",
+          "promotion.change_hotelofferpromotion",
+          "spa.change_spa",
+          "restaurant.view_restaurant",
+          "properties.view_bankaccountgst",
+          "inventory.change_roomdetail",
+          "properties.view_contactdetails",
+          "promotion.add_basicpromotion",
+          "cancellation.view_listingcancellationpolicy",
+          "promotion.delete_basicpromotionrooms",
+          "spa.add_spa",
+          "promotion.view_lastminutepromotionrooms",
+          "common.view_roomtype",
+          "promotion.change_advancepurchasepromotion",
+          "promotion.view_basicpromotion",
+          "properties.view_hotelchain",
+          "inventory.view_roomdetail",
+          "properties.view_rooms",
+          "restaurant.add_restaurant",
+          "common.view_country",
+          "properties.add_hotelchaincontactdetails",
+          "inventory.change_promotion",
+          "inventory.add_roomdetail",
+          "promotion.delete_hotelofferpromotion",
+          "properties.view_reservationpayment",
+          "properties.view_hotelchainlocationdetails",
+          "cancellation.view_cancellationpolicy",
+          "promotion.view_advancepurchasepromotion",
+          "inventory.view_rates",
+          "inventory.view_promotion",
+          "auth.view_group",
+          "venues.view_venue"
+        ],
+        "role_id": "2",
+        "is_superuser": false,
+        "user_type": "Owner",
+        "city_id": "371",
+        "region_id": "4",
+        "password": "pbkdf2_sha256$600000$wasnD79tOcLNxK8tvwCrag$Whz4yxktZLPstHOo94VvQA6QdMf8XcGeCVBcUKOn/lE=",
+        "address_line1": null,
+        "address_line2": null,
+        "country_code": "91",
+        "country_id": "101",
+        "company_name": null,
+        "secondary_phone_ext": null,
+        "city": "Guwahati",
+        "secondary_phone": null,
+        "gender": null,
+        "languages_spoken": null,
+        "language": "english",
+        "about_me": null,
+        "hometown": null,
+        "school": null,
+        "created_at": "2024-10-22 16:09:15.796303+00:00",
+        "region": "Assam",
+        "country": "India",
+        "pin_code": null,
+        "latitude": null,
+        "longitude": null,
+        "office": null,
+        "parent": null,
+        "status": true,
+        "status_remark": null,
+        "role_name": "Owner",
+        "full_name": "Kaushik Chatterjee"
+      },
+      "name": " MJ FUNCITY WATERPARK AND RESORT",
+      "name_hindi": " MJ FUNCITY WATERPARK AND RESORT",
+      "description": "The newest and most luxurious resort in Lucknow, The Best Resort, is strategically located in the heart of the city for easy accessibility to all that Lucknow has to offer. Catering to both leisure and business travelers, the resort boasts a myriad of facilities and services. Highlights include opulent rooms and suites, top-notch restaurants, a cutting-edge fitness center, and an inviting outdoor swimming pool.",
+      "description_hindi": "The newest and most luxurious resort in Lucknow, The Best Resort, is strategically located in the heart of the city for easy accessibility to all that Lucknow has to offer. Catering to both leisure and business travelers, the resort boasts a myriad of facilities and services. Highlights include opulent rooms and suites, top-notch restaurants, a cutting-edge fitness center, and an inviting outdoor swimming pool.",
+      "order": 0,
+      "property_type": "Resorts",
+      "property_chain": null,
+      "hotel_chain": 1,
+      "hotel_chain_name": "Default Chain",
+      "star_category": "5",
+      "no_of_rooms": 10,
+      "lat": 26.936330704427693,
+      "lon": 81.02219002252974,
+      "no_of_floors": 3,
+      "no_of_buildings": 2,
+      "is_favourite": 0,
+      "images": [
+        {
+          "id": 1811,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-20-29_banquet.jpg",
+          "cover_photo": true,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1812,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-25-09_Photo (6).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1813,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-25-27_Photo (8).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1814,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-25-47_Photo (5).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1815,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-30-26_Photo (35).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1816,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-30-27_Photo (36).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1817,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-30-42_Photo (37).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        },
+        {
+          "id": 1818,
+          "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/22-10-2024-16-31-06_Photo (38).jpeg",
+          "cover_photo": false,
+          "images_tag": [],
+          "order": 0,
+          "status": 0,
+          "status_remark": null
+        }
+      ],
+      "documents_required_for_check_in": true,
+      "contactdetails": [
+        {
+          "id": 507,
+          "name": "Kaushik Chatterjee",
+          "email": "kaushik@wchotels.com",
+          "mobile": "9999880803",
+          "contact_type": "Primary"
+        }
+      ],
+      "address": " W2PF+3H2, Rasoolpur Sadat, Uttar Pradesh 226026",
+      "city": 4933,
+      "state": 38,
+      "country": 101,
+      "guest_cancellation_type": "strict",
+      "check_in": "12 PM",
+      "check_out": "12 PM",
+      "check_in_age": "18",
+      "check_in_policies": "False",
+      "step_completed": 9,
+      "status": true,
+      "status_remark": null,
+      "instant_booking": false,
+      "b2c_commission_rate": 20,
+      "website": "https://mjfuncity.com/",
+      "meta_title": "",
+      "meta_keywords": "",
+      "meta_description": "",
+      "meta_tags": "",
+      "created": "2024-10-22T16:13:35.821207Z",
+      "video_request_status": null,
+      "check_in_document": "voterID,passport,drivingLicense,aadharCard,govtID",
+      "servicedetails": [
+        {
+          "id": 369,
+          "name": "MJ Restro",
+          "serviceType": "Restaurant",
+          "openTime": "08:00 AM",
+          "closeTime": "10:00 PM",
+          "typeofService": "Food",
+          "images": []
+        }
+      ],
+      "b2b_commission_rate": 20,
+      "videos": [],
+      "city_name": "Lucknow",
+      "state_name": "Uttar Pradesh",
+      "country_short_name": "IN",
+      "country_name": "India",
+      "show_landing": false,
+      "show_landing2": false,
+      "review_rating": null,
+      "sbr_rate": null,
+      "review_rating_count": null,
+      "video_url": null,
+      "rooms": [
+        {
+          "room_name": "Deluxe Room",
+          "created": "2024-10-22T16:33:16.194726Z",
+          "description": "MJ Funcity is the best water park in Lucknow. It is the perfect place to spend a day out with family and friends. The park has a wide range of attractions, including a lazy river, a wave pool, a diving area, and more. If you’re looking for an amusement park that offers something for everyone, MJ Funcity is the place to go. It is the best theme park in Lucknow. It has a lot of rides and attractions for all ages. It’s also a great place to take your family on summer days. There’s something for everyone, from small children’s rides to thrilling thrill rides. The park is also well-equipped with food stalls and vendors, making it easy for you to buy snacks or meals to take with you on your ride.",
+          "suitable_for_kids": false,
+          "pets_allowed": false,
+          "smoking_allowed": false,
+          "room_type": 1,
+          "id": 569,
+          "room_location": "Deluxe Room",
+          "room_view": "Swimming Pool View",
+          "no_of_rooms": "10",
+          "costume_room_name": "Deluxe",
+          "base_adults": 2,
+          "maximum_adults": 3,
+          "maximum_children": 1,
+          "dimensions": "244",
+          "bed_type": "Kings",
+          "images": [
+            {
+              "id": 2129,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-33_Photo (15).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2130,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-33_Photo (13).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2131,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-33_Photo (12).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2132,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-34_Photo (14).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2133,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-35_Photo (20).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2134,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-35_Photo (22).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2135,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-36_Photo (18).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            },
+            {
+              "id": 2136,
+              "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/22-10-2024-16-34-36_Photo (21).jpeg",
+              "cover_photo": false,
+              "room_images_tag": [],
+              "order": 0,
+              "status": 0,
+              "status_remark": null
+            }
+          ],
+          "no_of_beds": 1,
+          "extra_bed_allowed": true,
+          "extra_bed_type": "Mattress",
+          "maximum_occupancy": 4,
+          "ep_highlights": "",
+          "cp_highlights": "",
+          "map_highlights": "",
+          "ap_highlights": "",
+          "room_type_details": {
+            "id": 1,
+            "name": "Deluxe Room",
+            "created": "2023-11-18T03:48:51.395978Z",
+            "created_by": 2
+          },
+          "videos": [],
+          "facilitiesDetails": [
+            {
+              "id": 1,
+              "name": "Air Conditioning",
+              "name_hindi": "एयर कंडीशनिंग",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/AirConditioning.png",
+              "created": "2020-01-29T13:45:20Z"
+            },
+            {
+              "id": 7,
+              "name": "Blanket",
+              "name_hindi": "कंबल",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Blanket.png",
+              "created": "2020-01-29T13:30:17Z"
+            },
+            {
+              "id": 14,
+              "name": "Coffee Machine",
+              "name_hindi": "कॉफी मशीन",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/CoffeeMachine.png",
+              "created": "2020-01-29T13:34:40Z"
+            },
+            {
+              "id": 21,
+              "name": "Dining Area",
+              "name_hindi": "डाइनिंग एरिया",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/DiningArea.png",
+              "created": "2020-01-29T13:37:27Z"
+            },
+            {
+              "id": 22,
+              "name": "Dining Table",
+              "name_hindi": "डाइनिंग टेबल",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/DiningTable.png",
+              "created": "2020-01-29T13:37:45Z"
+            },
+            {
+              "id": 26,
+              "name": "Fan",
+              "name_hindi": "पंखा",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Fan.png",
+              "created": "2020-01-29T13:38:49Z"
+            },
+            {
+              "id": 29,
+              "name": "Geyser",
+              "name_hindi": "गीजर",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Geyser.png",
+              "created": "2020-01-29T13:39:50Z"
+            },
+            {
+              "id": 33,
+              "name": "Hot & Cold Water",
+              "name_hindi": "गर्म और ठंडा पानी",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/HotColdWater.png",
+              "created": "2020-01-29T13:45:20Z"
+            },
+            {
+              "id": 36,
+              "name": "In Room dining",
+              "name_hindi": "इन-रूम डाइनिंग",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/InRoomdining.png",
+              "created": "2020-01-29T13:47:02Z"
+            },
+            {
+              "id": 40,
+              "name": "Jetspray",
+              "name_hindi": "जेटस्प्रे",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Jetspray.png",
+              "created": "2020-01-29T13:48:50Z"
+            },
+            {
+              "id": 44,
+              "name": "Living Area",
+              "name_hindi": "लिविंग एरिया",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/LivingArea.png",
+              "created": "2020-01-29T14:04:01Z"
+            },
+            {
+              "id": 55,
+              "name": "Room service",
+              "name_hindi": "रूम सर्विस",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Roomservice.png",
+              "created": "2020-01-29T13:30:32Z"
+            },
+            {
+              "id": 59,
+              "name": "Shaving Mirror",
+              "name_hindi": "शेविंग मिरर",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/ShavingMirror.png",
+              "created": "2020-01-29T13:33:51Z"
+            },
+            {
+              "id": 62,
+              "name": "Slippers",
+              "name_hindi": "चप्पलें",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Slippers.png",
+              "created": "2020-01-29T13:35:07Z"
+            },
+            {
+              "id": 73,
+              "name": "Toiletries",
+              "name_hindi": "टॉयलेटरीज़",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Toiletries.png",
+              "created": "2020-01-29T13:38:49Z"
+            },
+            {
+              "id": 74,
+              "name": "TV",
+              "name_hindi": "टीवी",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/TV.png",
+              "created": "2020-01-29T13:39:11Z"
+            },
+            {
+              "id": 78,
+              "name": "Wifi",
+              "name_hindi": "वाईफाई",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Wifi.png",
+              "created": "2020-01-29T13:42:52Z"
+            },
+            {
+              "id": 79,
+              "name": "Work Desk",
+              "name_hindi": "वर्क डेस्क",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/WorkDesk.png",
+              "created": "2020-01-29T13:43:51Z"
+            },
+            {
+              "id": 82,
+              "name": "Balcony",
+              "name_hindi": "बालकनी",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Balcony.png",
+              "created": "2020-01-29T13:46:08Z"
+            },
+            {
+              "id": 85,
+              "name": "Bathroom",
+              "name_hindi": "बाथरूम",
+              "parent": null,
+              "amenities_tags": [],
+              "image": "/media/uploads/Bathroom.png",
+              "created": "2020-01-29T13:47:45Z"
+            }
+          ],
+          "facilities": [
+            1,
+            7,
+            14,
+            21,
+            22,
+            26,
+            29,
+            33,
+            36,
+            40,
+            44,
+            55,
+            59,
+            62,
+            73,
+            74,
+            78,
+            79,
+            82,
+            85
+          ],
+          "ap_rate": 0.0,
+          "map_rate": 0.0,
+          "cp_rate": 0.0,
+          "ep_rate": 0.0,
+          "plans": [
+            {
+              "id": 1050,
+              "plan": 2,
+              "plan_name": "EP",
+              "plan_items": [
+                {
+                  "id": 4,
+                  "name": "Accomodation Only",
+                  "created": "2023-11-18T03:47:43.875513Z",
+                  "created_by": 1
+                }
+              ],
+              "room": 569
+            },
+            {
+              "id": 1051,
+              "plan": 1,
+              "plan_name": "CP",
+              "plan_items": [
+                {
+                  "id": 25,
+                  "name": "Breakfast",
+                  "created": "2023-11-29T07:11:31.964935Z",
+                  "created_by": 2
+                }
+              ],
+              "room": 569
+            },
+            {
+              "id": 1052,
+              "plan": 4,
+              "plan_name": "MAP",
+              "plan_items": [
+                {
+                  "id": 25,
+                  "name": "Breakfast",
+                  "created": "2023-11-29T07:11:31.964935Z",
+                  "created_by": 2
+                },
+                {
+                  "id": 33,
+                  "name": "Free Lunch or Dinner",
+                  "created": "2023-11-29T07:13:54.658402Z",
+                  "created_by": 2
+                }
+              ],
+              "room": 569
+            }
+          ]
+        }
+      ],
+      "facilities": [
+        1,
+        7,
+        10,
+        14,
+        21,
+        22,
+        26,
+        33,
+        34,
+        36,
+        40,
+        41,
+        44,
+        46,
+        55,
+        57,
+        62,
+        69,
+        73,
+        74,
+        77,
+        78,
+        79,
+        82,
+        85
+      ],
+      "facilitiesDetails": [
+        {
+          "id": 1,
+          "name": "Air Conditioning",
+          "name_hindi": "एयर कंडीशनिंग",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/AirConditioning.png",
+          "created": "2020-01-29T13:45:20Z"
+        },
+        {
+          "id": 7,
+          "name": "Blanket",
+          "name_hindi": "कंबल",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Blanket.png",
+          "created": "2020-01-29T13:30:17Z"
+        },
+        {
+          "id": 10,
+          "name": "Chair",
+          "name_hindi": "कुर्सी",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Chair.png",
+          "created": "2020-01-29T13:32:25Z"
+        },
+        {
+          "id": 14,
+          "name": "Coffee Machine",
+          "name_hindi": "कॉफी मशीन",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/CoffeeMachine.png",
+          "created": "2020-01-29T13:34:40Z"
+        },
+        {
+          "id": 21,
+          "name": "Dining Area",
+          "name_hindi": "डाइनिंग एरिया",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/DiningArea.png",
+          "created": "2020-01-29T13:37:27Z"
+        },
+        {
+          "id": 22,
+          "name": "Dining Table",
+          "name_hindi": "डाइनिंग टेबल",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/DiningTable.png",
+          "created": "2020-01-29T13:37:45Z"
+        },
+        {
+          "id": 26,
+          "name": "Fan",
+          "name_hindi": "पंखा",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Fan.png",
+          "created": "2020-01-29T13:38:49Z"
+        },
+        {
+          "id": 33,
+          "name": "Hot & Cold Water",
+          "name_hindi": "गर्म और ठंडा पानी",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/HotColdWater.png",
+          "created": "2020-01-29T13:45:20Z"
+        },
+        {
+          "id": 34,
+          "name": "Housekeeping",
+          "name_hindi": "हाउसकीपिंग",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Housekeeping.png",
+          "created": "2020-01-29T13:45:51Z"
+        },
+        {
+          "id": 36,
+          "name": "In Room dining",
+          "name_hindi": "इन-रूम डाइनिंग",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/InRoomdining.png",
+          "created": "2020-01-29T13:47:02Z"
+        },
+        {
+          "id": 40,
+          "name": "Jetspray",
+          "name_hindi": "जेटस्प्रे",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Jetspray.png",
+          "created": "2020-01-29T13:48:50Z"
+        },
+        {
+          "id": 41,
+          "name": "Kettle",
+          "name_hindi": "केतली",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Kettle.png",
+          "created": "2020-01-29T13:49:11Z"
+        },
+        {
+          "id": 44,
+          "name": "Living Area",
+          "name_hindi": "लिविंग एरिया",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/LivingArea.png",
+          "created": "2020-01-29T14:04:01Z"
+        },
+        {
+          "id": 46,
+          "name": "Mineral Water",
+          "name_hindi": "मिनरल वॉटर",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/MineralWater.png",
+          "created": "2020-01-29T14:04:36Z"
+        },
+        {
+          "id": 55,
+          "name": "Room service",
+          "name_hindi": "रूम सर्विस",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Roomservice.png",
+          "created": "2020-01-29T13:30:32Z"
+        },
+        {
+          "id": 57,
+          "name": "Seating Area",
+          "name_hindi": "बैठने का स्थान",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/SeatingArea.png",
+          "created": "2020-01-29T13:32:25Z"
+        },
+        {
+          "id": 62,
+          "name": "Slippers",
+          "name_hindi": "चप्पलें",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Slippers.png",
+          "created": "2020-01-29T13:35:07Z"
+        },
+        {
+          "id": 69,
+          "name": "Telephone",
+          "name_hindi": "टेलीफोन",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Telephone.png",
+          "created": "2020-01-29T13:37:45Z"
+        },
+        {
+          "id": 73,
+          "name": "Toiletries",
+          "name_hindi": "टॉयलेटरीज़",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Toiletries.png",
+          "created": "2020-01-29T13:38:49Z"
+        },
+        {
+          "id": 74,
+          "name": "TV",
+          "name_hindi": "टीवी",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/TV.png",
+          "created": "2020-01-29T13:39:11Z"
+        },
+        {
+          "id": 77,
+          "name": "Western Toilet Seat",
+          "name_hindi": "वेस्टर्न टॉयलेट सीट",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Western_Toilet_Seat.png",
+          "created": "2020-01-29T13:42:31Z"
+        },
+        {
+          "id": 78,
+          "name": "Wifi",
+          "name_hindi": "वाईफाई",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Wifi.png",
+          "created": "2020-01-29T13:42:52Z"
+        },
+        {
+          "id": 79,
+          "name": "Work Desk",
+          "name_hindi": "वर्क डेस्क",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/WorkDesk.png",
+          "created": "2020-01-29T13:43:51Z"
+        },
+        {
+          "id": 82,
+          "name": "Balcony",
+          "name_hindi": "बालकनी",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Balcony.png",
+          "created": "2020-01-29T13:46:08Z"
+        },
+        {
+          "id": 85,
+          "name": "Bathroom",
+          "name_hindi": "बाथरूम",
+          "parent": null,
+          "amenities_tags": [],
+          "image": "/media/uploads/Bathroom.png",
+          "created": "2020-01-29T13:47:45Z"
+        }
+      ],
+      "other_rules": "<p>Pets not allowes</p>",
+      "highlights": "Best Wedding Venues In Lucknow",
+      "title_highlights": "Banquet Halls In Lucknow",
+      "meta_names": "",
+      "property_highlights": [],
+      "property_highlights_details": [],
+      "cancellation_policies": []
+    }
+  ],
+  "totalRecords": 1
+}
