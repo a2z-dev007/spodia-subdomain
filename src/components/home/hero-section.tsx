@@ -173,7 +173,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="relative z-20 -mt-[3.25rem] sm:-mt-[3.75rem] lg:-mt-[4.25rem] flex justify-center w-full px-1 sm:px-2">
+        <div className="relative z-20 -mt-[3rem] flex justify-center w-full px-1 sm:px-2">
           <PremiumHotelSearchBar
             variant="minimal"
             containerClassName="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl"
