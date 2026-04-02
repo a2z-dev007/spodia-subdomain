@@ -100,54 +100,49 @@ export const generateCitySlug = (cityName: string | null | undefined): string =>
     .replace(/[^a-z0-9-]/g, '');
 };
 
-// Helper function to generate hotel link for a city with city_id
+// Helper function to generate hotel link for a city
 export const generateHotelLink = (cityName: string | null | undefined, cityId?: number | null): string => {
   if (!cityName) {
-    return '/in/hotels/hotels';
+    return '/in/hotels';
   }
   const slug = generateCitySlug(cityName);
-  const baseUrl = `/in/hotels/${slug}/hotels`;
-  return cityId ? `${baseUrl}?city_id=${cityId}` : baseUrl;
+  return `/in/hotels/${slug}`;
 };
 
-// Helper function to generate homestay link for a city with city_id
+// Helper function to generate homestay link for a city
 export const generateHomestayLink = (cityName: string | null | undefined, cityId?: number | null): string => {
   if (!cityName) {
     return '/in/hotels/homestays';
   }
   const slug = generateCitySlug(cityName);
-  const baseUrl = `/in/hotels/${slug}/homestays`;
-  return cityId ? `${baseUrl}?city_id=${cityId}` : baseUrl;
+  return `/in/hotels/${slug}/homestays`;
 };
 
-// Helper function to generate 5-star hotel link for a city with city_id
+// Helper function to generate 5-star hotel link for a city
 export const generateFiveStarLink = (cityName: string | null | undefined, cityId?: number | null): string => {
   if (!cityName) {
     return '/in/hotels/5-star-hotels';
   }
   const slug = generateCitySlug(cityName);
-  const baseUrl = `/in/hotels/${slug}/5-star-hotels`;
-  return cityId ? `${baseUrl}?city_id=${cityId}` : baseUrl;
+  return `/in/hotels/${slug}/5-star-hotels`;
 };
 
-// Helper function to generate budget hotel link for a city with city_id
+// Helper function to generate budget hotel link for a city
 export const generateBudgetHotelLink = (cityName: string | null | undefined, cityId?: number | null): string => {
   if (!cityName) {
     return '/in/hotels/budget-hotels';
   }
   const slug = generateCitySlug(cityName);
-  const baseUrl = `/in/hotels/${slug}/budget-hotels`;
-  return cityId ? `${baseUrl}?city_id=${cityId}` : baseUrl;
+  return `/in/hotels/${slug}/budget-hotels`;
 };
 
-// Helper function to generate resort link for a city with city_id
+// Helper function to generate resort link for a city
 export const generateResortLink = (cityName: string | null | undefined, cityId?: number | null): string => {
   if (!cityName) {
     return '/in/hotels/resorts';
   }
   const slug = generateCitySlug(cityName);
-  const baseUrl = `/in/hotels/${slug}/resorts`;
-  return cityId ? `${baseUrl}?city_id=${cityId}` : baseUrl;
+  return `/in/hotels/${slug}/resorts`;
 };
 
 // Helper function to generate state slug
@@ -161,24 +156,22 @@ export const generateStateSlug = (stateName: string | null | undefined): string 
     .replace(/[^a-z0-9-]/g, '');
 };
 
-// Helper function to generate hotel link for a state with state_id
+// Helper function to generate hotel link for a state
 export const generateStateHotelLink = (stateName: string | null | undefined, stateId?: number | null): string => {
   if (!stateName) {
-    return '/in/hotels/state/hotels';
+    return '/in/hotels/state';
   }
   const slug = generateStateSlug(stateName);
-  const baseUrl = `/in/hotels/${slug}/hotels`;
-  return stateId ? `${baseUrl}?state_id=${stateId}` : baseUrl;
+  return `/in/hotels/${slug}`;
 };
 
-// Helper function to generate resort link for a state with state_id
+// Helper function to generate resort link for a state
 export const generateStateResortLink = (stateName: string | null | undefined, stateId?: number | null): string => {
   if (!stateName) {
     return '/in/hotels/state/resorts';
   }
   const slug = generateStateSlug(stateName);
-  const baseUrl = `/in/hotels/${slug}/resorts`;
-  return stateId ? `${baseUrl}?state_id=${stateId}` : baseUrl;
+  return `/in/hotels/${slug}/resorts`;
 };
 
 // Helper functions to format footer data for HotelSection component

@@ -1,0 +1,243 @@
+{
+  "status": "success",
+  "listing_detail": {
+    "id": 5,
+    "user_id": 2,
+    "ownerdetails": {
+      "url": "/api/users/2/",
+      "id": 2,
+      "username": "1063ad4cdcc052d493d77200aca9c9d28b67bf9555634643d81a934a7884fc3c",
+      "first_name": "Admin",
+      "last_name": "Admin",
+      "mobile": "917399666689",
+      "profile_image": null,
+      "email": "gautam@wchotels.com",
+      "full_name": "Admin Admin"
+    },
+    "name": "HM Resort",
+    "name_hindi": "एचएम रिज़ॉर्ट",
+    "rate_type": null,
+    "description": "Nestled on the serene banks of the Brahmaputra River in Dibrugarh, HM Resort offers a retreat into the tranquil beauty of Assam. This luxurious property is surrounded by the lush tea gardens of Maijan, creating an immersive escape where modern comfort meets natural charm. Just a short drive from Dibrugarh Airport and Railway Station, HM Resort combines convenience with relaxation, making it an ideal destination for both leisure and business travelers.\n\nThe resort features elegantly designed accommodations that range from spacious rooms to premium cottages, each offering panoramic views of either the lush tea estates or the majestic Brahmaputra. Every room is thoughtfully equipped with modern amenities, ensuring guests experience comfort without compromise. The soft hues and refined decor create a soothing environment, perfect for unwinding after a day of exploring the local sights.\n\nFor dining, the resort's on-site restaurant, The Piano Room, serves a fusion of Assamese and international cuisines. The skilled chefs at HM Resort use fresh, locally sourced ingredients, crafting dishes that celebrate Assam's rich culinary heritage. The restaurant's inviting ambiance makes it an excellent spot for family dinners or romantic meals, with a menu that satisfies a variety of palates.\n\nHM Resort also excels in hosting events, from intimate gatherings to grand celebrations. With multiple indoor and outdoor venues, the resort can accommodate up to 1000 guests, making it ideal for weddings, corporate meetings, and family functions. The event spaces are well-equipped and versatile, with dedicated event planning services to ensure each gathering is memorable.\n\nFor recreation, guests can soon enjoy a swimming pool and a children's park. Nearby attractions include the renowned Kaziranga National Park and local tea estates, offering opportunities for both adventure and relaxation. The resort staff is dedicated to providing personalized service, ensuring that each stay is as comfortable as it is memorable.",
+    "description_hindi": "ब्रह्मपुत्र नदी के शांत किनारों पर स्थित HM रिज़ॉर्ट, असम की नैसर्गिक सुंदरता में लिपटा एक लक्ज़री रिसॉर्ट है। डिब्रूगढ़ के मशहूर माजान चाय बागानों से घिरा यह रिज़ॉर्ट आधुनिक सुविधाओं और प्राकृतिक सौंदर्य का अद्भुत मेल प्रस्तुत करता है। डिब्रूगढ़ एयरपोर्ट और रेलवे स्टेशन से कुछ ही दूरी पर स्थित, यह रिज़ॉर्ट परिवारों और व्यापारिक यात्रियों के लिए एक आदर्श स्थल है।",
+    "order": 0,
+    "property_type": "Resorts",
+    "property_chain": null,
+    "hotel_chain": 1,
+    "hotel_chain_name": "Default Chain",
+    "star_category": "3",
+    "no_of_rooms": 10,
+    "lat": 27.504674432380714,
+    "lon": 94.95174209999983,
+    "no_of_floors": 3,
+    "no_of_buildings": 1,
+    "is_favourite": 0,
+    "images": [
+      {
+        "id": 1964,
+        "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/28-10-2024-05-37-02_IMG-20240531-WA0057.jpg",
+        "cover_photo": true,
+        "images_tag": [],
+        "order": 0,
+        "status": 0,
+        "status_remark": null
+      },
+      {
+        "id": 1965,
+        "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/28-10-2024-05-37-18_IMG-20240531-WA0058.jpg",
+        "cover_photo": false,
+        "images_tag": [],
+        "order": 0,
+        "status": 0,
+        "status_remark": null
+      },
+      {
+        "id": 1966,
+        "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/28-10-2024-05-38-44_IMG-20240531-WA0054.jpg",
+        "cover_photo": false,
+        "images_tag": [],
+        "order": 0,
+        "status": 0,
+        "status_remark": null
+      },
+      {
+        "id": 1967,
+        "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/28-10-2024-05-38-45_IMG-20240531-WA0055.jpg",
+        "cover_photo": false,
+        "images_tag": [],
+        "order": 0,
+        "status": 0,
+        "status_remark": null
+      },
+      {
+        "id": 1968,
+        "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_images/28-10-2024-05-38-45_IMG-20240531-WA0056.jpg",
+        "cover_photo": false,
+        "images_tag": [],
+        "order": 0,
+        "status": 0,
+        "status_remark": null
+      }
+    ],
+    "documents_required_for_check_in": true,
+    "contactdetails": [
+      {
+        "id": 554,
+        "name": "Sourabh Ghimire",
+        "email": "sourabh@wchotels.com",
+        "mobile": "7399555588",
+        "contact_type": "FOM"
+      }
+    ],
+    "address": "HM Resort, Maijan Natun Gaon, Assam 786002",
+    "city": 351,
+    "state": 4,
+    "country": 101,
+    "guest_cancellation_type": "relaxed",
+    "check_in": "12 PM",
+    "check_out": "11 AM",
+    "check_in_age": "18",
+    "check_in_policies": "True",
+    "step_completed": 9,
+    "status": true,
+    "status_remark": null,
+    "instant_booking": false,
+    "b2c_commission_rate": 20,
+    "website": "NA",
+    "meta_title": "HM Resort Dibrugarh - Luxury Resort in Assam's Tea Capital | Premium Stays & Event Venues",
+    "meta_keywords": "HM Resort Dibrugarh, luxury resort Dibrugarh, Assam resort, premium accommodations Assam, tea garden resort Assam, family vacation Assam, Dibrugarh hotels, Brahmaputra River resort, fine dining Dibrugarh, Assam wedding venues, resort with pool Assam, romantic getaway Dibrugarh, Assam hospitality, resort near Kaziranga, best resorts in Dibrugarh, Assam event venues, nature retreat Assam, Assam luxury hotels, top Assam resorts.",
+    "meta_description": "Discover luxury and tranquility at HM Resort in Dibrugarh, Assam. Nestled amid tea gardens and near the Brahmaputra River, the resort offers premium accommodations, fine dining, family-friendly amenities, and scenic surroundings. Perfect for romantic getaways, family vacations, or hosting corporate events and weddings. Book now for a rejuvenating stay!",
+    "meta_tags": "HM Resort Dibrugarh, Assam resorts, luxury stays Assam, event venues Dibrugarh, Assam hospitality, family vacation resort, tea garden resort.",
+    "created": "2024-03-08T12:55:57.493814Z",
+    "video_request_status": null,
+    "check_in_document": "voterID",
+    "servicedetails": [
+      {
+        "id": 379,
+        "name": "NA",
+        "serviceType": "Banquet Halls",
+        "openTime": "07:00 AM",
+        "closeTime": "02:00AM",
+        "typeofService": "NA",
+        "images": []
+      }
+    ],
+    "b2b_commission_rate": 20,
+    "videos": [
+      {
+        "id": 10,
+        "title": "Padmini Resort",
+        "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ZA9NdeJLHrY?si=TeD0MoOKNfmGd0h0\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+        "status": 1,
+        "status_remark": null,
+        "created_by": 2
+      }
+    ],
+    "city_name": "Dibrugarh",
+    "state_name": "Assam",
+    "country_short_name": "IN",
+    "country_name": "India",
+    "show_landing": true,
+    "show_landing2": true,
+    "review_rating": 0,
+    "sbr_rate": 0,
+    "review_rating_count": 0,
+    "video_url": null,
+    "rooms": [
+      {
+        "room_name": "Deluxe Room",
+        "created": "2024-03-08T13:06:47.431679Z",
+        "description": "This spacious and well-furnished room includes a plush king-size bed, air conditioning, complimentary Wi-Fi, a 42-inch television, and a tea and coffee maker. Ideal for a peaceful stay, it also features amenities like a minibar, bathrobe, slippers, and room service for added comfort",
+        "suitable_for_kids": false,
+        "pets_allowed": false,
+        "smoking_allowed": true,
+        "room_type": 1,
+        "id": 3,
+        "room_location": "Deluxe Room",
+        "room_view": "Sea View",
+        "no_of_rooms": "4",
+        "costume_room_name": "Deluxe",
+        "base_adults": 1,
+        "maximum_adults": 3,
+        "maximum_children": 1,
+        "dimensions": "240",
+        "bed_type": "Kings",
+        "images": [
+          {
+            "id": 2304,
+            "file": "https://spodiaweb.s3.ap-south-1.amazonaws.com/hotel_room_images/28-10-2024-05-45-36_IMG_20231116_114911.jpg",
+            "cover_photo": false,
+            "room_images_tag": [],
+            "order": 0,
+            "status": 0,
+            "status_remark": null
+          }
+        ],
+        "no_of_beds": 1,
+        "extra_bed_allowed": true,
+        "extra_bed_type": "Mattress",
+        "maximum_occupancy": 3,
+        "cp_rate": 2500,
+        "ep_rate": 3500,
+        "tax_amount": 300,
+        "member_rate": 2250,
+        "facilitiesDetails": [
+          {
+            "id": 1,
+            "name": "Air Conditioning",
+            "name_hindi": "एयर कंडीशनिंग",
+            "parent": null,
+            "amenities_tags": [],
+            "image": "/media/uploads/AirConditioning.png",
+            "created": "2020-01-29T13:45:20Z"
+          },
+          {
+            "id": 78,
+            "name": "Wifi",
+            "name_hindi": "वाईफाई",
+            "parent": null,
+            "amenities_tags": [],
+            "image": "/media/uploads/Wifi.png",
+            "created": "2020-01-29T13:42:52Z"
+          }
+        ]
+      }
+    ],
+    "facilities": [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 38, 39, 40, 41, 43, 46, 47, 48, 55, 59, 65, 69, 73, 74, 77, 78],
+    "facilitiesDetails": [
+      {
+        "id": 1,
+        "name": "Air Conditioning",
+        "name_hindi": "एयर कंडीशनिंग",
+        "parent": null,
+        "amenities_tags": [],
+        "image": "/media/uploads/AirConditioning.png",
+        "created": "2020-01-29T13:45:20Z"
+      },
+      {
+        "id": 78,
+        "name": "Wifi",
+        "name_hindi": "वाईफाई",
+        "parent": null,
+        "amenities_tags": [],
+        "image": "/media/uploads/Wifi.png",
+        "created": "2020-01-29T13:42:52Z"
+      },
+      {
+        "id": 48,
+        "name": "Mini Fridge",
+        "name_hindi": "मिनी फ्रिज",
+        "parent": null,
+        "amenities_tags": [],
+        "image": "/media/uploads/MiniFridge.png",
+        "created": "2020-02-25T10:50:13Z"
+      }
+    ],
+    "other_rules": "<h3>1. House Rules of HM Resort, Dibrugarh, Assam</h3><ul><li><strong>Check-In/Check-Out</strong>: Check-in begins at 12:00 PM, and check-out is at 11:00 AM.</li><li><strong>Valid ID Required</strong>: All guests must present valid photo identification and address proof during check-in.</li><li><strong>Child Policy</strong>: Children under 5 years stay free without an extra bed.</li><li><strong>Valuables</strong>: Guests are encouraged to store valuables with management for safekeeping.</li><li><strong>Smoking Policy</strong>: Non-smoking rooms are available; consult the hotel for designated smoking areas.</li></ul><h3>2. Terms &amp; Conditions of HM Resort, Dibrugarh, Assam</h3><ul><li><strong>Reservation and Cancellation</strong>: Cancellations may incur fees based on the timing of the cancellation; check the resort's policy for details on refundable and non-refundable charges.</li><li><strong>Damage Policy</strong>: Guests are responsible for any damages to the property and may be charged accordingly.</li><li><strong>Guest Conduct</strong>: The resort reserves the right to refuse service or evict guests engaging in disruptive or inappropriate behavior.</li></ul>",
+    "highlights": "Enjoy stunning views along the Brahmaputra River, Lush tea gardens surround the peaceful resort, Ideal for family getaways with children's facilities, Savor delicious meals at The Piano Room, Host weddings, meetings, or events in versatile venues, Relax in elegant, spacious rooms with modern amenities, Recreational zone and swimming pool to open soon, Conveniently located for exploring Assam's nature and culture",
+    "title_highlights": "Riverside Scenic Views, Surrounded by Tea Gardens, Family-Friendly Environment, On-Site Fine Dining, Event Hosting Available, Spacious and Elegant Rooms, Recreational Facilities Upcoming, Proximity to Nature",
+    "meta_names": "4 Star Hotels In City,5 Star Hotels In City,Hotels Near City,Luxury Hotels In City,Deluxe Hotels In City,Best Hotels In City",
+    "property_highlights": [],
+    "property_highlights_details": [],
+    "cancellation_policies": []
+  }
+}

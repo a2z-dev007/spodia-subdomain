@@ -1,10 +1,16 @@
 import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
 import './globals.css';
+import './globals-map.css';
+import { Manrope } from 'next/font/google';
 import { Providers } from './providers';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'sonner';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import BottomTab from '@/components/layout/BottomTab';
+import FooterSSR from '@/components/layout/FooterSSR';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -15,11 +21,11 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: 'Spodia Hotels – Book Your Perfect Stay',
-  description: 'Experience luxury and comfort at Spodia Hotels. Best prices, instant confirmation, 24×7 support.',
-  keywords: 'hotel booking, luxury hotels, budget stays, hotel reservations, accommodation',
+  description: 'Find and book verified hotels, homestays, and budget stays across India, Nepal & Bhutan with Spodia. Best prices, instant confirmation, 24×7 support, and 5000+ trusted properties.',
+  keywords: 'hotel booking, luxury hotels, budget stays, hotel reservations, accommodation, spodia',
   robots: 'index, follow',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/fav.png',
   },
   openGraph: {
     title: 'Spodia Hotels – Book Your Perfect Stay',
@@ -40,30 +46,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${manrope.className}`}>
-      <head>
-        {/* Google Analytics (gtag.js) - To be configured per hotel */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX', {
-                page_title: document.title,
-                page_location: window.location.href
-              });
-            `,
-          }}
-        />
-      </head>
-      <body className={`${manrope.className} antialiased`}>
+    <html lang="en" className={`${manrope.variable} ${manrope.className}`} suppressHydrationWarning>
+      <body className={`${manrope.className} antialiased`} suppressHydrationWarning>
         <Providers>
           {children}
+          <BottomTab />
+          <FooterSSR />
         </Providers>
         <ToastContainer />
         <Toaster
@@ -79,6 +67,7 @@ export default function RootLayout({
             },
           }}
         />
+        <div id="datepicker-portal" />
       </body>
     </html>
   );

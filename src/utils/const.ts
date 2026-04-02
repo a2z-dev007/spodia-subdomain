@@ -10,6 +10,12 @@ export const LINKS = {
     NOT_FOUND: '/404',
     SERVER_ERROR: '/500',
     LIST_YOUR_PROPERTY:'/list-property',
+    SPAS: '/spas',
+    EVENT_VENUES: '/events',
+    EVENT_VENUES_SEARCH: '/events/search',
+    VENUE_TYPE: '/events/venue-types',
+    RESTAURANTS: '/restaurants',
+    HOURLY_ROOMS: '/hourly-rooms',
 
     // Company Links
     TERMS_CONDITIONS: '/terms-conditions',
@@ -158,6 +164,7 @@ export const LINKS = {
 
 export const CONTACT_INFO ={
 title:"Hotel Specialist",
+eventTitle:"Event Specialist",
 mobile1:"+918800842084",
 mobile2:"+917399666688",
 email1:"hotels@spodia.in",
@@ -166,6 +173,5 @@ email3:"care@spodia.in",
 contactEmail:"contact@spodia.in",
 helloEmail:"hello@spodia.in",
 address:"Spodia, 2nd Floor, 4, 4th Cross, 1st Main Road, 2nd Stage, Indiranagar, Bengaluru, Karnataka 560038",
-map:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
 
 }

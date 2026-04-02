@@ -18,11 +18,15 @@ import bgSection from "./bg-section.jpg"
 import herobg from "./hero.png"
 import logo from "./logo.png"
 import placeholder from "./placeholder.png"
-
+import heroSearchBg from "./hero/hero-bg.png"
+import homeHero from "./hero/hero.webp"
+import eventHero from "./hero/event-hero.jpg"
 
 export const IMAGES = {
   bgSection: bgSection,
+  heroSearchBg: heroSearchBg,
   herobg: herobg,
+  eventHero: eventHero,
   lucknow: lucknow,
   guwahati: guwahati,
   shillong: shillong,
@@ -33,6 +37,7 @@ export const IMAGES = {
   agra: agra,
   mumbai: mumbai,
   chennai: chennai,
+  homeHero: homeHero,
   newdelhi: newdelhi,
   listingHeroBg: listingHeroBg,
   blogHeroBg:blogHeroBg,

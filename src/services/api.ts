@@ -236,6 +236,7 @@ export const updateProfile = (profileData: {
     return handleApiCall(() => apiClient.post("/users/profile-update/", profileData))
 }
 
+
 export const updateProfileImage = (imageFile: File) => {
     const formData = new FormData()
     formData.append("image", imageFile)
@@ -428,4 +429,19 @@ export const applyJob = (formData: FormData) => {
 // Testimonials API
 export const getTestimonials = (params?: { show_homepage?: 0 | 1 }) => {
     return handleApiCall(() => apiClient.get("/testimonials/", { params }))
+}
+
+// Blog APIs
+export const getBlogs = (params: { applicable_for: string; page_number?: number; number_of_records?: number }) => {
+    return handleApiCall(() => apiClient.get("/get/blogs-list/", { params }));
+}
+
+export const getBlogDetails = (blogIdOrSlug: string | number, applicableFor: string) => {
+    const isId = typeof blogIdOrSlug === 'number' || !isNaN(Number(blogIdOrSlug));
+    return handleApiCall(() => apiClient.get("/get/blogs-list/", { 
+        params: { 
+            applicable_for: applicableFor, 
+            ...(isId ? { blog_id: blogIdOrSlug } : { slug: blogIdOrSlug })
+        } 
+    }));
 }
