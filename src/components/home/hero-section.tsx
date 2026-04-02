@@ -29,7 +29,7 @@ const TRUST_BADGES: { icon: LucideIcon; label: string }[] = [
 ];
 
 const TRUST_PILL_CLASS =
-  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/35 bg-black/35 backdrop-blur-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.2)]';
+  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/35 bg-white/35 backdrop-blur-sm px-3.5 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.2)]';
 
 const TRUST_ICON_CLASS =
   'w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#FF9530] drop-shadow-[0_0_8px_rgba(255,149,48,0.45)]';
