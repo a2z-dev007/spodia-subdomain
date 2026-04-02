@@ -395,14 +395,14 @@ export default function HomeDiscoverySections() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 sm:pt-16 pb-10 sm:pb-14">
         <h2 className={`${headingClass} mb-6`}>Popular Cities Worldwide</h2>
 
-        <div className="relative">
+        <div className="relative max-w-full overflow-x-hidden">
           <Swiper
             onSwiper={(swiper) => {
               worldwideSwiperRef.current = swiper;
             }}
             slidesPerView="auto"
             spaceBetween={24}
-            className="worldwide-discovery-swiper !overflow-visible pb-2 pt-1"
+            className="worldwide-discovery-swiper max-w-full overflow-hidden pb-2 pt-1"
             breakpoints={{
               640: { spaceBetween: 32 },
             }}
@@ -438,14 +438,14 @@ export default function HomeDiscoverySections() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 border-t border-gray-100">
         <h2 className={`${headingClass} mb-6`}>Popular Cities in India</h2>
 
-        <div className="relative">
+        <div className="relative max-w-full overflow-x-hidden">
           <Swiper
             onSwiper={(swiper) => {
               indiaSwiperRef.current = swiper;
             }}
             slidesPerView="auto"
             spaceBetween={16}
-            className="india-discovery-swiper !overflow-visible pb-2"
+            className="india-discovery-swiper max-w-full overflow-hidden pb-2"
             breakpoints={{
               640: { spaceBetween: 20 },
             }}
@@ -490,14 +490,14 @@ export default function HomeDiscoverySections() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 border-t border-gray-100">
         <h2 className={`${headingClass} mb-6`}>Trending Wellness &amp; Spas</h2>
 
-        <div className="relative">
+        <div className="relative max-w-full overflow-x-hidden">
           <Swiper
             onSwiper={(swiper) => {
               spaSwiperRef.current = swiper;
             }}
             slidesPerView="auto"
             spaceBetween={16}
-            className="spa-discovery-swiper !overflow-visible pb-2"
+            className="spa-discovery-swiper max-w-full overflow-hidden pb-2"
             breakpoints={{
               640: { spaceBetween: 20 },
             }}

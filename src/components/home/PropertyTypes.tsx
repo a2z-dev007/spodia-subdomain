@@ -57,55 +57,57 @@ const PropertyTypes = () => {
             )}
 
             <div className="relative">
-              <Swiper
-                onSwiper={(swiper) => {
-                  swiperRef.current = swiper;
-                }}
-                loop
-                slidesPerView="auto"
-                spaceBetween={24}
-                className="property-cities-swiper !overflow-visible pt-6"
-              >
-                {indianCities.map((city) => (
-                  <SwiperSlide key={city.id} className="!w-auto">
-                    <div
-                      className={`city-item flex min-w-[100px] flex-col items-center space-y-3 cursor-pointer transition-transform hover:scale-105 group pt-1 ${
-                        selectedCity === city.name ? "selected" : ""
-                      }`}
-                      onClick={() =>
-                        setSelectedCity(selectedCity === city.name ? null : city.name)
-                      }
-                    >
+              <div className="max-w-full overflow-x-hidden">
+                <Swiper
+                  onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                  }}
+                  loop
+                  slidesPerView="auto"
+                  spaceBetween={24}
+                  className="property-cities-swiper max-w-full overflow-hidden pt-6"
+                >
+                  {indianCities.map((city) => (
+                    <SwiperSlide key={city.id} className="!w-auto">
                       <div
-                        className={`flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border-2 text-2xl shadow-sm transition-all duration-300 group-hover:scale-110 ${
-                          selectedCity === city.name
-                            ? "border-orange-500 bg-gradient-to-br from-orange-500 to-orange-400 text-white shadow-md ring-4 ring-orange-500/10"
-                            : "border-gray-100 bg-white group-hover:border-orange-200 group-hover:bg-orange-50"
+                        className={`city-item flex min-w-[100px] flex-col items-center space-y-3 cursor-pointer transition-transform hover:scale-105 group pt-1 ${
+                          selectedCity === city.name ? "selected" : ""
                         }`}
+                        onClick={() =>
+                          setSelectedCity(selectedCity === city.name ? null : city.name)
+                        }
                       >
-                        <Image
-                          src={city.icon}
-                          alt={city.name}
-                          width={32}
-                          height={32}
-                          className={`${selectedCity === city.name ? "brightness-0 invert" : ""} transition-all duration-300`}
-                        />
-                      </div>
-                      <div className="text-center">
-                        <h4
-                          className={`text-xs sm:text-sm font-semibold transition-colors duration-300 ${
+                        <div
+                          className={`flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border-2 text-2xl shadow-sm transition-all duration-300 group-hover:scale-110 ${
                             selectedCity === city.name
-                              ? "text-orange-600"
-                              : "text-gray-700 group-hover:text-orange-500"
+                              ? "border-orange-500 bg-gradient-to-br from-orange-500 to-orange-400 text-white shadow-md ring-4 ring-orange-500/10"
+                              : "border-gray-100 bg-white group-hover:border-orange-200 group-hover:bg-orange-50"
                           }`}
                         >
-                          {city.name}
-                        </h4>
+                          <Image
+                            src={city.icon}
+                            alt={city.name}
+                            width={32}
+                            height={32}
+                            className={`${selectedCity === city.name ? "brightness-0 invert" : ""} transition-all duration-300`}
+                          />
+                        </div>
+                        <div className="text-center">
+                          <h4
+                            className={`text-xs sm:text-sm font-semibold transition-colors duration-300 ${
+                              selectedCity === city.name
+                                ? "text-orange-600"
+                                : "text-gray-700 group-hover:text-orange-500"
+                            }`}
+                          >
+                            {city.name}
+                          </h4>
+                        </div>
                       </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
 
               <button
                 type="button"

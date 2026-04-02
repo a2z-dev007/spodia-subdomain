@@ -106,7 +106,7 @@ export function RestaurantCarousel({ hotels = [], isLoading = false, title = "To
                                         spaceBetween: 24,
                                     }
                                 }}
-                                className="restaurant-swiper !overflow-visible"
+                                className="restaurant-swiper max-w-full overflow-hidden"
                             >
                                 {stayData.map((stay) => (
                                     <SwiperSlide key={stay.id}>

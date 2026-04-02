@@ -77,14 +77,14 @@ function HeroDestinationCarousel({
   swiperRef: MutableRefObject<SwiperType | null>;
 }) {
   return (
-    <div className="relative mt-8 sm:mt-12 w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10">
+    <div className="relative mt-8 sm:mt-12 w-full max-w-[1920px] mx-auto overflow-x-hidden px-4 sm:px-6 lg:px-10">
       <Swiper
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
         slidesPerView="auto"
         spaceBetween={28}
-        className="hero-dest-swiper !overflow-visible py-3"
+        className="hero-dest-swiper max-w-full overflow-hidden py-3"
         breakpoints={{
           0: { centeredSlides: false },
           768: { centeredSlides: true, centeredSlidesBounds: true },

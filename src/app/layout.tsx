@@ -47,7 +47,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${manrope.variable} ${manrope.className}`} suppressHydrationWarning>
-      <body className={`${manrope.className} antialiased`} suppressHydrationWarning>
+      <body
+        className={`${manrope.className} antialiased overflow-x-hidden`}
+        suppressHydrationWarning
+      >
         <Providers>
           {children}
           <BottomTab />
