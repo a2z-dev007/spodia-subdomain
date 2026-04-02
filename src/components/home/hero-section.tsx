@@ -29,7 +29,7 @@ const TRUST_BADGES: { icon: LucideIcon; label: string }[] = [
 ];
 
 const TRUST_PILL_CLASS =
-  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/60 bg-white/20 backdrop-blur-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.12)]';
+  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/35 bg-black/35 backdrop-blur-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.2)]';
 
 const TRUST_ICON_CLASS =
   'w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#FF9530] drop-shadow-[0_0_8px_rgba(255,149,48,0.45)]';
@@ -46,7 +46,7 @@ const FEATURE_STRIP = [
     iconClass: 'text-[#FF9530]',
   },
   {
-    icon: CheckCircle2,
+    icon: ShieldCheck,
     text: 'Verified properties',
     iconClass: 'text-emerald-500',
   },
@@ -139,50 +139,59 @@ export default function HeroSection() {
   const heroDestSwiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <section className="relative z-10 w-full bg-white pt-24 sm:pt-28 lg:pt-[8.75rem] pb-14 sm:pb-20">
-      <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10">
-        {/* pb reserves space for the search bar half that sits below the image */}
-        <div className="relative w-full pb-10 sm:pb-12 lg:pb-14">
-          <div className="relative w-full h-[320px] sm:h-[400px] lg:h-[460px] xl:h-[520px] rounded-[1.75rem] sm:rounded-[2rem] lg:rounded-[2.75rem] overflow-hidden shadow-[0_12px_48px_rgba(0,0,0,0.1)]">
-            <Image
-              src={IMAGES.heroSearchBg}
-              alt="Luxury resort pool at dusk"
-              fill
-              priority
-              className="object-cover object-center"
-              sizes="100vw"
-            />
-            <div
-              className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/25 pointer-events-none"
-              aria-hidden
-            />
+    <section className="relative z-10 w-full bg-white pb-12 sm:pb-16 pt-24 sm:pt-28 lg:pt-[9rem] xl:pt-[9.25rem]">
+      {/* pt clears fixed header + ~24–32px breathing room (aligned with main nav px) */}
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10">
+        <div className="relative w-full">
+          {/* Inner box height = image only so search bar bottom-0 + translate-y-1/2 straddles the hero edge */}
+          <div className="relative w-full">
+            <div className="relative w-full h-[300px] sm:h-[380px] md:h-[420px] lg:h-[440px] xl:h-[480px] rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.08)]">
+              <Image
+                src={IMAGES.heroSearchBg}
+                alt="Luxury resort pool at dusk"
+                fill
+                priority
+                className="object-cover object-center"
+                sizes="100vw"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/35 pointer-events-none"
+                aria-hidden
+              />
 
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-10 pb-10 sm:pb-14 lg:pb-16 xl:pb-20">
-              <h1 className="text-white font-bold tracking-tight text-[1.75rem] sm:text-4xl md:text-[2.625rem] lg:text-[2.875rem] xl:text-[3.125rem] leading-[1.12] max-w-[22rem] sm:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
-                <span className="block">Find your perfect stay,</span>
-                <span className="block mt-1.5 sm:mt-2">Anywhere in the World</span>
-              </h1>
+              {/* Headline + pills: vertically centered in the hero image */}
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-12 py-6 sm:py-8">
+                <h1 className="text-white font-bold tracking-tight text-[1.625rem] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] xl:text-[3rem] leading-[1.12] max-w-[20rem] sm:max-w-[44rem] lg:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.4)]">
+                  <span className="block">Find your perfect stay,</span>
+                  <span className="block mt-1.5 sm:mt-2">Anywhere in the World</span>
+                </h1>
 
-              <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mt-6 sm:mt-8 max-w-[min(100%,58rem)]">
-                {TRUST_BADGES.map(({ icon: Icon, label }) => (
-                  <div key={label} className={TRUST_PILL_CLASS}>
-                    <Icon className={TRUST_ICON_CLASS} strokeWidth={2.25} />
-                    <span className="whitespace-nowrap">{label}</span>
-                  </div>
-                ))}
+                <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-2.5 mt-5 sm:mt-7 max-w-[min(100%,58rem)]">
+                  {TRUST_BADGES.map(({ icon: Icon, label }) => (
+                    <div key={label} className={TRUST_PILL_CLASS}>
+                      <Icon className={TRUST_ICON_CLASS} strokeWidth={2.25} />
+                      <span className="whitespace-nowrap">{label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
+            </div>
+
+            <div className="absolute left-1/2 bottom-0 z-20 w-full -translate-x-1/2 translate-y-1/2 px-2 sm:px-3 md:px-4 lg:px-6">
+              <PremiumHotelSearchBar
+                variant="minimal"
+                containerClassName="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl"
+              />
             </div>
           </div>
 
-          <div className="absolute left-1/2 bottom-0 z-20 w-full -translate-x-1/2 translate-y-1/2 px-2 sm:px-3 md:px-4">
-            <PremiumHotelSearchBar
-              variant="minimal"
-              containerClassName="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl"
-            />
-          </div>
+          <div
+            className="h-12 sm:h-14 md:h-[3.75rem] lg:h-16 xl:h-[4.25rem] shrink-0"
+            aria-hidden
+          />
         </div>
 
-        <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-y-3 gap-x-6 sm:gap-x-10 lg:gap-x-16 px-3 text-center sm:text-left">
+        <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-y-3 gap-x-6 sm:gap-x-10 lg:gap-x-14 px-1 text-center sm:text-left">
           {FEATURE_STRIP.map(({ icon: Icon, text, iconClass }) => (
             <div
               key={text}
