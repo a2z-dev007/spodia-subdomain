@@ -55,12 +55,14 @@ const PremiumGuestSelect: FC<PremiumGuestSelectProps> = ({
   };
 
   return (
-    <div className={`flex items-center relative ${className} flex-1 min-w-[200px] ${containerClassName}`}>
-      <div className="shrink-0 mr-2.5 transition-transform group-hover:scale-110">
-        <Users className="w-5 h-5 text-[#FF9530]" />
+    <div className={`relative flex flex-1 items-center ${className} min-w-[200px] ${containerClassName}`}>
+      <div className="mr-2.5 shrink-0 transition-transform group-hover:scale-110">
+        <Users className="h-[18px] w-[18px] text-[#FF9530] sm:h-5 sm:w-5" strokeWidth={2.25} />
       </div>
-      <div className="flex-1 text-left min-w-0 pr-4 relative">
-        {label && <p className="text-[12px] font-bold text-gray-400 capitalize mb-1">{label}</p>}
+      <div className="relative min-w-0 flex-1 pr-2 text-left sm:pr-4">
+        {label && (
+          <p className="mb-0.5 text-[11px] font-medium capitalize tracking-wide text-gray-400 sm:text-xs">{label}</p>
+        )}
         
         <Popover open={showDropdown} onOpenChange={(open) => {
           if (!open && guests.children > 0 && childrenAges.some(age => age === 0)) {
@@ -80,13 +82,14 @@ const PremiumGuestSelect: FC<PremiumGuestSelectProps> = ({
                 }
               }}
             >
-              <span 
-                className="text-sm font-bold text-[#1E293B] truncate p-0 m-0"
+              <span
+                className="truncate p-0 m-0 text-[15px] font-bold leading-tight text-neutral-950"
                 suppressHydrationWarning={true}
               >
-                {rooms} room, {guests.adults} adults, {guests.children} children
+                {rooms} room{rooms !== 1 ? 's' : ''}, {guests.adults} adults, {guests.children}{' '}
+                {guests.children === 1 ? 'child' : 'children'}
               </span>
-              <ChevronDown className="w-4 h-4 text-[#FF9530] shrink-0 ml-1" strokeWidth={3} />
+              <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-[#FF9530]" strokeWidth={2.75} />
             </div>
           </PopoverTrigger>
 

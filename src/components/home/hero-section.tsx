@@ -6,7 +6,7 @@ import {
   CheckCircle2,
   Star,
   Lock,
-  Shield,
+  ShieldCheck,
   Headphones,
   MessagesSquare,
   ChevronLeft,
@@ -20,16 +20,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 
-/** Figma: one row of pills — same semi-transparent dark bg + light border + white icon/text */
+/** Light glass pills: frosted white + warm accent icons (reference UI) */
 const TRUST_BADGES: { icon: LucideIcon; label: string }[] = [
-  { icon: Shield, label: 'Best Price Guarantee' },
+  { icon: ShieldCheck, label: 'Best Price Guarantee' },
   { icon: MessagesSquare, label: '10M+ Trusted Reviews' },
   { icon: Headphones, label: '24/7 Global Support' },
   { icon: Lock, label: 'SSL Secured Booking' },
 ];
 
 const TRUST_PILL_CLASS =
-  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/45 bg-neutral-950/45 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 text-[10px] sm:text-[11px] font-medium text-white shadow-sm';
+  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/60 bg-white/20 backdrop-blur-xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.12)]';
+
+const TRUST_ICON_CLASS =
+  'w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#FF9530] drop-shadow-[0_0_8px_rgba(255,149,48,0.45)]';
 
 const FEATURE_STRIP = [
   {
@@ -136,51 +139,50 @@ export default function HeroSection() {
   const heroDestSwiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <section className="relative z-10 w-full bg-white pt-24 sm:pt-28 lg:pt-[8.75rem] pb-12 sm:pb-16">
+    <section className="relative z-10 w-full bg-white pt-24 sm:pt-28 lg:pt-[8.75rem] pb-14 sm:pb-20">
       <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10">
-        <div className="relative w-full h-[300px] sm:h-[380px] lg:h-[440px] xl:h-[480px] rounded-[1.75rem] sm:rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
-          <Image
-            src={IMAGES.heroSearchBg}
-            alt="Luxury resort pool at dusk"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          {/* Figma: subtle overlay — photo stays vivid */}
-          <div
-            className="absolute inset-0 bg-gradient-to-b from-black/12 via-black/5 to-black/20 pointer-events-none"
-            aria-hidden
-          />
+        {/* pb reserves space for the search bar half that sits below the image */}
+        <div className="relative w-full pb-10 sm:pb-12 lg:pb-14">
+          <div className="relative w-full h-[320px] sm:h-[400px] lg:h-[460px] xl:h-[520px] rounded-[1.75rem] sm:rounded-[2rem] lg:rounded-[2.75rem] overflow-hidden shadow-[0_12px_48px_rgba(0,0,0,0.1)]">
+            <Image
+              src={IMAGES.heroSearchBg}
+              alt="Luxury resort pool at dusk"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="100vw"
+            />
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/25 pointer-events-none"
+              aria-hidden
+            />
 
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 sm:px-10 pb-[4.5rem] sm:pb-24 lg:pb-28">
-            <h1 className="text-white font-bold tracking-[0.02em] text-[1.6875rem] sm:text-4xl md:text-[2.625rem] lg:text-[2.875rem] xl:text-[3.125rem] leading-[1.14] max-w-[20rem] sm:max-w-[46rem] [text-shadow:0_2px_16px_rgba(0,0,0,0.22)]">
-              <span className="block">Find your perfect stay,</span>
-              <span className="block mt-1">Anywhere in the World</span>
-            </h1>
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-10 pb-10 sm:pb-14 lg:pb-16 xl:pb-20">
+              <h1 className="text-white font-bold tracking-tight text-[1.75rem] sm:text-4xl md:text-[2.625rem] lg:text-[2.875rem] xl:text-[3.125rem] leading-[1.12] max-w-[22rem] sm:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]">
+                <span className="block">Find your perfect stay,</span>
+                <span className="block mt-1.5 sm:mt-2">Anywhere in the World</span>
+              </h1>
 
-            <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-2.5 mt-6 sm:mt-8 max-w-[min(100%,56rem)]">
-              {TRUST_BADGES.map(({ icon: Icon, label }) => (
-                <div key={label} className={TRUST_PILL_CLASS}>
-                  <Icon
-                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-white opacity-95"
-                    strokeWidth={2}
-                  />
-                  <span className="whitespace-nowrap">{label}</span>
-                </div>
-              ))}
+              <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mt-6 sm:mt-8 max-w-[min(100%,58rem)]">
+                {TRUST_BADGES.map(({ icon: Icon, label }) => (
+                  <div key={label} className={TRUST_PILL_CLASS}>
+                    <Icon className={TRUST_ICON_CLASS} strokeWidth={2.25} />
+                    <span className="whitespace-nowrap">{label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+
+          <div className="absolute left-1/2 bottom-0 z-20 w-full -translate-x-1/2 translate-y-1/2 px-2 sm:px-3 md:px-4">
+            <PremiumHotelSearchBar
+              variant="minimal"
+              containerClassName="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl"
+            />
           </div>
         </div>
 
-        <div className="relative z-20 -mt-[3rem] flex justify-center w-full px-1 sm:px-2">
-          <PremiumHotelSearchBar
-            variant="minimal"
-            containerClassName="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl"
-          />
-        </div>
-
-        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-y-3 gap-x-6 sm:gap-x-10 lg:gap-x-16 text-center sm:text-left px-3">
+        <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-y-3 gap-x-6 sm:gap-x-10 lg:gap-x-16 px-3 text-center sm:text-left">
           {FEATURE_STRIP.map(({ icon: Icon, text, iconClass }) => (
             <div
               key={text}

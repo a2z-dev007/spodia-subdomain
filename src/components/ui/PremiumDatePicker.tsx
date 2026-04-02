@@ -88,12 +88,18 @@ const PremiumDatePicker: FC<PremiumDatePickerProps> = ({
                 }
               }}
             >
-              <Calendar className="w-5 h-5 text-[#FF9530] shrink-0 mr-2.5 transition-transform group-hover:scale-110" />
-              <div className="flex-1 text-left">
-                {label && <p className="text-[13px] font-bold text-gray-400 capitalize mb-1">{label}</p>}
-                <p 
-                  className={`text-[15px] font-bold p-0 transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
-                    (selectsRange ? startDate : selected) ? 'text-gray-800' : 'text-gray-400 font-normal'
+              <Calendar className="mr-2.5 h-[18px] w-[18px] shrink-0 text-[#FF9530] transition-transform group-hover:scale-110 sm:h-5 sm:w-5" strokeWidth={2.25} />
+              <div className="flex-1 min-w-0 text-left">
+                {label && (
+                  <p className="mb-0.5 text-[11px] font-medium capitalize tracking-wide text-gray-400 sm:text-xs">
+                    {label}
+                  </p>
+                )}
+                <p
+                  className={`overflow-hidden text-ellipsis whitespace-nowrap p-0 text-[15px] transition-colors ${
+                    (selectsRange ? startDate : selected)
+                      ? 'font-bold text-neutral-900'
+                      : 'font-medium text-gray-500'
                   }`}
                   suppressHydrationWarning={true}
                 >

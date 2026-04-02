@@ -19,7 +19,27 @@ const manrope = Manrope({
   display: 'swap',
 });
 
+/** Public site origin for absolute OG/Twitter image URLs (WhatsApp, Facebook, etc.). */
+function siteOrigin(): string {
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '');
+  if (raw) {
+    try {
+      const normalized = raw.startsWith('http') ? raw : `https://${raw}`;
+      return new URL(normalized).origin;
+    } catch {
+      /* fall through */
+    }
+  }
+  return 'https://spodia.com';
+}
+
+const metadataBase = new URL(siteOrigin());
+
 export const metadata: Metadata = {
+  metadataBase,
   title: 'Spodia Hotels – Book Your Perfect Stay',
   description: 'Find and book verified hotels, homestays, and budget stays across India, Nepal & Bhutan with Spodia. Best prices, instant confirmation, 24×7 support, and 5000+ trusted properties.',
   keywords: 'hotel booking, luxury hotels, budget stays, hotel reservations, accommodation, spodia',
@@ -30,13 +50,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Spodia Hotels – Book Your Perfect Stay',
     description: 'Experience luxury and comfort with instant confirmation and 24×7 support.',
-    url: 'https://spodia.com/',
+    url: '/',
+    siteName: 'Spodia Hotels',
     type: 'website',
+    locale: 'en_IN',
+    images: [
+      {
+        url: '/logo.png',
+        alt: 'Spodia Hotels',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Spodia Hotels – Book Your Perfect Stay',
     description: 'Experience luxury and comfort with instant confirmation and 24×7 support.',
+    images: ['/logo.png'],
   },
 };
 

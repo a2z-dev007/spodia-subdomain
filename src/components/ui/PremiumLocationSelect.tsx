@@ -27,7 +27,7 @@ const DropdownIndicator = (props: any) => {
 
 const PremiumLocationSelect: FC<PremiumLocationSelectProps> = ({ 
   label = "Location",
-  icon = <MapPin className="w-5 h-5 text-[#FF9530]" />,
+  icon = <MapPin className="h-[18px] w-[18px] sm:h-5 sm:w-5 text-[#FF9530]" strokeWidth={2.25} />,
   containerClassName = "",
   className = "",
   placeholder = "Where is the event?",
@@ -83,8 +83,8 @@ const PremiumLocationSelect: FC<PremiumLocationSelectProps> = ({
     placeholder: (provided) => ({
       ...provided,
       margin: 0,
-      color: '#94A3B8',
-      fontSize: '0.875rem',
+      color: '#64748B',
+      fontSize: '0.9375rem',
       fontWeight: '500',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -167,8 +167,9 @@ const PremiumLocationSelect: FC<PremiumLocationSelectProps> = ({
       {icon && <div className="shrink-0 mr-2.5 transition-transform group-hover:scale-110">{icon}</div>}
       <div className="flex-1 text-left min-w-0 font-bold">
         {label && (
-          <p className="text-[12px] font-bold text-gray-400 capitalize mb-1">
-            {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+          <p className="mb-0.5 text-[11px] font-medium capitalize tracking-wide text-gray-400 sm:text-xs">
+            {label}
+            {required && <span className="ml-0.5 text-red-500">*</span>}
           </p>
         )}
         <AsyncSelect
