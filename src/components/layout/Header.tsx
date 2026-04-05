@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useAppSelector, useAppDispatch } from "@/lib/hooks"
 import { logout } from "@/lib/features/auth/authSlice"
 import { Button } from "@/components/ui/button"
-import { Globe, ChevronDown, Menu, X, User, Settings, LogOut, Calendar, Hotel, Clock, UtensilsCrossed, Sparkles, PartyPopper, Building2, Info, Phone, HelpCircle, Briefcase } from "lucide-react"
+import { Globe, ChevronDown, Menu, X, User, Settings, LogOut, Calendar, Hotel, Clock, UtensilsCrossed, Sparkles, PartyPopper, Building2, Info, Phone, HelpCircle, Briefcase, Users } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Image from "next/image"
 import { MdEmail } from "react-icons/md"
@@ -15,29 +15,53 @@ import { IMAGES } from "@/assets/images"
 import { LINKS, CONTACT_INFO } from "@/utils/const"
 
 interface HeaderProps {
+    // These props are kept for backward compatibility but ignored for the new full-width fixed style
     withScrollEffect?: boolean
+    isFloating?: boolean
 }
 
-const Header = ({ withScrollEffect = false }: HeaderProps) => {
+const Header = ({ }: HeaderProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
     const [showUserMenu, setShowUserMenu] = useState(false)
     const [selectedCurrency, setSelectedCurrency] = useState("INR")
     const [showCurrencyMenu, setShowCurrencyMenu] = useState(false)
+    const headerRef = useRef<HTMLElement>(null)
 
     const pathname = usePathname()
     const { user } = useAppSelector((state) => state?.auth ?? { user: null, isLoading: false })
     const dispatch = useAppDispatch()
     const router = useRouter()
 
-    // Scroll handler (active on all pages to hide top menu)
+    // Scroll handler to hide top menu and update header height
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 100)
+            const scrolled = window.scrollY > 50
+            setIsScrolled(scrolled)
         }
         window.addEventListener("scroll", handleScroll, { passive: true })
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])
+
+    // Calculate dynamic header height and set CSS variable
+    useEffect(() => {
+        const updateHeight = () => {
+            if (headerRef.current) {
+                const height = headerRef.current.offsetHeight
+                document.documentElement.style.setProperty('--header-height', `${height}px`)
+            }
+        }
+
+        updateHeight()
+        // Use a small delay to ensure transitions have finished or browser has painted
+        const timer = setTimeout(updateHeight, 350)
+        
+        window.addEventListener("resize", updateHeight)
+        return () => {
+            window.removeEventListener("resize", updateHeight)
+            clearTimeout(timer)
+        }
+    }, [isScrolled, isMobileMenuOpen])
 
     // Prevent background scroll when mobile menu is open
     useEffect(() => {
@@ -66,15 +90,12 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
         { label: "Career", href: "/career", icon: Briefcase },
     ]
 
-    const collapseTopUtilityBar = withScrollEffect && isScrolled
+    // Only hide the top utility bar on scroll
+    const hideTopUtilityBar = isScrolled
 
     const currencies = [
         { code: "INR", symbol: "₹", name: "Indian Rupee" },
         { code: "USD", symbol: "$", name: "US Dollar" },
-        // { code: "EUR", symbol: "€", name: "Euro" },
-        // { code: "GBP", symbol: "£", name: "British Pound" },
-        // { code: "AUD", symbol: "A$", name: "Australian Dollar" },
-        // { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
     ]
 
     const handleLogout = () => {
@@ -83,21 +104,14 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
         router.push("/")
     }
 
-    // Header style based on mode
-    const headerClasses = withScrollEffect
-        ? isScrolled
-            ? "lg:bg-white/95 fixed lg:top-0 lg:backdrop-blur-sm lg:border-b lg:border-gray-100 lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:max-w-full lg:px-6 lg:rounded-none w-full"
-            : "lg:bg-white/95 lg:fixed lg:top-3 lg:backdrop-blur-xl lg:border lg:left-1/2 lg:-translate-x-1/2 lg:w-[calc(100%-2rem)] lg:max-w-7xl lg:border-white/20 lg:rounded-2xl lg:shadow-lg w-full"
-        : "fixed top-0 left-0 right-0 w-full bg-white border-b border-gray-100 shadow-sm"
-
     return (
         <header
-            className={`z-[1000] transition-all duration-300 bg-white ${headerClasses}`}
+            ref={headerRef}
+            className="fixed top-0 left-0 right-0 w-full z-[1000] transition-all duration-300 bg-white border-b border-gray-100 shadow-sm"
         >
-
             {/* Top Menu - Hides on scroll */}
             <div className={`hidden lg:block transition-all duration-500 ease-in-out overflow-hidden px-6 ${
-                collapseTopUtilityBar
+                hideTopUtilityBar
                 ? "max-h-0 opacity-0 pointer-events-none" 
                 : "max-h-20 opacity-100 pt-3 pb-2"
             }`}>
@@ -177,10 +191,7 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
 
             {/* Main Navigation */}
             <div
-                className={`px-4 lg:px-6 xl:px-8 transition-all duration-300 py-4 w-full ${isScrolled || !withScrollEffect
-                    ? "lg:py-3 xl:py-4"
-                    : "lg:py-4 xl:py-5"
-                    }`}
+                className={`px-4 lg:px-6 xl:px-8 transition-all duration-300 py-3 xl:py-4 w-full`}
             >
                 <div className="flex items-center justify-between max-w-[1920px] mx-auto gap-4 w-full">
                     {/* Logo */}
@@ -225,9 +236,7 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
                     <div className="hidden lg:flex items-center space-x-3 flex-shrink-0">
                         <Link 
                             href={LINKS.LIST_YOUR_PROPERTY}
-                           
-                            
-                            className="border bg-white/50 text-[#FF9530] border-[#FF9530] hover:bg-[#e8851c] hover:text-white font-semibold rounded-full px-4  py-2 xl:py-2.5 text-sm xl:text-base transition-all duration-300 hover:scale-105 whitespace-nowrap flex items-center justify-center"
+                            className="border bg-white/50 text-[#FF9530] border-[#FF9530] hover:bg-[#e8851c] hover:text-white font-semibold rounded-full px-4 py-2 xl:py-2.5 text-sm xl:text-base transition-all duration-300 hover:scale-105 whitespace-nowrap flex items-center justify-center"
                         >
                             <Building2 className="w-3.5 h-3.5 xl:w-4 xl:h-4 mr-1.5 xl:mr-2" />
                             <span className="hidden xl:inline">List Your Property</span>
@@ -248,7 +257,6 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
                                 >
                                     <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
                                         <div className="flex items-center space-x-3">
-                                            {/* <UserAvatar user={user} size="lg" showRing /> */}
                                             <div>
                                                 <p className="font-semibold text-gray-900">{user.full_name}</p>
                                                 <p className="text-sm text-gray-600">{user.email}</p>
@@ -356,7 +364,6 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
                             <nav className="flex-1 px-4 py-6">
                                 {user ? (
                                     <div className="space-y-3">
-                                        {/* User Info */}
                                         <div
                                             className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                                             <UserAvatar user={user} size="lg" showRing />
@@ -430,7 +437,6 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
                                         Login
                                     </Button>
                                 )}
-                                {/* Main Navigation */}
                                 <div className="space-y-1 mb-6 mt-6">
                                     {navItems.map((item) => {
                                         const isActive =
@@ -453,24 +459,16 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
                                     })}
                                 </div>
 
-                                {/* Action Buttons */}
                                 <div className="space-y-3 mb-6">
                                     <Link
                                     href={LINKS.LIST_YOUR_PROPERTY}
-                                      
-                                        // onClick={() => {
-                                        //     router.push(LINKS.LIST_YOUR_PROPERTY)
-                                        //     setIsMobileMenuOpen(false)
-                                        // }}
                                         className="w-full border bg-white/50 text-[#FF9530] border-[#FF9530] hover:bg-[#e8851c] hover:text-white font-semibold rounded-full px-6 py-2.5 transition-all duration-300 hover:scale-105 flex items-center  justify-center"
                                     >
                                         <Building2 className="w-5 h-5 mr-2" />
                                         List Your Property
                                     </Link>
-
                                 </div>
 
-                                {/* Secondary Navigation */}
                                 <div className="border-t border-gray-100 pt-6 mb-6">
                                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">
                                         Quick Links
@@ -493,7 +491,6 @@ const Header = ({ withScrollEffect = false }: HeaderProps) => {
                                     </div>
                                 </div>
 
-                                {/* Contact Information */}
                                 <div className="border-t border-gray-100 pt-6 pb-24">
                                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">
                                         Get in Touch

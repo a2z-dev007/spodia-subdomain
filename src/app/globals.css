@@ -49,6 +49,13 @@ html.lenis, html.lenis body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --header-height: 120px; /* Default height for initial render */
+  }
+
+  @media (max-width: 1024px) {
+    :root {
+      --header-height: 80px; /* Mobile height */
+    }
   }
   
   html {
@@ -1009,4 +1016,21 @@ footer[class*="fixed"] {
 
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
+}
+
+/* Animation delay utilities for staggered animations */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+.animation-delay-800 {
+  animation-delay: 800ms;
 }

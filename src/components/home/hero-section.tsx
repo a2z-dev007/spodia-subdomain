@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, type MutableRefObject } from 'react';
-import PremiumHotelSearchBar from '@/components/home/PremiumHotelSearchBar';
+import MainSearchBar from '@/components/shared/MainSearchBar';
 import {
   CheckCircle2,
   Star,
@@ -139,7 +139,7 @@ export default function HeroSection() {
   const heroDestSwiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <section className="relative z-10 w-full bg-white pb-12 sm:pb-16 pt-24 sm:pt-28 lg:pt-[9rem] xl:pt-[9.25rem]">
+    <section className="relative z-10 w-full bg-white pb-12 sm:pb-16">
       {/* pt clears fixed header + ~24–32px breathing room (aligned with main nav px) */}
       <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10">
         <div className="relative w-full">
@@ -178,9 +178,8 @@ export default function HeroSection() {
             </div>
 
             <div className="absolute left-1/2 bottom-0 z-20 w-full -translate-x-1/2 translate-y-1/2 px-2 sm:px-3 md:px-4 lg:px-6">
-              <PremiumHotelSearchBar
-                variant="minimal"
-                containerClassName="w-full max-w-5xl xl:max-w-6xl 2xl:max-w-7xl"
+              <MainSearchBar
+                className="!bg-white/95 !backdrop-blur-xl border border-white/20"
               />
             </div>
           </div>

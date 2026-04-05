@@ -1,0 +1,20 @@
+import HotelSegmentPageShell from "@/components/hotel/HotelSegmentPageShell";
+import { buildHotelSegmentMetadata } from "@/lib/seo/metadata";
+
+type Props = { params: Promise<{ entityKey: string }> };
+
+export async function generateMetadata({ params }: Props) {
+  const { entityKey } = await params;
+  return buildHotelSegmentMetadata({ entityKey, segment: "dine" });
+}
+
+export default async function Page({ params }: Props) {
+  const { entityKey } = await params;
+  return (
+    <HotelSegmentPageShell
+      entityKey={entityKey}
+      title="Dine"
+      intro="Restaurants, bars, and dining experiences at {hotel}."
+    />
+  );
+}

@@ -20,6 +20,7 @@ interface PremiumGuestSelectProps {
   setChildrenAges: React.Dispatch<React.SetStateAction<number[]>>;
   containerClassName?: string;
   className?: string;
+  showIcon?: boolean;
 }
 
 const PremiumGuestSelect: FC<PremiumGuestSelectProps> = ({
@@ -31,7 +32,8 @@ const PremiumGuestSelect: FC<PremiumGuestSelectProps> = ({
   childrenAges,
   setChildrenAges,
   containerClassName = "",
-  className = ""
+  className = "",
+  showIcon = true
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -56,9 +58,11 @@ const PremiumGuestSelect: FC<PremiumGuestSelectProps> = ({
 
   return (
     <div className={`relative flex flex-1 items-center ${className} min-w-[200px] ${containerClassName}`}>
-      <div className="mr-2.5 shrink-0 transition-transform group-hover:scale-110">
-        <Users className="h-[18px] w-[18px] text-[#FF9530] sm:h-5 sm:w-5" strokeWidth={2.25} />
-      </div>
+      {showIcon && (
+        <div className="mr-2.5 shrink-0 transition-transform group-hover:scale-110">
+          <Users className="h-[18px] w-[18px] text-[#FF9530] sm:h-5 sm:w-5" strokeWidth={2.25} />
+        </div>
+      )}
       <div className="relative min-w-0 flex-1 pr-2 text-left sm:pr-4">
         {label && (
           <p className="mb-0.5 text-[11px] font-medium capitalize tracking-wide text-gray-400 sm:text-xs">{label}</p>

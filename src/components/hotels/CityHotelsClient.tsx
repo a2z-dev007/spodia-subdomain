@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/layout/Header";
 import PremiumHotelSearchBar from "@/components/home/PremiumHotelSearchBar";
 import HotelFiltersClient from "@/components/hotels/HotelFiltersClient";
 import MobileFiltersClient from "@/components/hotels/MobileFiltersClient";
@@ -308,8 +307,6 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
 
     return (
         <main className="min-h-screen bg-gray-50">
-            <Header />
-
             {/* Hero with Search Bar */}
             <div
                 className="w-full bg-cover bg-center bg-no-repeat flex items-center justify-center pt-28 pb-8 md:pt-36 px-4 md:px-8 relative z-10"

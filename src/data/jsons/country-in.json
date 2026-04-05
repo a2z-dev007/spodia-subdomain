@@ -1,0 +1,473 @@
+{
+  "country": "IN",
+  "currency": "INR",
+  "locale": "en-IN",
+  "data": {
+    "hero": {
+      "title": "Discover India's Best Stays – Palaces, Beaches & Beyond.",
+      "subtitle": "Book Hotels with Spas, Restaurants & Event Spaces. Best Price Guaranteed!",
+      "backgroundImage": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1920&q=80",
+      "trustBadges": [
+        "50,000+ Verified Properties",
+        "Best Price Guarantee",
+        "Free Cancellation",
+        "24/7 Customer Support"
+      ]
+    },
+    "topCities": [
+      {
+        "id": "goa",
+        "name": "Goa",
+        "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80",
+        "startingPrice": 1999,
+        "currency": "INR",
+        "tags": ["Beachfront", "Nightlife", "Portuguese Heritage"],
+        "slug": "goa-in"
+      },
+      {
+        "id": "jaipur",
+        "name": "Jaipur",
+        "image": "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&q=80",
+        "startingPrice": 2499,
+        "currency": "INR",
+        "tags": ["Palace Hotels", "Royal Heritage", "Pink City"],
+        "slug": "jaipur-rajasthan-in"
+      },
+      {
+        "id": "udaipur",
+        "name": "Udaipur",
+        "image": "https://images.unsplash.com/photo-1599661046827-dacff0c0f0e3?w=800&q=80",
+        "startingPrice": 3999,
+        "currency": "INR",
+        "tags": ["Lake Palaces", "Romantic", "Luxury"],
+        "slug": "udaipur-rajasthan-in"
+      },
+      {
+        "id": "kerala",
+        "name": "Kerala",
+        "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9947?w=800&q=80",
+        "startingPrice": 2999,
+        "currency": "INR",
+        "tags": ["Backwaters", "Houseboats", "Ayurveda"],
+        "slug": "kerala-in"
+      },
+      {
+        "id": "delhi",
+        "name": "New Delhi",
+        "image": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=80",
+        "startingPrice": 1799,
+        "currency": "INR",
+        "tags": ["Capital City", "Historical", "Business"],
+        "slug": "delhi-in"
+      },
+      {
+        "id": "mumbai",
+        "name": "Mumbai",
+        "image": "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=800&q=80",
+        "startingPrice": 2299,
+        "currency": "INR",
+        "tags": ["Financial Hub", "Bollywood", "Coastal"],
+        "slug": "mumbai-maharashtra-in"
+      },
+      {
+        "id": "rishikesh",
+        "name": "Rishikesh",
+        "image": "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?w=800&q=80",
+        "startingPrice": 1499,
+        "currency": "INR",
+        "tags": ["Spiritual", "Yoga Retreats", "Ganges"],
+        "slug": "rishikesh-uttarakhand-in"
+      },
+      {
+        "id": "manali",
+        "name": "Manali",
+        "image": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800&q=80",
+        "startingPrice": 1899,
+        "currency": "INR",
+        "tags": ["Mountains", "Adventure", "Snow"],
+        "slug": "manali-himachal-pradesh-in"
+      }
+    ],
+    "collections": [
+      {
+        "id": "luxury-palaces",
+        "title": "Palace Hotels of Rajasthan",
+        "type": "luxury",
+        "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1200&q=80",
+        "description": "Experience royal grandeur in converted palaces and heritage havelis",
+        "cta": "/collections/luxury-palaces"
+      },
+      {
+        "id": "beachfront-villas",
+        "title": "Beachfront Villas & Resorts",
+        "type": "beach",
+        "image": "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&q=80",
+        "description": "Wake up to ocean views in premium beachfront properties",
+        "cta": "/collections/beachfront-villas"
+      },
+      {
+        "id": "spiritual-retreats",
+        "title": "Spiritual Retreats & Ashrams",
+        "type": "spiritual",
+        "image": "https://images.unsplash.com/photo-1545389336-cf090694435e?w=1200&q=80",
+        "description": "Find inner peace in sacred spaces across India",
+        "cta": "/collections/spiritual-retreats"
+      },
+      {
+        "id": "mountain-escapes",
+        "title": "Himalayan Mountain Escapes",
+        "type": "mountain",
+        "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+        "description": "Breathtaking mountain resorts with panoramic valley views",
+        "cta": "/collections/mountain-escapes"
+      }
+    ],
+    "whySpodia": [
+      {
+        "icon": "star",
+        "title": "50,000+ Verified Hotels & Venues",
+        "description": "Every property is personally verified for quality and authenticity"
+      },
+      {
+        "icon": "shield",
+        "title": "Lowest Price Guarantee",
+        "description": "Find a lower price? We'll match it and give you an extra 10% off"
+      },
+      {
+        "icon": "sparkles",
+        "title": "Exclusive Spiritual Retreats",
+        "description": "Access to unique ashrams, yoga centers, and meditation retreats"
+      },
+      {
+        "icon": "award",
+        "title": "Award-Winning Customer Service",
+        "description": "24/7 support in multiple languages with instant booking confirmation"
+      }
+    ],
+    "hotelChains": [
+      {
+        "name": "Taj Hotels",
+        "logo": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200&q=80",
+        "slug": "taj-hotels",
+        "propertyCount": 100
+      },
+      {
+        "name": "Oberoi",
+        "logo": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=200&q=80",
+        "slug": "oberoi-hotels",
+        "propertyCount": 30
+      },
+      {
+        "name": "ITC Hotels",
+        "logo": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=200&q=80",
+        "slug": "itc-hotels",
+        "propertyCount": 110
+      },
+      {
+        "name": "Leela Palaces",
+        "logo": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=200&q=80",
+        "slug": "leela-palaces",
+        "propertyCount": 11
+      },
+      {
+        "name": "Marriott",
+        "logo": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=200&q=80",
+        "slug": "marriott-hotels",
+        "propertyCount": 90
+      },
+      {
+        "name": "Hyatt",
+        "logo": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=200&q=80",
+        "slug": "hyatt-hotels",
+        "propertyCount": 45
+      }
+    ],
+    "blogs": [
+      {
+        "id": "varanasi-guide",
+        "title": "Top 10 Pilgrimage Stays in Varanasi: A Spiritual Journey",
+        "slug": "varanasi-pilgrimage-hotels",
+        "image": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&q=80",
+        "excerpt": "Explore the best spiritual stays along the sacred Ganges, from heritage ghats to modern ashrams with traditional hospitality.",
+        "readTime": "8 min read",
+        "publishedDate": "2026-03-15"
+      },
+      {
+        "id": "goa-beaches",
+        "title": "Hidden Beach Paradises in Goa Beyond the Tourist Trails",
+        "slug": "hidden-beaches-goa",
+        "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80",
+        "excerpt": "Discover secluded beaches, boutique beach shacks, and luxury villas away from the crowded tourist spots.",
+        "readTime": "6 min read",
+        "publishedDate": "2026-03-10"
+      },
+      {
+        "id": "rajasthan-palaces",
+        "title": "Living Like Royalty: A Guide to Rajasthan's Palace Hotels",
+        "slug": "rajasthan-palace-hotels-guide",
+        "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80",
+        "excerpt": "From Udaipur's Lake Palace to Jaipur's Rambagh, experience the opulence of maharajas in these stunning heritage properties.",
+        "readTime": "10 min read",
+        "publishedDate": "2026-03-05"
+      },
+      {
+        "id": "kerala-backwaters",
+        "title": "Kerala Backwaters: Ultimate Houseboat Experience Guide",
+        "slug": "kerala-houseboat-guide",
+        "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9947?w=800&q=80",
+        "excerpt": "Everything you need to know about booking the perfect houseboat cruise through Kerala's serene backwaters.",
+        "readTime": "7 min read",
+        "publishedDate": "2026-02-28"
+      }
+    ],
+    "ecosystem": {
+      "spas": [
+        {
+          "id": "ananda-himalayas",
+          "name": "Ananda in the Himalayas",
+          "location": "Rishikesh, Uttarakhand",
+          "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
+          "startingPrice": 15000,
+          "currency": "INR",
+          "rating": 4.9,
+          "reviewCount": 328,
+          "specialties": ["Ayurveda", "Yoga", "Meditation"],
+          "slug": "ananda-himalayas-rishikesh"
+        },
+        {
+          "id": "kaya-kalp",
+          "name": "Kaya Kalp - The Royal Spa",
+          "location": "Udaipur, Rajasthan",
+          "image": "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&q=80",
+          "startingPrice": 8000,
+          "currency": "INR",
+          "rating": 4.8,
+          "reviewCount": 256,
+          "specialties": ["Royal Treatments", "Aromatherapy", "Wellness"],
+          "slug": "kaya-kalp-spa-udaipur"
+        },
+        {
+          "id": "jiva-spas",
+          "name": "Jiva Spas by Taj",
+          "location": "Multiple Locations",
+          "image": "https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=800&q=80",
+          "startingPrice": 5000,
+          "currency": "INR",
+          "rating": 4.7,
+          "reviewCount": 512,
+          "specialties": ["Traditional Indian", "Holistic Healing"],
+          "slug": "jiva-spas-taj"
+        }
+      ],
+      "restaurants": [
+        {
+          "id": "bukhara-itc",
+          "name": "Bukhara - ITC Maurya",
+          "location": "New Delhi",
+          "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+          "cuisine": "North-West Frontier",
+          "type": "Fine Dining",
+          "michelinStars": 0,
+          "awards": ["World's 50 Best Restaurants"],
+          "priceRange": "₹₹₹₹",
+          "slug": "bukhara-itc-maurya-delhi"
+        },
+        {
+          "id": "indian-accent",
+          "name": "Indian Accent",
+          "location": "New Delhi, Mumbai, Hyderabad",
+          "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80",
+          "cuisine": "Modern Indian",
+          "type": "Fine Dining",
+          "michelinStars": 0,
+          "awards": ["Asia's 50 Best Restaurants"],
+          "priceRange": "₹₹₹₹",
+          "slug": "indian-accent-restaurants"
+        },
+        {
+          "id": "trishna-mumbai",
+          "name": "Trishna",
+          "location": "Mumbai, Maharashtra",
+          "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&q=80",
+          "cuisine": "Seafood",
+          "type": "Casual Fine Dining",
+          "michelinStars": 0,
+          "awards": ["Michelin Plate"],
+          "priceRange": "₹₹₹",
+          "slug": "trishna-restaurant-mumbai"
+        }
+      ],
+      "venues": [
+        {
+          "id": "udaipur-palace-weddings",
+          "name": "Udaipur Palace Weddings",
+          "location": "Udaipur, Rajasthan",
+          "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+          "type": "Wedding Venue",
+          "capacity": 500,
+          "startingPrice": 500000,
+          "currency": "INR",
+          "features": ["Lake View", "Heritage Property", "Full Service"],
+          "slug": "udaipur-palace-weddings"
+        },
+        {
+          "id": "taj-mahal-palace-events",
+          "name": "Taj Mahal Palace Events",
+          "location": "Mumbai, Maharashtra",
+          "image": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80",
+          "type": "Corporate Events",
+          "capacity": 1000,
+          "startingPrice": 750000,
+          "currency": "INR",
+          "features": ["Gateway of India View", "Luxury Service", "Multiple Halls"],
+          "slug": "taj-mahal-palace-events-mumbai"
+        },
+        {
+          "id": "rambagh-palace-jaipur",
+          "name": "Rambagh Palace Events",
+          "location": "Jaipur, Rajasthan",
+          "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80",
+          "type": "Destination Weddings",
+          "capacity": 800,
+          "startingPrice": 600000,
+          "currency": "INR",
+          "features": ["Royal Gardens", "Heritage Venue", "Palace Tours"],
+          "slug": "rambagh-palace-events-jaipur"
+        }
+      ]
+    },
+    "deals": [
+      {
+        "id": "monsoon-magic",
+        "title": "Monsoon Magic Sale",
+        "discount": 30,
+        "discountType": "percentage",
+        "validFrom": "2026-06-01T00:00:00Z",
+        "validTill": "2026-07-31T23:59:59Z",
+        "description": "Get 30% off on selected hill stations and backwater properties during monsoon season",
+        "cta": "/deals/monsoon-magic",
+        "imageUrl": "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=800&q=80",
+        "terms": "Valid on select properties. Non-refundable."
+      },
+      {
+        "id": "early-bird-summer",
+        "title": "Early Bird Summer Booking",
+        "discount": 25,
+        "discountType": "percentage",
+        "validFrom": "2026-03-01T00:00:00Z",
+        "validTill": "2026-04-30T23:59:59Z",
+        "description": "Book your summer vacation now and save 25% on beach resorts and mountain escapes",
+        "cta": "/deals/early-bird-summer",
+        "imageUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
+        "terms": "Minimum 3 nights stay. Free cancellation till 7 days before check-in."
+      },
+      {
+        "id": "weekend-getaway",
+        "title": "Weekend Getaway Special",
+        "discount": 2000,
+        "discountType": "fixed",
+        "currency": "INR",
+        "validFrom": "2026-01-01T00:00:00Z",
+        "validTill": "2026-12-31T23:59:59Z",
+        "description": "Flat ₹2000 off on weekend stays at properties near major cities",
+        "cta": "/deals/weekend-getaway",
+        "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
+        "terms": "Valid for Friday-Sunday check-ins. Minimum 2 nights."
+      }
+    ],
+    "seoSections": {
+      "nearbyCities": [
+        { "name": "Noida", "slug": "noida-uttar-pradesh-in" },
+        { "name": "Gurgaon", "slug": "gurgaon-haryana-in" },
+        { "name": "Faridabad", "slug": "faridabad-haryana-in" },
+        { "name": "Ghaziabad", "slug": "ghaziabad-uttar-pradesh-in" },
+        { "name": "Agra", "slug": "agra-uttar-pradesh-in" },
+        { "name": "Chandigarh", "slug": "chandigarh-in" },
+        { "name": "Lucknow", "slug": "lucknow-uttar-pradesh-in" },
+        { "name": "Amritsar", "slug": "amritsar-punjab-in" }
+      ],
+      "bestHotels": [
+        { "name": "Taj Lake Palace", "slug": "taj-lake-palace-udaipur", "city": "Udaipur" },
+        { "name": "Oberoi Udaivilas", "slug": "oberoi-udaivilas-udaipur", "city": "Udaipur" },
+        { "name": "Rambagh Palace", "slug": "rambagh-palace-jaipur", "city": "Jaipur" },
+        { "name": "Taj Mahal Palace Mumbai", "slug": "taj-mahal-palace-mumbai", "city": "Mumbai" },
+        { "name": "The Leela Palace New Delhi", "slug": "leela-palace-new-delhi", "city": "Delhi" },
+        { "name": "ITC Grand Chola Chennai", "slug": "itc-grand-chola-chennai", "city": "Chennai" }
+      ],
+      "categories": [
+        "5 Star Luxury Hotels",
+        "4 Star Premium Hotels",
+        "3 Star Budget Hotels",
+        "Boutique Heritage Hotels",
+        "Beach Resorts",
+        "Mountain Resorts",
+        "Luxury Villas",
+        "Homestays & Guesthouses",
+        "Ashrams & Spiritual Stays",
+        "Business Hotels"
+      ]
+    },
+    "footer": {
+      "columns": [
+        {
+          "title": "Explore India",
+          "links": [
+            { "label": "Delhi Hotels", "slug": "delhi-in" },
+            { "label": "Mumbai Hotels", "slug": "mumbai-maharashtra-in" },
+            { "label": "Goa Resorts", "slug": "goa-in" },
+            { "label": "Jaipur Palaces", "slug": "jaipur-rajasthan-in" },
+            { "label": "Kerala Backwaters", "slug": "kerala-in" },
+            { "label": "Udaipur Lakes", "slug": "udaipur-rajasthan-in" }
+          ]
+        },
+        {
+          "title": "Popular Experiences",
+          "links": [
+            { "label": "Luxury Spas", "slug": "/spas" },
+            { "label": "Fine Dining", "slug": "/restaurants" },
+            { "label": "Wedding Venues", "slug": "/event-venues" },
+            { "label": "Spiritual Retreats", "slug": "/collections/spiritual-retreats" },
+            { "label": "Palace Hotels", "slug": "/collections/luxury-palaces" }
+          ]
+        },
+        {
+          "title": "Company",
+          "links": [
+            { "label": "About Us", "slug": "/about-us" },
+            { "label": "Careers", "slug": "/career" },
+            { "label": "Press", "slug": "/press" },
+            { "label": "Blog", "slug": "/blog" },
+            { "label": "Contact", "slug": "/contact" }
+          ]
+        },
+        {
+          "title": "Support",
+          "links": [
+            { "label": "Help Center", "slug": "/help" },
+            { "label": "FAQs", "slug": "/faqs" },
+            { "label": "Cancellation Policy", "slug": "/cancellation-policy" },
+            { "label": "Terms of Service", "slug": "/terms" },
+            { "label": "Privacy Policy", "slug": "/privacy" }
+          ]
+        }
+      ],
+      "newsletter": {
+        "title": "Get Exclusive Deals",
+        "description": "Subscribe and get ₹500 off your first booking",
+        "offer": "₹500 Off First Booking",
+        "placeholder": "Enter your email"
+      },
+      "socialLinks": {
+        "facebook": "https://facebook.com/spodia",
+        "instagram": "https://instagram.com/spodia",
+        "twitter": "https://twitter.com/spodia",
+        "youtube": "https://youtube.com/spodia"
+      },
+      "contactInfo": {
+        "phone": "+91-1800-123-4567",
+        "email": "support@spodia.com",
+        "address": "Spodia Technologies Pvt Ltd, Bangalore, India"
+      }
+    }
+  }
+}

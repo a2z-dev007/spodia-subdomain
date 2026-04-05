@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isDiscoveryCountrySegment } from "@/lib/resolver/discoveryCountry";
 
 /**
  * Public hostname for this request (Netlify/proxies may set x-forwarded-host).
@@ -45,6 +46,13 @@ function isMainMarketingHost(host: string): boolean {
   return false;
 }
 
+function withTenantRequestHeaders(req: NextRequest, subdomainKey: string): Headers {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-subdomain", subdomainKey);
+  requestHeaders.set("x-spodia-tenant-host", getPublicHost(req));
+  return requestHeaders;
+}
+
 export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = getPublicHost(req);
@@ -61,19 +69,23 @@ export function middleware(req: NextRequest) {
   }
 
   const parts = currentHost.split(".");
-
-  const countryCodes = ["in"];
-  const isDiscoveryRoute = countryCodes.includes(parts[parts.length - 1]);
+  const lastLabel = parts[parts.length - 1] ?? "";
+  const isDiscoveryRoute = parts.length > 0 && isDiscoveryCountrySegment(lastLabel);
 
   if (isDiscoveryRoute) {
     const pathParts = [...parts].reverse();
     const newPath = `/site/${pathParts.join("/")}${url.pathname}`;
-    return NextResponse.rewrite(new URL(newPath, req.url));
+    const subdomainKey = pathParts.join("/");
+    return NextResponse.rewrite(new URL(newPath, req.url), {
+      request: { headers: withTenantRequestHeaders(req, subdomainKey) },
+    });
   }
 
   const hotelSlug = parts.join("-");
   const newPath = `/hotel/${hotelSlug}${url.pathname}`;
-  return NextResponse.rewrite(new URL(newPath, req.url));
+  return NextResponse.rewrite(new URL(newPath, req.url), {
+    request: { headers: withTenantRequestHeaders(req, hotelSlug) },
+  });
 }
 
 export const config = {

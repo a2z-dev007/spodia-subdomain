@@ -1,5 +1,5 @@
 import {AuthorType, StayDataType, TaxonomyType} from "@/data/types";
-import {DEMO_STAY_CATEGORIES} from "@/data/taxonomies";
+
 
 export const buildAuthorFromApi = (owner: any): AuthorType => ({
     id: owner?.id || 0,
@@ -86,10 +86,20 @@ export const mapApiToStay = (item: any): StayDataType => {
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { BsTwitterX } from "react-icons/bs";
 
-export const SOCIAL_LINKS = [
+// Dynamic social media links configuration
+interface SocialLinkConfig {
+    label: string;
+    href: string;
+    icon: React.ComponentType<any>;
+    className: string;
+    iconClassName: string;
+    description: string;
+}
+
+export const getSocialLinks = (): SocialLinkConfig[] => [
     {
         label: "Facebook",
-        href: "https://www.facebook.com/spodiaasia",
+        href: process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/spodiaasia",
         icon: Facebook,
         className: "bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/30",
         iconClassName: "text-blue-400",
@@ -97,7 +107,7 @@ export const SOCIAL_LINKS = [
     },
     {
         label: "Youtube",
-        href: "https://www.youtube.com/@Spodiaasia",
+        href: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/@Spodiaasia",
         icon: Youtube,
         className: "bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/30",
         iconClassName: "text-red-400",
@@ -105,7 +115,7 @@ export const SOCIAL_LINKS = [
     },
     {
         label: "Instagram",
-        href: "https://www.instagram.com/spodiaasia",
+        href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/spodiaasia",
         icon: Instagram,
         className: "bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/30",
         iconClassName: "text-pink-400",
@@ -113,17 +123,13 @@ export const SOCIAL_LINKS = [
     },
     {
         label: "X (Twitter)",
-        href: "https://x.com/Spodiaasia",
+        href: process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/Spodiaasia",
         icon: BsTwitterX,
         className: "bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/30",
         iconClassName: "text-gray-400",
         description: "Join the conversation"
     },
-]
+];
 
-
-
-// Facebook : https://www.facebook.com/spodiaasia
-// Youtube: https://www.youtube.com/@Spodiaasia
-// Instagram : https://www.instagram.com/spodiaasia
-// X/Twitter : https://x.com/Spodiaasia
+// For backward compatibility, export static version
+export const SOCIAL_LINKS = getSocialLinks();
