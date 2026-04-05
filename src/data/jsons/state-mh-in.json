@@ -1,0 +1,102 @@
+{
+  "hero": {
+    "title": "Discover Maharashtra: A Legacy of Heritage & Urban Escapes.",
+    "subtitle": "Book Luxury Hotels with Spas, Coastal Resorts & Corporate Conference Venues in Maharashtra.",
+    "backgroundImage": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9947?auto=format&fit=crop&w=1920&q=80",
+    "trustBadges": ["Tourism Certified", "Free Cancellation", "24/7 Verified Support"]
+  },
+  "topItems": [
+    {
+      "id": "mumbai-city",
+      "name": "Mumbai",
+      "image": "https://images.unsplash.com/photo-1570160227045-38df72692bc5?auto=format&fit=crop&w=800&q=80",
+      "startingPrice": 1499,
+      "currency": "INR",
+      "tags": ["Financial Capital", "Luxury Stays"],
+      "slug": "mumbai"
+    },
+    {
+      "id": "pune-city",
+      "name": "Pune",
+      "image": "https://images.unsplash.com/photo-1595658658481-d53d3f999875?auto=format&fit=crop&w=800&q=80",
+      "startingPrice": 1299,
+      "currency": "INR",
+      "tags": ["IT Hub", "Pleasant Climate"],
+      "slug": "pune"
+    },
+    {
+      "id": "lonavala-city",
+      "name": "Lonavala",
+      "image": "https://images.unsplash.com/photo-1626248384115-46f903746c82?auto=format&fit=crop&w=800&q=80",
+      "startingPrice": 2999,
+      "currency": "INR",
+      "tags": ["Hill Station", "Weekend Getaway"],
+      "slug": "lonavala"
+    }
+  ],
+  "featuredProperties": [
+    {
+      "id": "hotel-1",
+      "name": "Taj Lands End, Mumbai",
+      "location": "Bandra, Mumbai",
+      "price": 12500,
+      "currency": "INR",
+      "rating": 4.8,
+      "reviews": 1250,
+      "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+      "tags": ["5-Star Luxury", "Ocean View"],
+      "cta": "/hotel/taj-lands-end"
+    },
+    {
+      "id": "hotel-2",
+      "name": "Hyatt Regency Pune",
+      "location": "Viman Nagar, Pune",
+      "price": 8500,
+      "currency": "INR",
+      "rating": 4.6,
+      "reviews": 840,
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+      "tags": ["Business Hotel", "Top Rated"],
+      "cta": "/hotel/hyatt-regency-pune"
+    }
+  ],
+  "whySpodia": [
+    { "title": "Over 10,000 Verified Hotels" },
+    { "title": "Exclusive Corporate Rates" },
+    { "title": "24/7 Regional Assistance" },
+    { "title": "Best Price State-wide Guarantee" }
+  ],
+  "hotelChains": [
+    { "name": "Taj Hotels", "slug": "taj" },
+    { "name": "The Oberoi Group", "slug": "oberoi" },
+    { "name": "Lemon Tree Hotels", "slug": "lemon-tree" }
+  ],
+  "ecosystem": {
+    "spas": [
+      { "name": "Jiva Spa at Taj", "price": 4500 },
+      { "name": "Kaya Kalp Spa", "price": 3800 }
+    ],
+    "venues": [
+      { "name": "Grand Maharashtra Ballroom", "capacity": 1000 },
+      { "name": "Beachfront Pavilion, Alibaug", "capacity": 200 }
+    ],
+    "restaurants": [
+      { "name": "The Souk", "location": "Mumbai" },
+      { "name": "Spice Kitchen", "location": "Pune" }
+    ]
+  },
+  "deals": [
+    {
+      "title": "Unlock 25% Off on Monsoon Getaways",
+      "validTill": "2026-08-15",
+      "urgencyTag": "Trending Offer",
+      "discount": "25%"
+    }
+  ],
+  "seoSections": {
+    "links": [
+      { "title": "Popular Cities", "items": ["Mumbai", "Pune", "Nagpur", "Alibaug", "Nasik", "Aurangabad"] },
+      { "title": "Stay Categories", "items": ["Beach Resorts", "Business Hotels", "Heritage Stays", "Hill Stations"] }
+    ]
+  }
+}

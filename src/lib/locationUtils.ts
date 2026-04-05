@@ -14,15 +14,34 @@ export async function resolveLocationIds(slug: string[]) {
     let stateId: number | undefined;
     let cityId: number | undefined;
 
+    // Static fallback for development/testing
+    const fallbackMap: Record<string, number> = {
+        'in': 101,
+        'maharashtra': 22,
+        'mumbai': 706,
+        'colaba': 1001, // Mock ID for location-level
+    };
+
     try {
+        const countrySlug = slug[0].toLowerCase();
+        countryId = fallbackMap[countrySlug];
+
+        if (slug.length > 1) {
+            const stateSlug = slug[1].toLowerCase();
+            stateId = fallbackMap[stateSlug];
+        }
+
+        if (slug.length > 2) {
+            const citySlug = slug[2].toLowerCase();
+            cityId = fallbackMap[citySlug];
+        }
+
+        // Try API resolution if not in fallback or to supplement
         const countriesRes = await getCountries();
-        // Inspect response structure. Assuming .data is array or .data.data
         const countries: Country[] = countriesRes.data?.data || countriesRes.data || [];
 
-        const countrySlug = slug[0];
-        // Match by shortname or name
         const country = countries.find(c =>
-            c.shortname?.toLowerCase() === countrySlug.toLowerCase() ||
+            c.shortname?.toLowerCase() === countrySlug ||
             normalize(c.name) === normalize(countrySlug)
         );
 

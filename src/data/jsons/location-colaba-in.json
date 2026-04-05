@@ -1,0 +1,71 @@
+{
+  "hero": {
+    "title": "Stay in the Heart of Colaba: Gateway to Mumbai's Souvenirs & Heritage.",
+    "subtitle": "Discover Hotels with Colonial Charm, Vibrant Street Views & Immediate Access to the Gateway of India.",
+    "backgroundImage": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80",
+    "trustBadges": ["Heritage Circle Certified", "Top Local Curator", "Fast Check-in"]
+  },
+  "featuredProperties": [
+    {
+      "id": "trident-nariman-point",
+      "name": "Trident Nariman Point, Colaba",
+      "location": "Nariman Point / Colaba Shore",
+      "price": 14000,
+      "currency": "INR",
+      "rating": 4.7,
+      "reviews": 2100,
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+      "tags": ["Sea View", "Business Focal", "Walking Distance Landmarks"],
+      "cta": "/hotel/trident-nariman-point"
+    },
+    {
+      "id": "taj-mahal-palace-colaba",
+      "name": "The Taj Mahal Palace",
+      "location": "Apollo Bunder",
+      "price": 22000,
+      "currency": "INR",
+      "rating": 4.9,
+      "reviews": 5400,
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+      "tags": ["Heritage Icon", "Full Sea Front"],
+      "cta": "/hotel/taj-mahal-palace"
+    }
+  ],
+  "whySpodia": [
+    { "title": "Verified Landmark Proximity" },
+    { "title": "24/7 Local Concierge Service" },
+    { "title": "Best Prices for Heritage Suites" }
+  ],
+  "hotelChains": [
+    { "name": "Taj Group", "slug": "taj" },
+    { "name": "Oberoi Trident", "slug": "trident" }
+  ],
+  "ecosystem": {
+    "spas": [
+      { "name": "Jiva Spa, Taj", "price": 8000 },
+      { "name": "The Spa at Trident", "price": 6000 }
+    ],
+    "venues": [
+      { "name": "The Rooftop Ballroom", "capacity": 200 },
+      { "name": "Colonial Boardroom", "capacity": 30 }
+    ],
+    "restaurants": [
+      { "name": "The Lantern", "location": "Inner Colaba" },
+      { "name": "Street 18", "location": "Colaba Causeway" }
+    ]
+  },
+  "deals": [
+    {
+      "title": "Weekend Coastal Stay: Save 20%",
+      "validTill": "2026-06-30",
+      "urgencyTag": "Selling Fast",
+      "discount": "20%"
+    }
+  ],
+  "seoSections": {
+    "links": [
+      { "title": "Nearby Historical Landmarks", "items": ["Gateway of India", "Prince of Wales Museum", "Colaba Causeway", "Regal Cinema", "Jehangir Art Gallery"] },
+      { "title": "Explore Local Vibes", "items": ["Heritage Walks", "Market Hopping", "Seafood Havens", "Coffee Shops", "Art Scene"] }
+    ]
+  }
+}

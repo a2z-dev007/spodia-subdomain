@@ -1,0 +1,101 @@
+{
+  "hero": {
+    "title": "Welcome to Mumbai: Where Luxury Meets Iconic Marine Views.",
+    "subtitle": "Book Premium Hotels with Rooftop Dining, Sea-facing Suites & World-class Business Centres in Mumbai.",
+    "backgroundImage": "https://images.unsplash.com/photo-1566552881560-0be862a7c445?auto=format&fit=crop&w=1920&q=80",
+    "trustBadges": ["City Certified", "Instant Confirmation", "Best Area Rates"]
+  },
+  "topItems": [
+    {
+      "id": "colaba-area",
+      "name": "Colaba",
+      "image": "https://images.unsplash.com/photo-1570160227045-38df72692bc5?auto=format&fit=crop&w=800&q=80",
+      "startingPrice": 1899,
+      "currency": "INR",
+      "tags": ["Heritage", "Shopping Hub"],
+      "slug": "colaba"
+    },
+    {
+      "id": "juhu-area",
+      "name": "Juhu",
+      "image": "https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=800&q=80",
+      "startingPrice": 2499,
+      "currency": "INR",
+      "tags": ["Beach", "Bollywood Hub"],
+      "slug": "juhu"
+    },
+    {
+      "id": "bkc-area",
+      "name": "BKC",
+      "image": "https://images.unsplash.com/photo-1566552881560-0be862a7c445?auto=format&fit=crop&w=800&q=80",
+      "startingPrice": 5999,
+      "currency": "INR",
+      "tags": ["Business District", "Financial Centre"],
+      "slug": "bkc"
+    }
+  ],
+  "featuredProperties": [
+    {
+      "id": "taj-mahal-palace",
+      "name": "The Taj Mahal Palace, Mumbai",
+      "location": "Colaba",
+      "price": 22000,
+      "currency": "INR",
+      "rating": 4.9,
+      "reviews": 5400,
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+      "tags": ["Heritage", "Sea View", "Global Icon"],
+      "cta": "/hotel/taj-mahal-palace"
+    },
+    {
+      "id": "jw-marriott-sahar",
+      "name": "JW Marriott Mumbai Sahar",
+      "location": "Andheri East",
+      "price": 14000,
+      "currency": "INR",
+      "rating": 4.7,
+      "reviews": 1800,
+      "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+      "tags": ["Near Airport", "Modern Luxury"],
+      "cta": "/hotel/jw-marriott-sahar"
+    }
+  ],
+  "whySpodia": [
+    { "title": "5,000+ Verified City Stays" },
+    { "title": "Priority Booking Support" },
+    { "title": "Exclusive Mumbai Dining Club" }
+  ],
+  "hotelChains": [
+    { "name": "Taj Hotels", "slug": "taj" },
+    { "name": "Marriott", "slug": "marriott" },
+    { "name": "Hilton", "slug": "hilton" }
+  ],
+  "ecosystem": {
+    "spas": [
+      { "name": "Quan Spa at JW Marriott", "price": 6500 },
+      { "name": "The Oberoi Spa", "price": 7500 }
+    ],
+    "venues": [
+      { "name": "Palladium Hotel Ballroom", "capacity": 600 },
+      { "name": "Crystal Room at Taj", "capacity": 400 }
+    ],
+    "restaurants": [
+      { "name": "Wasabi by Morimoto", "location": "Taj Palace" },
+      { "name": "Peshawri", "location": "ITC Maratha" }
+    ]
+  },
+  "deals": [
+    {
+      "title": "Business Traveller Flash Sale: 30% Off BKC Hotels",
+      "validTill": "2026-07-01",
+      "urgencyTag": "Last 2 Days",
+      "discount": "30%"
+    }
+  ],
+  "seoSections": {
+    "links": [
+      { "title": "Nearby Areas", "items": ["Worli", "Bandra East", "Powai", "Andheri West", "Malad", "Lower Parel"] },
+      { "title": "Popular Searches", "items": ["Hotels Near Airport", "Sea View Suites", "Boutique Stays", "5 Star Hotels"] }
+    ]
+  }
+}
