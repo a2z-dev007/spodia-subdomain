@@ -2,90 +2,96 @@
 
 import React from "react";
 import { 
-  ShieldCheck, 
-  Zap, 
-  Clock, 
+  CreditCard, 
+  CalendarCheck, 
+  History, 
   Wifi, 
   Car, 
-  RotateCcw, 
-  Star 
+  XCircle 
 } from "lucide-react";
 
 const advantages = [
   {
     id: 1,
     title: "Best Price Guarantee",
-    description: "Always get the lowest rates and best deals when you book through us.",
-    icon: <ShieldCheck size={48} className="text-orange-500" />
+    description: "Get budget-friendly prices with the best accommodation options in the city.",
+    icon: <CreditCard className="w-6 h-6 text-[#F97316]" />
   },
   {
     id: 2,
-    title: "Instant Confirmation",
-    description: "Receive your booking voucher within seconds of completing the payment.",
-    icon: <Zap size={48} className="text-orange-500" />
+    title: "Instant Booking",
+    description: "Book in advance and get hassle-free check-ins without any waiting time.",
+    icon: <CalendarCheck className="w-6 h-6 text-[#F97316]" />
   },
   {
     id: 3,
     title: "Flexible Check-out",
-    description: "Enjoy leisure time with our flexible check-in and check-out options.",
-    icon: <Clock size={48} className="text-orange-500" />
+    description: "We provide late check-outs for our guests' convenience on prior notice.",
+    icon: <History className="w-6 h-6 text-[#F97316]" />
   },
   {
     id: 4,
     title: "High-Speed Wi-Fi",
-    description: "Stay connected throughout the property with high-speed fiber internet.",
-    icon: <Wifi size={48} className="text-orange-500" />
+    description: "We always keep you connected with 24x7 free high-speed wifi access.",
+    icon: <Wifi className="w-6 h-6 text-[#F97316]" />
   },
   {
     id: 5,
-    title: "Free Airport Transfer",
-    description: "Complimentary pickup and drop for all premium suite bookings.",
-    icon: <Car size={48} className="text-orange-500" />
+    title: "Airport Transfers",
+    description: "We have seamless pickup and drop services for our guests' convenience.",
+    icon: <Car className="w-6 h-6 text-[#F97316]" />
   },
   {
     id: 6,
     title: "Easy Cancellation",
-    description: "Full refund on cancellations made up to 24 hours before check-in.",
-    icon: <RotateCcw size={48} className="text-orange-500" />
+    description: "Smooth cancellation process at one's convenience without extra charges.",
+    icon: <XCircle className="w-6 h-6 text-[#F97316]" />
   }
 ];
 
 export default function HotelAdvantages() {
   return (
-    <section className="bg-black py-32 px-6 w-full -mt-20 overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-600/10 rounded-full blur-[200px] -mr-[400px] -mt-[400px]" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[150px] -ml-[300px] -mb-[300px]" />
+    <section className="bg-black py-24 px-6 w-full overflow-hidden relative">
+      {/* Decorative Blobs */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-600/5 rounded-full blur-[120px] -mr-[300px] -mt-[300px]" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] -ml-[300px] -mb-[300px]" />
 
-      <div className="max-w-[1440px] mx-auto relative z-10">
-        <div className="text-center mb-24 px-6">
-          <span className="text-[#FF7A00] text-sm font-black uppercase tracking-[0.4em] block mb-8">OUR UNIQUE EDGE</span>
-          <h2 className="text-5xl md:text-[80px] font-black text-white leading-none mb-10 tracking-tight">
-            The Nandan <span className="text-[#FF7A00]">Advantage</span>
+      <div className="max-w-[1600px] mx-auto relative z-10 px-4 md:px-12">
+        {/* Section Header */}
+        <div className="text-center mb-24">
+          <span className="text-[#F97316] text-[12px] font-black uppercase tracking-[0.4em] block mb-6">
+            OUR UNIQUE EDGE
+          </span>
+          <h2 className="text-4xl md:text-[64px] font-black text-white leading-tight tracking-tight">
+            The Nandan Advantages
           </h2>
-          <p className="text-gray-400 font-medium max-w-[700px] mx-auto text-xl leading-relaxed">
-            Discover why thousands of travelers choose us for their stay in Guwahati. Luxury is not an option, it's our standard.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1px bg-white/10 rounded-[60px] overflow-hidden border border-white/10 shadow-2xl">
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-20 gap-y-24">
           {advantages.map((item) => (
             <div 
               key={item.id} 
-              className="bg-black p-12 transition-all duration-300 hover:bg-zinc-900 group border-[0.5px] border-white/5"
+              className="flex flex-col items-center text-center transition-all duration-300 group"
             >
-              <div className="bg-white/5 w-[100px] h-[100px] rounded-[35px] flex items-center justify-center mb-10 transition-transform group-hover:scale-110 group-hover:bg-orange-500/10">
+              {/* Icon Container */}
+              <div className="bg-white/5 w-16 h-16 rounded-[22px] flex items-center justify-center mb-10 transition-transform group-hover:scale-110 group-hover:bg-orange-500/10">
                 {item.icon}
               </div>
-              <h3 className="text-3xl font-black text-white mb-6 group-hover:text-orange-500 transition-colors">
+              
+              {/* Content */}
+              <h3 className="text-[24px] font-black text-white mb-6 group-hover:text-[#F97316] transition-colors">
                 {item.title}
               </h3>
-              <p className="text-gray-400 font-medium leading-relaxed text-lg transition-colors group-hover:text-gray-300">
+              <p className="text-gray-400 font-medium leading-relaxed text-[15px] max-w-[320px]">
                 {item.description}
               </p>
             </div>
           ))}
         </div>
       </div>
+
     </section>
   );
 }
+
