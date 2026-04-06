@@ -11,6 +11,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import BottomTab from '@/components/layout/BottomTab';
 import FooterSSR from '@/components/layout/FooterSSR';
+import ConditionalShell from '@/components/layout/ConditionalShell';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -83,8 +84,10 @@ export default function RootLayout({
       >
         <Providers>
           {children}
-          <BottomTab />
-          <FooterSSR />
+          <ConditionalShell>
+            <BottomTab />
+            <FooterSSR />
+          </ConditionalShell>
         </Providers>
         <ToastContainer />
         <Toaster

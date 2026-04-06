@@ -12,6 +12,13 @@ export default function SubdomainShellLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isHotelPage = pathname.startsWith("/hotel/");
+
+  if (isHotelPage) {
+    return <>{children}</>;
+  }
+
   return (
     <>
       <Header />
