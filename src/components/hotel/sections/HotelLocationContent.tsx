@@ -1,84 +1,115 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { MapPin, Plane, Train, Building, Church, Camera, Car } from "lucide-react";
-
-const landmarks = [
-  { id: 1, name: "Kamakhya Temple", dist: "7.5 km", time: "20 min", icon: <Church size={20} className="text-orange-500" /> },
-  { id: 2, name: "Railway Station", dist: "1.2 km", time: "5 min", icon: <Train size={20} className="text-orange-500" /> },
-  { id: 3, name: "LGBI Airport", dist: "22 km", time: "45 min", icon: <Plane size={20} className="text-orange-500" /> },
-  { id: 4, name: "Umananda Island", dist: "3.5 km", time: "15 min", icon: <Camera size={20} className="text-orange-500" /> },
-  { id: 5, name: "GS Road Market", dist: "2.8 km", time: "10 min", icon: <Building size={20} className="text-orange-500" /> },
-  { id: 6, name: "ISBT Guwahati", dist: "12 km", time: "30 min", icon: <Car size={20} className="text-orange-500" /> }
-];
+import { MapPin, Compass, Train, Navigation, Plane, Umbrella, Bus } from "lucide-react";
 
 export default function HotelLocationContent() {
   return (
-    <section className="py-32 px-6 max-w-[1440px] mx-auto w-full group relative overflow-hidden">
-      <div className="text-center mb-20 max-w-[1000px] mx-auto px-6">
-        <h2 className="text-5xl md:text-7xl font-black text-[#1a1a1a] mb-8 leading-none tracking-tight">
-          Location & <span className="text-orange-500 underline decoration-[6px] decoration-orange-500/20 underline-offset-[12px]">Access</span>
-        </h2>
-        <p className="text-gray-500 font-medium text-xl max-w-[700px] mx-auto leading-relaxed">
-          Strategically located in the heart of Guwahati, we are well connected to all major transit hubs and tourist landmarks.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 px-6">
-        {/* Map Container */}
-        <div className="relative h-[600px] w-full rounded-[60px] overflow-hidden shadow-2xl border-[10px] border-white ring-1 ring-gray-100 group">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114584.73484085442!2d91.66!3d26.11!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5a287f913d3d%3A0xc3b835e39d53d865!2sGuwahati%2C%20Assam!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
-            width="100%" 
-            height="100%" 
-            style={{ border: 0 }} 
-            allowFullScreen 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-            className="filter grayscale transition-all duration-700 group-hover:grayscale-0"
-          ></iframe>
-          <div className="absolute top-10 left-10 bg-white p-6 rounded-[30px] shadow-2xl flex items-center gap-4 transition-transform group-hover:scale-105">
-            <div className="bg-orange-500 w-12 h-12 rounded-full flex items-center justify-center">
-              <MapPin size={24} className="text-white" />
-            </div>
-            <div>
-              <h4 className="text-xl font-black text-[#1a1a1a]">Hotel Nandan</h4>
-              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mt-1">Guwahati, Assam</p>
-            </div>
+    <section className="bg-white py-24 px-6 w-full relative overflow-hidden">
+      <div className="max-w-[1600px] mx-auto relative z-10 px-4">
+        
+        {/* Section Header */}
+        <div className="mb-14 px-2">
+          <h2 className="text-[40px] font-black text-[#2D3142] mb-3">
+            Location & Access
+          </h2>
+          <div className="text-[#9CA3AF] font-medium text-[15px] space-y-1">
+            <p>Hotel Nandan</p>
+            <p>Guwahati Railway Station</p>
           </div>
         </div>
 
-        {/* Landmarks Container */}
-        <div className="flex flex-col justify-center space-y-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {landmarks.map((item) => (
-              <div key={item.id} className="bg-white p-10 rounded-[40px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] border-[1.5px] border-gray-50 flex items-start gap-6 transition-all duration-300 hover:border-orange-500/30 hover:scale-[1.05] group">
-                <div className="w-[60px] h-[60px] rounded-[20px] bg-orange-50 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
-                  {item.icon}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Map Section */}
+          <div className="lg:col-span-7 h-[500px] md:h-[600px] rounded-[24px] overflow-hidden relative shadow-sm border border-gray-100">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.4435534241696!2d91.7482813!3d26.1822262!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a597a7a14765d%3A0x6b876fc156e9df02!2sHotel%20Nandan!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              className="filter grayscale-[0.2]"
+            ></iframe>
+            
+            {/* Map Overlay Card */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6 py-4 rounded-[20px] shadow-xl flex items-center gap-4 border border-gray-50 max-w-[280px] w-full">
+              <div className="bg-[#F97316] w-12 h-12 rounded-full flex items-center justify-center shrink-0">
+                <MapPin size={24} className="text-white" />
+              </div>
+              <div className="overflow-hidden">
+                <h4 className="text-[16px] font-black text-[#1a1a1a] truncate">Hotel Nandan</h4>
+                <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Guwahati, Assam</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Info Side Card */}
+          <div className="lg:col-span-5 bg-white rounded-[24px] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.06)] border border-gray-50 p-8 md:p-10 h-full">
+            {/* Landmarks Group */}
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="bg-orange-50 w-8 h-8 rounded-lg flex items-center justify-center">
+                  <Compass size={18} className="text-[#F97316]" />
                 </div>
-                <div>
-                  <h4 className="text-2xl font-black text-[#1a1a1a] mb-2">{item.name}</h4>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-black text-gray-400 uppercase tracking-widest">{item.dist}</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-200"></span>
-                    <span className="text-sm font-black text-orange-500 uppercase tracking-widest">{item.time}</span>
-                  </div>
+                <span className="text-[12px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">
+                  LANDMARKS
+                </span>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex justify-between items-center transition-all hover:translate-x-1">
+                  <span className="text-[15px] font-bold text-[#475569]">Guwahati Railway Station</span>
+                  <span className="bg-[#F1F5F9] text-[#94A3B8] text-[11px] font-black px-3 py-1 rounded-md">0.5 km</span>
+                </div>
+                <div className="flex justify-between items-center transition-all hover:translate-x-1">
+                  <span className="text-[15px] font-bold text-[#475569]">Kamakhya Temple</span>
+                  <span className="bg-[#F1F5F9] text-[#94A3B8] text-[11px] font-black px-3 py-1 rounded-md">7.2 km</span>
                 </div>
               </div>
-            ))}
-          </div>
-          
-          <div className="bg-black p-12 rounded-[50px] shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[100px] -mr-[150px] -mt-[150px]" />
-            <div className="relative z-10">
-              <h4 className="text-3xl font-black text-white mb-4">Need a pickup?</h4>
-              <p className="text-gray-400 font-medium text-lg mb-8 leading-relaxed">
-                Contact our concierge desk for complimentary airport/railway station pickups for premium stays.
-              </p>
-              <button className="bg-white text-black px-10 py-5 rounded-[40px] font-black uppercase tracking-widest text-[13px] hover:bg-orange-500 hover:text-white transition-all shadow-xl active:scale-[0.98]">
-                Request Pickup →
-              </button>
+            </div>
+
+            {/* Transport Group */}
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="bg-orange-50 w-8 h-8 rounded-lg flex items-center justify-center">
+                  <Bus size={18} className="text-[#F97316]" />
+                </div>
+                <span className="text-[12px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">
+                  TRANSPORT
+                </span>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex justify-between items-center transition-all hover:translate-x-1">
+                  <span className="text-[15px] font-bold text-[#475569]">ISBT Guwahati</span>
+                  <span className="bg-[#F1F5F9] text-[#94A3B8] text-[11px] font-black px-3 py-1 rounded-md">12 km</span>
+                </div>
+                <div className="flex justify-between items-center transition-all hover:translate-x-1">
+                  <span className="text-[15px] font-bold text-[#475569]">LGBI Airport</span>
+                  <span className="bg-[#F1F5F9] text-[#94A3B8] text-[11px] font-black px-3 py-1 rounded-md">22 km</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Special Info Cards */}
+            <div className="space-y-4">
+              <div className="bg-[#F8FAFC] p-4 rounded-[18px] border border-gray-100 flex items-center justify-between group cursor-default">
+                <div className="flex items-center gap-4">
+                  <Plane size={20} className="text-[#F97316] group-hover:scale-110 transition-transform" />
+                  <span className="text-[14px] font-bold text-[#1a1a1a]">International Airport</span>
+                </div>
+                <span className="text-[#9CA3AF] text-[12px] font-medium">15 min drive</span>
+              </div>
+              
+              <div className="bg-[#F8FAFC] p-4 rounded-[18px] border border-gray-100 flex items-center justify-between group cursor-default">
+                <div className="flex items-center gap-4">
+                  <Umbrella size={20} className="text-[#F97316] group-hover:scale-110 transition-transform" />
+                  <span className="text-[14px] font-bold text-[#1a1a1a]">Sunny Beach</span>
+                </div>
+                <span className="text-[#9CA3AF] text-[12px] font-medium">5 min walk</span>
+              </div>
             </div>
           </div>
         </div>
@@ -86,3 +117,4 @@ export default function HotelLocationContent() {
     </section>
   );
 }
+

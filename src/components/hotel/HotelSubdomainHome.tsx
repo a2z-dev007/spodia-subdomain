@@ -18,6 +18,7 @@ import HotelSpecialServices from "@/components/hotel/sections/HotelSpecialServic
 import HotelHighlights from "@/components/hotel/sections/HotelHighlights";
 import HotelLocationContent from "@/components/hotel/sections/HotelLocationContent";
 import HotelFAQ from "@/components/hotel/sections/HotelFAQ";
+import HotelFooterLinks from "@/components/hotel/sections/HotelFooterLinks";
 
 type Props = { entityKey: string };
 
@@ -110,6 +111,9 @@ export default async function HotelSubdomainHome({ entityKey }: Props) {
 
         {/* Common Inquiries (FAQ) */}
         <HotelFAQ />
+
+        {/* Global Destination Links */}
+        <HotelFooterLinks />
       </div>
     </div>
   );

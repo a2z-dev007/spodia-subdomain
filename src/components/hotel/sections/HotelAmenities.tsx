@@ -1,51 +1,101 @@
 "use client";
 
 import React from "react";
-import { Utensils, Wifi, Waves, Dumbbell, Car, Coffee, ShieldCheck, WavesIcon } from "lucide-react";
+import {
+  Utensils,
+  Wifi,
+  Waves,
+  Dumbbell,
+  Car,
+  Coffee,
+  ChefHat,
+  ParkingCircle,
+  ChevronDown,
+} from "lucide-react";
 
 const amenities = [
-  { id: 1, name: "Restaurant", icon: <Utensils size={40} className="text-[#FF7A00]" />, desc: "Indian & Continental" },
-  { id: 2, name: "High Speed Wi-Fi", icon: <Wifi size={40} className="text-[#FF7A00]" />, desc: "Fiber Optic 500Mbps" },
-  { id: 3, name: "Swimming Pool", icon: <WavesIcon size={40} className="text-[#FF7A00]" />, desc: "Temperature Controlled" },
-  { id: 4, name: "Gymnasium", icon: <Dumbbell size={40} className="text-[#FF7A00]" />, desc: "Modern Equipment" },
-  { id: 5, name: "Secured Parking", icon: <Car size={40} className="text-[#FF7A00]" />, desc: "Valet & Multi-level" },
-  { id: 6, name: "Coffee Shop", icon: <Coffee size={40} className="text-[#FF7A00]" />, desc: "24/7 Brewed Coffee" }
+  {
+    id: 1,
+    name: "RESTAURANT",
+    icon: <Utensils size={32} className="text-[#F97316]" />,
+    desc: "FINE DINING",
+  },
+  {
+    id: 2,
+    name: "KITCHEN",
+    icon: <ChefHat size={32} className="text-[#F97316]" />,
+    desc: "FULLY EQUIPPED",
+  },
+  {
+    id: 3,
+    name: "WI-FI",
+    icon: <Wifi size={32} className="text-[#F97316]" />,
+    desc: "FIBER HIGH SPEED",
+  },
+  {
+    id: 4,
+    name: "POOL",
+    icon: <Waves size={32} className="text-[#F97316]" />,
+    desc: "TEMPERATURE CONTROL",
+  },
+  {
+    id: 5,
+    name: "GYMNASIUM",
+    icon: <Dumbbell size={32} className="text-[#F97316]" />,
+    desc: "24/7 ACCESS",
+  },
+  {
+    id: 6,
+    name: "PARKING",
+    icon: <ParkingCircle size={32} className="text-[#F97316]" />,
+    desc: "VALET & FREE",
+  },
 ];
 
 export default function HotelAmenities() {
   return (
-    <section className="bg-[#fcfcfc] py-32 px-6 w-full -mt-20 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-100 rounded-full blur-[180px] -mr-[300px] -mt-[300px]" />
-      
-      <div className="max-w-[1440px] mx-auto relative z-10 px-6">
-        <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-8">
-          <div className="max-w-[700px]">
-            <h2 className="text-5xl md:text-7xl font-black text-[#1a1a1a] mb-8 leading-none tracking-tight">
-              World Class <span className="text-orange-500 underline decoration-[6px] decoration-orange-500/20 underline-offset-[12px]">Amenities</span>
-            </h2>
-            <p className="text-gray-500 font-medium text-xl leading-relaxed">
-              Experience unparalleled hospitality and comfort in every corner of our property based in the heart of Guwahati city.
-            </p>
-          </div>
-          <button className="bg-[#1a1a1a] text-white px-12 py-6 rounded-[3rem] font-black uppercase tracking-widest text-[14px] hover:bg-black transition-all shadow-2xl shadow-gray-200 active:scale-[0.98]">
-            Explore All 29 Amenities
-          </button>
+    <section className="bg-white pt-12 pb-12 px-6 w-full relative overflow-hidden">
+      <div className="max-w-[1600px] mx-auto relative z-10 px-4">
+        {/* Section Header */}
+        <div className="text-center mb-20 max-w-[800px] mx-auto">
+          <h2 className="text-[40px] font-black text-[#2D3142] mb-6 leading-tight">
+            World-Class Amenities
+          </h2>
+          <p className="text-[#9CA3AF] font-medium text-[15px] md:text-[16px] leading-relaxed">
+            Our properties have been handpicked to deliver premium hospitality.
+            Experience luxury that welcomes you like royalty in the heart of
+            Guwahati.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Amenities Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
           {amenities.map((item) => (
-            <div key={item.id} className="bg-white p-12 rounded-[50px] shadow-[0_45px_100px_-25px_rgba(0,0,0,0.08)] border-[1.5px] border-gray-50 flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.03] hover:border-orange-500/30 group">
-              <div className="w-[110px] h-[110px] rounded-[35px] bg-white shadow-xl shadow-gray-100 flex items-center justify-center mb-8 transition-transform group-hover:scale-110 group-hover:rotate-6">
+            <div
+              key={item.id}
+              className="bg-white p-8 rounded-[24px] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.08)] border border-gray-50 flex flex-col items-center text-center transition-all duration-300 hover:shadow-md hover:-translate-y-1 group"
+            >
+              <div className="mb-6 transition-transform group-hover:scale-110">
                 {item.icon}
               </div>
-              <h3 className="text-2xl font-black text-[#1a1a1a] mb-4 group-hover:text-orange-500 transition-colors">
+              <h3 className="text-[14px] font-black text-[#1a1a1a] mb-2 tracking-[0.05em]">
                 {item.name}
               </h3>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-[11px]">
+              <p className="text-[#9CA3AF] font-bold tracking-[0.02em] text-[10px]">
                 {item.desc}
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Bottom Link */}
+        <div className="flex justify-center">
+          <button className="flex flex-col items-center gap-2 group">
+            <span className="text-[#F97316] font-black text-[12px] uppercase tracking-[0.2em] border-b-2 border-orange-100 pb-1 group-hover:border-[#F97316] transition-all">
+              EXPLORE ALL 29 AMENITIES
+            </span>
+            <ChevronDown size={20} className="text-[#F97316] animate-bounce" />
+          </button>
         </div>
       </div>
     </section>
