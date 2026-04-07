@@ -21,7 +21,7 @@
       "id": "penthouse-suite",
       "title": "Penthouse Suite",
       "rating": 4.7,
-      "price": 6499,
+      "price": 680,
       "image": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=800",
       "category": "Suites / Villas",
       "amenities": [
@@ -29,13 +29,16 @@
         { "name": "Jacuzzi", "icon": "Bath" },
         { "name": "Fiber WiFi", "icon": "Wifi" }
       ],
-      "featured": true
+      "featured": true,
+      "sleeps": "2 Adults",
+      "size": "1,200 sq ft",
+      "view": "City Skyline"
     },
     {
       "id": "ocean-view-villa",
       "title": "Ocean View Villa",
       "rating": 4.7,
-      "price": 6499,
+      "price": 960,
       "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=800",
       "category": "Suites / Villas",
       "amenities": [
@@ -43,13 +46,16 @@
         { "name": "Jacuzzi", "icon": "Bath" },
         { "name": "Fiber WiFi", "icon": "Wifi" }
       ],
-      "featured": true
+      "featured": true,
+      "sleeps": "2 Adults",
+      "size": "1,800 sq ft",
+      "view": "Panoramic Ocean"
     },
     {
       "id": "executive-family",
       "title": "Executive Family Room",
       "rating": 4.7,
-      "price": 6499,
+      "price": 450,
       "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=800",
       "category": "Family Rooms",
       "amenities": [
@@ -57,7 +63,10 @@
         { "name": "Jacuzzi", "icon": "Bath" },
         { "name": "Fiber WiFi", "icon": "Wifi" }
       ],
-      "featured": true
+      "featured": true,
+      "sleeps": "4 Persons",
+      "size": "950 sq ft",
+      "view": "Garden/Pool"
     }
   ]
 }
