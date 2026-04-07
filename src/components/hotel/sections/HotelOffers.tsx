@@ -1,56 +1,94 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import {
+  CreditCard,
+  Tag,
+  Utensils,
+  Landmark,
+  Coffee,
+  Percent,
+} from "lucide-react";
 
-const offers = [
+interface Offer {
+  id: number;
+  bank: string;
+  title: string;
+  description: string;
+  bgColor: string;
+  accentColor: string;
+  icon: React.ReactNode;
+  bgIcon: React.ReactNode;
+}
+
+const offers: Offer[] = [
   {
     id: 1,
-    title: "Flat 10% Off",
-    description: "On all bookings made via HDFC Bank Debit/Credit Cards.",
     bank: "HDFC BANK",
-    bgColor: "bg-blue-50",
-    textColor: "text-blue-900",
-    tagColor: "bg-blue-600",
+    title: "Flat 10% Off",
+    description: "on International Hotels with HDFC Bank Cards",
+    bgColor: "bg-[#EEF4FF]",
+    accentColor: "text-[#3B4CB8]",
+    icon: <Landmark className="w-4 h-4" />,
+    bgIcon: <CreditCard className="w-32 h-32 text-[#3B4CB8]/10" />,
   },
   {
     id: 2,
-    title: "Flat 15% Off",
-    description: "Exclusive discount for Kotak Mahindra Bank customers.",
     bank: "KOTAK BANK",
-    bgColor: "bg-red-50",
-    textColor: "text-red-900",
-    tagColor: "bg-red-600",
+    title: "Flat 15% Off",
+    description: "on Domestic Stays with Kotak Credit Card EMI",
+    bgColor: "bg-[#FFF0F0]",
+    accentColor: "text-[#D32F2F]",
+    icon: <Percent className="w-4 h-4" />,
+    bgIcon: <Tag className="w-32 h-32 text-[#D32F2F]/10" />,
   },
   {
     id: 3,
-    title: "Free Breakfast",
-    description: "Become a member and enjoy free breakfast on every stay.",
     bank: "MEMBERS ONLY",
-    bgColor: "bg-orange-50",
-    textColor: "text-orange-900",
-    tagColor: "bg-[#FF7A00]",
-  }
+    title: "Free Breakfast",
+    description: "on all LuxeStay curated boutique hotels",
+    bgColor: "bg-[#FFFBEC]",
+    accentColor: "text-[#996A12]",
+    icon: <Coffee className="w-4 h-4" />,
+    bgIcon: <Utensils className="w-32 h-32 text-[#996A12]/10" />,
+  },
 ];
 
 export default function HotelOffers() {
   return (
-    <section className="py-20 px-6 max-w-[1440px] mx-auto w-full">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <section className="pt-16 pb-4 px-4 max-w-[1600px] mx-auto w-full">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {offers.map((offer) => (
-          <div 
-            key={offer.id} 
-            className={`${offer.bgColor} rounded-3xl p-8 flex flex-col justify-between h-[240px] transition-transform hover:scale-[1.02] cursor-pointer shadow-sm relative overflow-hidden`}
+          <div
+            key={offer.id}
+            className={`${offer.bgColor} rounded-[32px] px-8 py-5 flex flex-col justify-center h-[190px] transition-all hover:shadow-xl cursor-pointer relative overflow-hidden group`}
           >
-            <div>
-              <span className={`${offer.tagColor} text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest`}>
-                {offer.bank}
-              </span>
-              <h3 className={`text-3xl font-black ${offer.textColor} mt-4`}>{offer.title}</h3>
-              <p className={`text-sm ${offer.textColor}/80 mt-2 max-w-[200px]`}>{offer.description}</p>
+            {/* Content Container */}
+            <div className="relative z-10 pl-2">
+              <div className="flex items-center gap-2 mb-4">
+                <div
+                  className={`w-8 h-8 rounded-full ${offer.bgColor} border border-white flex items-center justify-center shadow-sm ${offer.accentColor}`}
+                >
+                  {offer.icon}
+                </div>
+                <span
+                  className={`text-[11px] font-extrabold uppercase tracking-widest ${offer.accentColor}`}
+                >
+                  {offer.bank}
+                </span>
+              </div>
+
+              <h3 className="text-[26px] font-black text-[#1a1a1a] mb-2 leading-tight">
+                {offer.title}
+              </h3>
+              <p className="text-[13px] text-gray-400 font-medium leading-relaxed">
+                {offer.description}
+              </p>
             </div>
-            <div className="flex justify-end">
-              <button className="text-sm font-bold underline decoration-2 underline-offset-4">REDEEM NOW</button>
+
+            {/* Faint Background Icon */}
+            <div className="absolute right-12 top-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6 pointer-events-none">
+              {offer.bgIcon}
             </div>
           </div>
         ))}
