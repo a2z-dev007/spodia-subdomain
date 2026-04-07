@@ -5,6 +5,7 @@ import DiscountBanner from "@/components/hotel/sections/DiscountBanner";
 import RoomAmenities from "@/components/hotel/sections/RoomAmenities";
 import RoomReviews from "@/components/hotel/sections/RoomReviews";
 import RoomAddOns from "@/components/hotel/sections/RoomAddOns";
+import RoomLocationFAQ from "@/components/hotel/sections/RoomLocationFAQ";
 import { buildHotelSegmentMetadata } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ entityKey: string }> };
@@ -40,6 +41,9 @@ export default async function Page({ params }: Props) {
 
       {/* Section 7: Guest Testimonials */}
       <RoomReviews />
+
+      {/* Section 8: Location & FAQ */}
+      <RoomLocationFAQ />
     </div>
   );
 }

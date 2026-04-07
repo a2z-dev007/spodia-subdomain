@@ -122,5 +122,35 @@
       "description": "Exclusive guided visits to the city's hidden gems.",
       "image": "https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=600"
     }
+  ],
+  "location": {
+    "mapImage": "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1200",
+    "points": [
+      { "name": "International Airport", "time": "15 min drive", "icon": "Plane" },
+      { "name": "Sunny Beach", "time": "5 min walk", "icon": "Sun" },
+      { "name": "Luxury Mall", "time": "10 min walk", "icon": "ShoppingBag" }
+    ]
+  },
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "What time is check-in and check-out?",
+      "answer": "Standard check-in is at 3:00 PM and check-out is at 12:00 PM. Early check-in or late check-out is subject to availability and may incur an additional fee."
+    },
+    {
+      "id": "faq-2",
+      "question": "Is there airport shuttle service?",
+      "answer": "Yes, we provide complimentary airport shuttle service for all our guests. Please provide your flight details 24 hours in advance."
+    },
+    {
+      "id": "faq-3",
+      "question": "Are pets allowed in the suites?",
+      "answer": "We have specific pet-friendly suites available. Please contact our concierge for further details and to ensure availability."
+    },
+    {
+      "id": "faq-4",
+      "question": "What is your cancellation policy?",
+      "answer": "Cancellations made 48 hours prior to arrival are free of charge. Cancellations within 48 hours will be charged for the first night."
+    }
   ]
 }
