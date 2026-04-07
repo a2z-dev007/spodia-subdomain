@@ -68,5 +68,39 @@
       "size": "950 sq ft",
       "view": "Garden/Pool"
     }
+  ],
+  "globalAmenities": {
+    "essentials": [
+      { "name": "Climate Control", "icon": "Thermometer" },
+      { "name": "Mini Bar", "icon": "Wine" },
+      { "name": "Plush Robes", "icon": "Shirt" },
+      { "name": "Nespresso Machine", "icon": "Coffee" }
+    ],
+    "premium": [
+      { "name": "24/7 Butler", "icon": "UserCheck" },
+      { "name": "Bose Sound System", "icon": "Speaker" },
+      { "name": "In-room Safe", "icon": "Lock" },
+      { "name": "Apple TV Integration", "icon": "Monitor" }
+    ]
+  },
+  "reviews": [
+    {
+      "id": 1,
+      "rating": 5,
+      "text": "\"The ocean-view villa was breathtaking! Waking up to the sound of waves was exactly what I needed.\"",
+      "author": "Priya, Delhi"
+    },
+    {
+      "id": 2,
+      "rating": 5,
+      "text": "\"Incredible service. The Penthouse Suite had the best city views I've ever seen. Highly recommended!\"",
+      "author": "Mark, London"
+    },
+    {
+      "id": 3,
+      "rating": 5,
+      "text": "\"Perfect for our family. The kids loved the pool and the kitchenette made our long stay very convenient.\"",
+      "author": "Sofia, Madrid"
+    }
   ]
 }

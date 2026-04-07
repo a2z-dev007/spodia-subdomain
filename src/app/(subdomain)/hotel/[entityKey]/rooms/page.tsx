@@ -2,6 +2,8 @@ import RoomsHero from "@/components/hotel/sections/RoomsHero";
 import RoomsListing from "@/components/hotel/sections/RoomsListing";
 import RoomComparison from "@/components/hotel/sections/RoomComparison";
 import DiscountBanner from "@/components/hotel/sections/DiscountBanner";
+import RoomAmenities from "@/components/hotel/sections/RoomAmenities";
+import RoomReviews from "@/components/hotel/sections/RoomReviews";
 import { buildHotelSegmentMetadata } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ entityKey: string }> };
@@ -28,6 +30,12 @@ export default async function Page({ params }: Props) {
 
       {/* Section 4: Promotions & Discounts */}
       <DiscountBanner />
+
+      {/* Section 5: Global Room Amenities */}
+      <RoomAmenities />
+
+      {/* Section 6: Guest Testimonials */}
+      <RoomReviews />
     </div>
   );
 }
