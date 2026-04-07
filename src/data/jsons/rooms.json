@@ -1,0 +1,63 @@
+{
+  "heroSlider": [
+    {
+      "id": 1,
+      "title": "Luxury Awaits - Discover Our Exquisite Rooms & Suites",
+      "subtext": "Free Cancellation · Best Price Guarantee · Premium Wifi",
+      "buttonText": "View All Suites",
+      "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1920"
+    },
+    {
+      "id": 2,
+      "title": "Experience Elegance - Unmatched Hospitality",
+      "subtext": "Luxury Stays · Signature Dining · Exclusive Events",
+      "buttonText": "Explore Suites",
+      "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=1920"
+    }
+  ],
+  "categories": ["All Rooms", "Suites / Villas", "Family Rooms", "Specials"],
+  "rooms": [
+    {
+      "id": "penthouse-suite",
+      "title": "Penthouse Suite",
+      "rating": 4.7,
+      "price": 6499,
+      "image": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=800",
+      "category": "Suites / Villas",
+      "amenities": [
+        { "name": "King Bed", "icon": "Bed" },
+        { "name": "Jacuzzi", "icon": "Bath" },
+        { "name": "Fiber WiFi", "icon": "Wifi" }
+      ],
+      "featured": true
+    },
+    {
+      "id": "ocean-view-villa",
+      "title": "Ocean View Villa",
+      "rating": 4.7,
+      "price": 6499,
+      "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=800",
+      "category": "Suites / Villas",
+      "amenities": [
+        { "name": "King Bed", "icon": "Bed" },
+        { "name": "Jacuzzi", "icon": "Bath" },
+        { "name": "Fiber WiFi", "icon": "Wifi" }
+      ],
+      "featured": true
+    },
+    {
+      "id": "executive-family",
+      "title": "Executive Family Room",
+      "rating": 4.7,
+      "price": 6499,
+      "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=800",
+      "category": "Family Rooms",
+      "amenities": [
+        { "name": "King Bed", "icon": "Bed" },
+        { "name": "Jacuzzi", "icon": "Bath" },
+        { "name": "Fiber WiFi", "icon": "Wifi" }
+      ],
+      "featured": true
+    }
+  ]
+}

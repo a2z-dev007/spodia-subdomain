@@ -1,4 +1,5 @@
-import HotelSegmentPageShell from "@/components/hotel/HotelSegmentPageShell";
+import RoomsHero from "@/components/hotel/sections/RoomsHero";
+import RoomsListing from "@/components/hotel/sections/RoomsListing";
 import { buildHotelSegmentMetadata } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ entityKey: string }> };
@@ -10,11 +11,14 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function Page({ params }: Props) {
   const { entityKey } = await params;
+  
   return (
-    <HotelSegmentPageShell
-      entityKey={entityKey}
-      title="Rooms"
-      intro="Room categories, occupancy, and in-room amenities for {hotel}."
-    />
+    <div className="flex flex-col w-full min-h-screen bg-white">
+      {/* Section 1: Hero Slider */}
+      <RoomsHero />
+
+      {/* Section 2: Rooms Gallery with Filters/Sorting */}
+      <RoomsListing />
+    </div>
   );
 }
