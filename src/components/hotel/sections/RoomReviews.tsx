@@ -8,7 +8,7 @@ import roomsData from "@/data/jsons/rooms.json";
 export default function RoomReviews() {
   return (
     <section className="w-full max-w-[1440px] mx-auto px-6 md:px-12 py-16">
-      <div className="bg-[#F9F9F7] rounded-[48px] p-10 md:p-16 lg:p-20">
+      <div className="bg-[#F0EDEA] rounded-[48px] p-10 md:p-16 lg:p-20">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-16">
           <h2 className="text-3xl md:text-[40px] font-bold text-gray-900 tracking-tight">
             What Guests Say About Our Rooms
