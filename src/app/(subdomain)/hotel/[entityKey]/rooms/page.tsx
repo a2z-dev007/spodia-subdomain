@@ -35,12 +35,12 @@ export default async function Page({ params }: Props) {
 
       {/* Section 5: Global Room Amenities */}
       <RoomAmenities />
+      {/* Section 7: Guest Testimonials */}
+      <RoomReviews />
 
       {/* Section 6: Explore Add-ons */}
       <RoomAddOns />
 
-      {/* Section 7: Guest Testimonials */}
-      <RoomReviews />
 
       {/* Section 8: Location & FAQ */}
       <RoomLocationFAQ />
