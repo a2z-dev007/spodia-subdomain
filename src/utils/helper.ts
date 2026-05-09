@@ -1,4 +1,5 @@
-import {AuthorType, StayDataType, TaxonomyType} from "@/data/types";
+import { DEMO_STAY_CATEGORIES } from "@/data/taxonomies";
+import { AuthorType, StayDataType, TaxonomyType } from "@/data/types";
 
 
 export const buildAuthorFromApi = (owner: any): AuthorType => ({
@@ -40,7 +41,7 @@ export const buildCategoryFromApi = (propertyType: string | undefined): Taxonomy
 export const mapApiToStay = (item: any): StayDataType => {
     const category = buildCategoryFromApi(item.property_type);
     const author = buildAuthorFromApi(item.ownerdetails);
-        // redirect link 
+    // redirect link 
     const hrefWithCity = `${item.name}-${item.city_name}`.replace(/\s+/g, '-').toLowerCase();
     // console.log("hrefWithCity",hrefWithCity)
     return {

@@ -161,9 +161,9 @@ export default function HeroSection() {
 
               {/* Headline + pills: vertically centered in the hero image */}
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-12 py-6 sm:py-8">
-                <h1 className="text-white font-bold tracking-tight text-[1.625rem] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] xl:text-[3rem] leading-[1.12] max-w-[20rem] sm:max-w-[44rem] lg:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.4)]">
+                <h1 className="text-white font-bold tracking-tight text-[1.625rem] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] xl:text-[3rem] leading-[2rem] max-w-[20rem] sm:max-w-[44rem] lg:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.4)]">
                   <span className="block">Find your perfect stay,</span>
-                  <span className="block mt-1.5 sm:mt-2">Anywhere in the World</span>
+                  <span className="block mt-2 sm:mt-2">Anywhere in the World</span>
                 </h1>
 
                 <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-2.5 mt-5 sm:mt-7 max-w-[min(100%,58rem)]">
@@ -205,7 +205,7 @@ export default function HeroSection() {
         </div>
       </div>
 
- 
+
     </section>
   );
 }

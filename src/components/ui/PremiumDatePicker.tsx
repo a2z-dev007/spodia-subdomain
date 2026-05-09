@@ -20,6 +20,7 @@ interface PremiumDatePickerProps {
   relative?: boolean
   containerClassName?: string
   monthsShown?: number
+  showIcon?: boolean
 }
 
 const PremiumDatePicker: FC<PremiumDatePickerProps> = ({
@@ -33,7 +34,8 @@ const PremiumDatePicker: FC<PremiumDatePickerProps> = ({
   label = 'Date',
   relative = true,
   containerClassName = '',
-  monthsShown: customMonthsShown
+  monthsShown: customMonthsShown,
+  showIcon = true
 }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [isLargeScreen, setIsLargeScreen] = useState(false)
@@ -88,7 +90,9 @@ const PremiumDatePicker: FC<PremiumDatePickerProps> = ({
                 }
               }}
             >
-              <Calendar className="mr-2.5 h-[18px] w-[18px] shrink-0 text-[#FF9530] transition-transform group-hover:scale-110 sm:h-5 sm:w-5" strokeWidth={2.25} />
+              {showIcon && (
+                <Calendar className="mr-2.5 h-[18px] w-[18px] shrink-0 text-[#FF9530] transition-transform group-hover:scale-110 sm:h-5 sm:w-5" strokeWidth={2.25} />
+              )}
               <div className="flex-1 min-w-0 text-left">
                 {label && (
                   <p className="mb-0.5 text-[11px] font-medium capitalize tracking-wide text-gray-400 sm:text-xs">

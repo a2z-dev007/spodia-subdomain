@@ -130,6 +130,7 @@ export default function MainSearchBar({
               className="!p-0 !min-h-0"
               containerClassName="!p-0"
               label=""
+              showIcon={false}
             />
           </div>
         </div>
@@ -149,9 +150,9 @@ export default function MainSearchBar({
             setChildrenAges={setChildrenAges}
             className="bg-transparent border-none p-0 !shadow-none ring-0 w-full hover:bg-transparent !h-auto"
             showIcon={false}
+            label=""
           />
         </div>
-        <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-gray-600 ml-2" />
       </div>
 
       {/* Search Button (Circular) */}

@@ -5,7 +5,6 @@ import HeaderFilter from "./cards/HeaderFilter";
 import StayCard from "./cards/StayCard";
 import StayCard2 from "./cards/StayCard2";
 import { StayDataType, AuthorType, TaxonomyType } from "@/data/types";
-import { DEMO_STAY_CATEGORIES } from "@/data/taxonomies";
 import { useApiData } from '@/hooks/useApiData';
 import { ShimmerPostList } from "react-shimmer-effects";
 import { Button } from "../ui/button";
@@ -13,7 +12,7 @@ import { useRouter } from "next/navigation";
 import ViewMoreBtn from "../ui/ViewMoreBtn";
 import ShimmerCardLoader from "../loaders/ShimmerCardLoader";
 import { BASE_URL } from "@/lib/api/apiClient";
-import {mapApiToStay} from "@/utils/helper";
+import { mapApiToStay } from "@/utils/helper";
 import { LINKS } from "@/utils/const";
 
 export interface SectionGridFeaturePlacesProps {
@@ -62,11 +61,11 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   // Extract unique property types from the API response
   const propertyTypes = useMemo(() => {
     if (!stays || stays.length === 0) return ["All"];
-    
+
     const types = stays
       .map(stay => stay.listingCategory?.name)
       .filter((type): type is string => !!type && type.trim() !== "");
-    
+
     // Normalize types to remove duplicates (e.g., "Resort" and "Resorts" -> "Resorts")
     const normalizedTypes = types.map(type => {
       const lower = type.toLowerCase();
@@ -77,7 +76,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
       if (lower === 'cottage') return 'Cottages';
       return type;
     });
-    
+
     const uniqueTypes = Array.from(new Set(normalizedTypes));
     return ["All", ...uniqueTypes];
   }, [stays]);
@@ -85,19 +84,19 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   // Filter stays based on selected property type
   const filteredStays = useMemo(() => {
     if (activeFilter === "All") return stays;
-    
+
     // Normalize the filter for comparison
     return stays.filter(stay => {
       const stayType = stay.listingCategory?.name;
       if (!stayType) return false;
-      
+
       const normalizedStayType = stayType.toLowerCase();
       const normalizedFilter = activeFilter.toLowerCase();
-      
+
       // Match both singular and plural forms
-      return normalizedStayType === normalizedFilter || 
-             normalizedStayType === normalizedFilter.replace(/s$/, '') ||
-             normalizedStayType + 's' === normalizedFilter;
+      return normalizedStayType === normalizedFilter ||
+        normalizedStayType === normalizedFilter.replace(/s$/, '') ||
+        normalizedStayType + 's' === normalizedFilter;
     });
   }, [stays, activeFilter]);
 
@@ -153,12 +152,12 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
         </div>
       </div>
       {
-        filteredStays?.length >0 &&  <div className="flex mt-16 justify-center items-center">
-        <ViewMoreBtn onClick={() => router.push(`${LINKS.SEARCH_RESULTS}?show_popular=true`)} text="View More" />
+        filteredStays?.length > 0 && <div className="flex mt-16 justify-center items-center">
+          <ViewMoreBtn onClick={() => router.push(`${LINKS.SEARCH_RESULTS}?show_popular=true`)} text="View More" />
 
-      </div>
+        </div>
       }
-     
+
     </section>
   );
 };
