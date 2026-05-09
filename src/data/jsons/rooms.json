@@ -1,0 +1,156 @@
+{
+  "heroSlider": [
+    {
+      "id": 1,
+      "title": "Luxury Awaits - Discover Our Exquisite Rooms & Suites",
+      "subtext": "Free Cancellation · Best Price Guarantee · Premium Wifi",
+      "buttonText": "View All Suites",
+      "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1920"
+    },
+    {
+      "id": 2,
+      "title": "Experience Elegance - Unmatched Hospitality",
+      "subtext": "Luxury Stays · Signature Dining · Exclusive Events",
+      "buttonText": "Explore Suites",
+      "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=1920"
+    }
+  ],
+  "categories": ["All Rooms", "Suites / Villas", "Family Rooms", "Specials"],
+  "rooms": [
+    {
+      "id": "penthouse-suite",
+      "title": "Penthouse Suite",
+      "rating": 4.7,
+      "price": 680,
+      "image": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&q=80&w=800",
+      "category": "Suites / Villas",
+      "amenities": [
+        { "name": "King Bed", "icon": "Bed" },
+        { "name": "Jacuzzi", "icon": "Bath" },
+        { "name": "Fiber WiFi", "icon": "Wifi" }
+      ],
+      "featured": true,
+      "sleeps": "2 Adults",
+      "size": "1,200 sq ft",
+      "view": "City Skyline"
+    },
+    {
+      "id": "ocean-view-villa",
+      "title": "Ocean View Villa",
+      "rating": 4.7,
+      "price": 960,
+      "image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=800",
+      "category": "Suites / Villas",
+      "amenities": [
+        { "name": "King Bed", "icon": "Bed" },
+        { "name": "Jacuzzi", "icon": "Bath" },
+        { "name": "Fiber WiFi", "icon": "Wifi" }
+      ],
+      "featured": true,
+      "sleeps": "2 Adults",
+      "size": "1,800 sq ft",
+      "view": "Panoramic Ocean"
+    },
+    {
+      "id": "executive-family",
+      "title": "Executive Family Room",
+      "rating": 4.7,
+      "price": 450,
+      "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=800",
+      "category": "Family Rooms",
+      "amenities": [
+        { "name": "King Bed", "icon": "Bed" },
+        { "name": "Jacuzzi", "icon": "Bath" },
+        { "name": "Fiber WiFi", "icon": "Wifi" }
+      ],
+      "featured": true,
+      "sleeps": "4 Persons",
+      "size": "950 sq ft",
+      "view": "Garden/Pool"
+    }
+  ],
+  "globalAmenities": {
+    "essentials": [
+      { "name": "Climate Control", "icon": "Thermometer" },
+      { "name": "Mini Bar", "icon": "Wine" },
+      { "name": "Plush Robes", "icon": "Shirt" },
+      { "name": "Nespresso Machine", "icon": "Coffee" }
+    ],
+    "premium": [
+      { "name": "24/7 Butler", "icon": "UserCheck" },
+      { "name": "Bose Sound System", "icon": "Speaker" },
+      { "name": "In-room Safe", "icon": "Lock" },
+      { "name": "Apple TV Integration", "icon": "Monitor" }
+    ]
+  },
+  "reviews": [
+    {
+      "id": 1,
+      "rating": 5,
+      "text": "\"The ocean-view villa was breathtaking! Waking up to the sound of waves was exactly what I needed.\"",
+      "author": "Priya, Delhi"
+    },
+    {
+      "id": 2,
+      "rating": 5,
+      "text": "\"Incredible service. The Penthouse Suite had the best city views I've ever seen. Highly recommended!\"",
+      "author": "Mark, London"
+    },
+    {
+      "id": 3,
+      "rating": 5,
+      "text": "\"Perfect for our family. The kids loved the pool and the kitchenette made our long stay very convenient.\"",
+      "author": "Sofia, Madrid"
+    }
+  ],
+  "addOns": [
+    {
+      "id": 1,
+      "title": "Spa Packages",
+      "description": "Full body massages and aromatic therapy starting from $120.",
+      "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=600"
+    },
+    {
+      "id": 2,
+      "title": "Private Dining",
+      "description": "Chef-curated menu served in the privacy of your suite.",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=600"
+    },
+    {
+      "id": 3,
+      "title": "Local Tours",
+      "description": "Exclusive guided visits to the city's hidden gems.",
+      "image": "https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=600"
+    }
+  ],
+  "location": {
+    "mapImage": "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1200",
+    "points": [
+      { "name": "International Airport", "time": "15 min drive", "icon": "Plane" },
+      { "name": "Sunny Beach", "time": "5 min walk", "icon": "Sun" },
+      { "name": "Luxury Mall", "time": "10 min walk", "icon": "ShoppingBag" }
+    ]
+  },
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "What time is check-in and check-out?",
+      "answer": "Standard check-in is at 3:00 PM and check-out is at 12:00 PM. Early check-in or late check-out is subject to availability and may incur an additional fee."
+    },
+    {
+      "id": "faq-2",
+      "question": "Is there airport shuttle service?",
+      "answer": "Yes, we provide complimentary airport shuttle service for all our guests. Please provide your flight details 24 hours in advance."
+    },
+    {
+      "id": "faq-3",
+      "question": "Are pets allowed in the suites?",
+      "answer": "We have specific pet-friendly suites available. Please contact our concierge for further details and to ensure availability."
+    },
+    {
+      "id": "faq-4",
+      "question": "What is your cancellation policy?",
+      "answer": "Cancellations made 48 hours prior to arrival are free of charge. Cancellations within 48 hours will be charged for the first night."
+    }
+  ]
+}

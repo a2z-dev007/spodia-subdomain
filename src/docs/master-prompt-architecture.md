@@ -1,7 +1,3 @@
-Below is a **production-grade PRD + system architecture** for your **Spodia Hotel Subdomain Platform (Next.js Frontend)** based on your PDFs and requirements.
-
----
-
 # 🧾 PRODUCT REQUIREMENTS DOCUMENT (PRD)
 
 ## Product: Spodia Subdomain Hotel Platform
