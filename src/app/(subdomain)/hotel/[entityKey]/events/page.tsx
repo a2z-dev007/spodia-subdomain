@@ -99,13 +99,15 @@ export default async function EventsPage({ params }: Props) {
          </div>
          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              {icon: <Tv/>, label: "LED Screens"},
-              {icon: <Mic2/>, label: "Surround Sound"},
-              {icon: <Wifi/>, label: "High-Speed WiFi"},
-              {icon: <Utensils/>, label: "Custom Catering"}
+              {icon: Tv, label: "LED Screens"},
+              {icon: Mic2, label: "Surround Sound"},
+              {icon: Wifi, label: "High-Speed WiFi"},
+              {icon: Utensils, label: "Custom Catering"}
             ].map((item, i) => (
               <div key={i} className="bg-gray-50 p-10 rounded-[32px] flex flex-col items-center justify-center text-center group hover:bg-white hover:shadow-xl hover:border-[#FF9530] border border-transparent transition-all">
-                 <div className="text-[#FF9530] mb-6 scale-[1.5] group-hover:scale-[1.8] transition-transform">{item.icon}</div>
+                 <div className="text-[#FF9530] mb-6 scale-[1.5] group-hover:scale-[1.8] transition-transform">
+                   <item.icon />
+                 </div>
                  <span className="font-black text-gray-900 text-lg">{item.label}</span>
               </div>
             ))}

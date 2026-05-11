@@ -58,14 +58,14 @@ export default async function ExplorePage({ params }: Props) {
          <div className="max-w-[1200px] mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                {[
-                 {icon: <Landmark/>, label: "Spiritual", color: "orange"},
-                 {icon: <Compass/>, label: "Nature", color: "blue"},
-                 {icon: <ShoppingBag/>, label: "Shopping", color: "orange"},
-                 {icon: <Camera/>, label: "History", color: "blue"}
+                 {icon: Landmark, label: "Spiritual", color: "orange"},
+                 {icon: Compass, label: "Nature", color: "blue"},
+                 {icon: ShoppingBag, label: "Shopping", color: "orange"},
+                 {icon: Camera, label: "History", color: "blue"}
                ].map((cat, i) => (
                  <div key={i} className="bg-white p-12 rounded-[40px] shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center hover:-translate-y-2 transition-transform cursor-pointer">
                     <div className={`w-20 h-20 rounded-[28px] ${cat.color === "orange" ? "bg-orange-50 text-[#FF9530]" : "bg-blue-50 text-blue-500"} flex items-center justify-center mb-6`}>
-                       {React.cloneElement(cat.icon as React.ReactElement, { className: "w-10 h-10" })}
+                       <cat.icon className="w-10 h-10" />
                     </div>
                     <span className="text-xl font-black text-gray-900">{cat.label}</span>
                  </div>

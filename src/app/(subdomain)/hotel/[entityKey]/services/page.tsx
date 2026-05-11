@@ -19,30 +19,30 @@ export default async function ServicesPage({ params }: Props) {
       title: "Core Services",
       desc: "Essentials for a seamless stay.",
       items: [
-        { icon: <Clock />, label: "24/7 Room Service" },
-        { icon: <Sparkles />, label: "Daily Housekeeping" },
-        { icon: <ShieldCheck />, label: "Laundry & Dry Cleaning" },
-        { icon: <Briefcase />, label: "Concierge Desk" }
+        { icon: Clock, label: "24/7 Room Service" },
+        { icon: Sparkles, label: "Daily Housekeeping" },
+        { icon: ShieldCheck, label: "Laundry & Dry Cleaning" },
+        { icon: Briefcase, label: "Concierge Desk" }
       ]
     },
     {
       title: "Wellness & Leisure",
       desc: "Recharge your mind and body.",
       items: [
-        { icon: <Waves />, label: "Infinity Pool" },
-        { icon: <Dumbbell />, label: "Modern Fitness Center" },
-        { icon: <Sparkles />, label: "Luxury Spa & Sauna" },
-        { icon: <Coffee />, label: "Coffee Shop & Lounge" }
+        { icon: Waves, label: "Infinity Pool" },
+        { icon: Dumbbell, label: "Modern Fitness Center" },
+        { icon: Sparkles, label: "Luxury Spa & Sauna" },
+        { icon: Coffee, label: "Coffee Shop & Lounge" }
       ]
     },
     {
       title: "Business & Travel",
       desc: "Connect and explore with ease.",
       items: [
-        { icon: <Wifi />, label: "High-Speed Fiber WiFi" },
-        { icon: <Briefcase />, label: "Conference & Meeting Rooms" },
-        { icon: <Car />, label: "Airport Pick-up & Drop" },
-        { icon: <Map />, label: "Local Sightseeing Tours" }
+        { icon: Wifi, label: "High-Speed Fiber WiFi" },
+        { icon: Briefcase, label: "Conference & Meeting Rooms" },
+        { icon: Car, label: "Airport Pick-up & Drop" },
+        { icon: Map, label: "Local Sightseeing Tours" }
       ]
     }
   ];
@@ -86,7 +86,7 @@ export default async function ServicesPage({ params }: Props) {
                        {cat.items.map((item, j) => (
                          <div key={j} className="flex items-center gap-6 group">
                             <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-[#FF9530] group-hover:text-white transition-all text-[#FF9530]">
-                               {React.cloneElement(item.icon as React.ReactElement, { className: "w-6 h-6" })}
+                               <item.icon className="w-6 h-6" />
                             </div>
                             <span className="text-lg font-black text-gray-800">{item.label}</span>
                          </div>
