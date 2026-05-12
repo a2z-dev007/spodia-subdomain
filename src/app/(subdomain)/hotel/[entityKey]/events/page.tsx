@@ -12,8 +12,8 @@ import {
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
 
-const EventsPage = ({ params }: { params: { entityKey: string } }) => {
-  const { entityKey } = params;
+const EventsPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
+  const { entityKey } = React.use(params);
   const { name, location } = propertyData;
   const [activeVenueTab, setActiveVenueTab] = useState("Grand Ballroom");
   const [guestCount, setGuestCount] = useState(250);

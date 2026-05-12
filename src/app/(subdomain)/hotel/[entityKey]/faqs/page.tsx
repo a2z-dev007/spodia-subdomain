@@ -9,8 +9,8 @@ import {
   HelpCircle, CreditCard, Wifi, MapPin, Car, Briefcase
 } from "lucide-react";
 
-const FAQPage = ({ params }: { params: { entityKey: string } }) => {
-  const { entityKey } = params;
+const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
+  const { entityKey } = React.use(params);
   const { name, location } = propertyData;
   
   const [searchQuery, setSearchQuery] = useState("");

@@ -12,8 +12,8 @@ import {
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
 
-const FacilitiesPage = ({ params }: { params: { entityKey: string } }) => {
-  const { entityKey } = params;
+const FacilitiesPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
+  const { entityKey } = React.use(params);
   const { name, location, type } = propertyData;
   
   const [activeTab, setActiveTab] = useState("All");
