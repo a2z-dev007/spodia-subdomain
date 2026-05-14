@@ -4,7 +4,6 @@ import HotelSearchbar from "@/components/hotel/HotelSearchbar";
 import { IMAGES } from "@/assets/images";
 import { hotelJsonLd } from "@/lib/seo/schema";
 import { parseSubdomain } from "@/lib/resolver/parseSubdomain";
-import HotelFABs from "@/components/hotel/HotelFABs";
 import { propertyData } from "@/lib/hotel/mockData";
 import { CheckCircle, Star, MapPin, Coffee, Wifi, Car, ShieldCheck } from "lucide-react";
 
@@ -90,7 +89,6 @@ export default async function HotelSubdomainHome({ entityKey }: Props) {
         <HotelSearchbar />
       </section>
 
-      <HotelFABs />
 
       {/* 2. Key Highlights Section (Modular Grid) */}
       <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
@@ -171,7 +169,6 @@ export default async function HotelSubdomainHome({ entityKey }: Props) {
         </section>
 
         <HotelFAQ />
-        <HotelFooterLinks />
       </div>
     </div>
   );

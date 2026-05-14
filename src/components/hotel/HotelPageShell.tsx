@@ -2,6 +2,7 @@ import React from "react";
 import { propertyData } from "@/lib/hotel/mockData";
 import HotelFooter from "./HotelFooter";
 import HotelFABs from "./HotelFABs";
+import HotelHeader from "./layout/HotelHeader";
 
 type Props = {
   children: React.ReactNode;
@@ -25,16 +26,13 @@ export default function HotelPageShell({ children, entityKey }: Props) {
   };
 
   return (
-    <div className="flex flex-col font-manrope bg-white w-full overflow-x-hidden min-h-screen">
+    <div className="w-full overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       
       {children}
-      
-      <HotelFooter />
-      <HotelFABs />
     </div>
   );
 }
