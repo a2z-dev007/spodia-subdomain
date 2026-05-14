@@ -71,6 +71,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
     { label: "Packages", href: `/hotel/${entityKey}/tariff` },
     { label: "Gallery", href: `/hotel/${entityKey}/gallery` },
     { label: "Sitemap", href: `/hotel/${entityKey}/sitemap` },
+    { label: "Reviews", href: `/hotel/${entityKey}/reviews` },
     { label: "FAQs", href: `/hotel/${entityKey}/faqs` },
     { label: "Contact", href: `/hotel/${entityKey}/contact` },
   ];

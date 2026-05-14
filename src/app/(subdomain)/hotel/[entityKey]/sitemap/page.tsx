@@ -4,6 +4,7 @@ import { propertyData } from "@/lib/hotel/mockData";
 import { ShieldCheck, Map, ArrowRight, Facebook, Instagram, Linkedin, Twitter, Pin as Pinterest } from "lucide-react";
 import Link from "next/link";
 import SitemapClient from "@/components/hotel/sections/SitemapClient";
+import HotelHeroPremium from "@/components/hotel/sections/HotelHeroPremium";
 
 type Props = {
   params: Promise<{ entityKey: string }>;
@@ -174,34 +175,23 @@ export default async function SitemapPage({ params }: Props) {
       />
 
       {/* 1. Hero Section */}
-      <section className="py-24 bg-gray-900 text-white px-6">
-        <div className="max-w-[1200px] mx-auto text-center">
-          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full mb-8 border border-white/10">
-             <Map className="w-5 h-5 text-[#FF9530]" />
-             <span className="text-[10px] font-black uppercase tracking-widest">Site Directory</span>
-          </div>
-          <h1 className="text-4xl md:text-7xl font-black mb-8 leading-tight">
+      <HotelHeroPremium 
+        pillIcon={<Map className="w-5 h-5" />}
+        pillText="Site Directory"
+        backgroundImage="/images/hotels/banner1.jpg"
+        title={
+          <>
             Site Navigation – <br/>
             Explore <span className="text-[#FF9530]">{name}</span> with Ease.
-          </h1>
-          <p className="text-gray-400 text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-12">
-            Find everything you need in one place. Jump to any page quickly!
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-6">
-             {[
-               { icon: <ShieldCheck className="w-5 h-5 text-[#FF9530]" />, text: "Secure Booking" },
-               { icon: <ShieldCheck className="w-5 h-5 text-[#FF9530]" />, text: "Verified Reviews" },
-               { icon: <ShieldCheck className="w-5 h-5 text-[#FF9530]" />, text: "24/7 Support" }
-             ].map((badge, i) => (
-               <div key={i} className="flex items-center gap-3 bg-white/5 px-6 py-4 rounded-2xl">
-                  {badge.icon}
-                  <span className="text-xs font-black uppercase tracking-wider">{badge.text}</span>
-               </div>
-             ))}
-          </div>
-        </div>
-      </section>
+          </>
+        }
+        subtitle="Find everything you need in one place. Jump to any page quickly!"
+        badges={[
+          { icon: <ShieldCheck className="w-5 h-5" />, text: "Secure Booking" },
+          { icon: <ShieldCheck className="w-5 h-5" />, text: "Verified Reviews" },
+          { icon: <ShieldCheck className="w-5 h-5" />, text: "24/7 Support" }
+        ]}
+      />
 
       {/* 2. Jump Links, Search & Grid (Client-side) */}
       <div className="bg-white">
