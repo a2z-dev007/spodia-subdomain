@@ -35,7 +35,7 @@ export const propertyData = {
       size: "300 sq. ft",
       view: "City",
       amenities: ["AC", "TV", "Safe", "Coffee Maker"],
-      images: ["/room1.jpg"]
+      images: ["/images/hotels/banner1.jpg", "/images/hotels/banner2.jpg"]
     },
     {
       id: 2,
@@ -47,7 +47,7 @@ export const propertyData = {
       size: "600 sq. ft",
       view: "Pool",
       amenities: ["AC", "TV", "Safe", "Mini Bar", "Balcony"],
-      images: ["/room2.jpg"]
+      images: ["/images/hotels/banner3.jpg", "/images/hotels/banner2.jpg"]
     }
   ],
   dining: {

@@ -1,156 +1,161 @@
 import React from "react";
 import HotelPageShell from "@/components/hotel/HotelPageShell";
-import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
 import { propertyData } from "@/lib/hotel/mockData";
-import { Check, Info, ShieldCheck, CreditCard, Calendar, Users } from "lucide-react";
+import { ShieldCheck, CheckCircle2, Zap, Headphones, ArrowRight } from "lucide-react";
+import TariffRoomCard from "@/components/hotel/sections/TariffRoomCard";
+import RateBookingWidget from "@/components/hotel/sections/RateBookingWidget";
+import SpecialOffers from "@/components/hotel/sections/SpecialOffers";
+import PriceComparison from "@/components/hotel/sections/PriceComparison";
+import PaymentTrust from "@/components/hotel/sections/PaymentTrust";
+import TariffFAQ from "@/components/hotel/sections/TariffFAQ";
+import BookingReviews from "@/components/hotel/sections/BookingReviews";
+import RateAddOns from "@/components/hotel/sections/RateAddOns";
 
 type Props = {
   params: Promise<{ entityKey: string }>;
 };
 
+export async function generateMetadata({ params }: Props) {
+  const { entityKey } = await params;
+  const { name, location } = propertyData;
+  
+  return {
+    title: `Best Rates at ${name} | Book Now & Save | ${location}`,
+    description: `Secure the best rates for ${name} in ${location}. Enjoy luxury amenities with free cancellation & instant confirmation. Book direct & save!`,
+  };
+}
+
 export default async function TariffPage({ params }: Props) {
   const { entityKey } = await params;
-  const { name, rooms } = propertyData;
+  const { name, rooms, type } = propertyData;
+
+  const isLuxury = type === "Hotel" || type === "Resort";
+  const heroTitle = isLuxury 
+    ? "Exclusive Rates – Luxury Redefined, Affordably Priced." 
+    : "Smart Savings – Comfort Without Compromise.";
+
+  // Schema Markup
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "name": name,
+    "priceRange": isLuxury ? "₹₹₹₹" : "₹₹",
+    "image": rooms[0]?.images[0],
+    "makesOffer": {
+      "@type": "Offer",
+      "price": rooms[0]?.price.toString(),
+      "priceCurrency": "INR",
+      "availability": "InStock"
+    }
+  };
 
   return (
     <HotelPageShell entityKey={entityKey}>
-      <HotelHeroSimple 
-        title="Rates & Tariffs"
-        subtitle={`Transparent pricing for every budget. Book directly with ${name} for the best rates and exclusive benefits.`}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* 2. Pricing Tables */}
-      <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
-         <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">Standard Rates</h2>
-            <p className="text-gray-600 text-xl font-medium">Choose a plan that fits your travel style.</p>
-         </div>
+      {/* 1. Hero Section */}
+      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={rooms[0]?.images[0] || "/images/hotels/banner1.jpg"} 
+            alt={name} 
+            className="w-full h-full object-cover scale-105 animate-slow-zoom"
+          />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
+        </div>
 
-         <div className="overflow-x-auto bg-white rounded-[40px] border border-gray-100 shadow-2xl overflow-hidden">
-            <table className="w-full text-left border-collapse min-w-[900px]">
-               <thead>
-                  <tr className="bg-gray-900 text-white">
-                     <th className="p-8 font-black text-lg">Room Type</th>
-                     <th className="p-8 font-black text-lg">EP (Room Only)</th>
-                     <th className="p-8 font-black text-lg">CP (Breakfast)</th>
-                     <th className="p-8 font-black text-lg">MAP (Half Board)</th>
-                     <th className="p-8 font-black text-lg">AP (Full Board)</th>
-                  </tr>
-               </thead>
-               <tbody className="divide-y divide-gray-100">
-                  {rooms.map((room) => (
-                    <tr key={room.id} className="hover:bg-gray-50 transition-colors">
-                       <td className="p-8 font-black text-gray-900 text-xl">{room.name}</td>
-                       <td className="p-8 font-black text-gray-600">₹{room.price.toLocaleString()}</td>
-                       <td className="p-8 font-black text-[#FF9530]">₹{(room.price + 500).toLocaleString()}</td>
-                       <td className="p-8 font-black text-gray-600">₹{(room.price + 1200).toLocaleString()}</td>
-                       <td className="p-8 font-black text-gray-600">₹{(room.price + 2000).toLocaleString()}</td>
-                    </tr>
-                  ))}
-               </tbody>
-            </table>
-         </div>
-         <p className="mt-8 text-gray-400 text-sm italic">* All rates are exclusive of applicable GST (12% - 18% based on room category).</p>
+        <div className="relative z-10 text-center px-6 max-w-[1000px]">
+          <div className="inline-flex items-center gap-2 bg-[#FF9530] text-white px-4 py-2 rounded-full mb-8 animate-fade-in-up">
+            <ShieldCheck className="w-4 h-4" />
+            <span className="text-[10px] font-black uppercase tracking-widest">Official Direct Rates</span>
+          </div>
+          <h1 className="text-4xl md:text-7xl font-black text-white mb-8 leading-tight animate-fade-in-up delay-100">
+            {heroTitle}
+          </h1>
+          <p className="text-gray-200 text-xl md:text-2xl font-medium mb-12 animate-fade-in-up delay-200">
+            Best Price Guarantee · Free Cancellation · Instant Confirmation
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto animate-fade-in-up delay-300">
+             {[
+               { icon: <CheckCircle2 className="w-5 h-5 text-[#FF9530]" />, text: "No Hidden Fees" },
+               { icon: <Zap className="w-5 h-5 text-[#FF9530]" />, text: "SSL Secure Payments" },
+               { icon: <Headphones className="w-5 h-5 text-[#FF9530]" />, text: "24/7 Support" }
+             ].map((item, i) => (
+               <div key={i} className="flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10">
+                  {item.icon}
+                  <span className="text-white font-black text-sm uppercase tracking-wider">{item.text}</span>
+               </div>
+             ))}
+          </div>
+        </div>
       </section>
 
-      {/* 4. Plan Inclusions */}
-      <section className="py-24 bg-gray-50 px-6">
+      {/* 2. Room Rates & Booking Widget */}
+      <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-16">
+          {/* Left: Room Rates */}
+          <div className="w-full lg:w-2/3">
+             <div className="mb-12">
+                <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Select Your Room</h2>
+                <p className="text-gray-500 text-xl font-medium">Compare categories and find the perfect match for your stay.</p>
+             </div>
+             
+             <div className="space-y-12">
+                {rooms.map((room) => (
+                  <TariffRoomCard key={room.id} room={room} />
+                ))}
+             </div>
+          </div>
+
+          {/* Right: Sticky Booking Widget */}
+          <div className="w-full lg:w-1/3">
+             <RateBookingWidget />
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Special Offers & Packages */}
+      <SpecialOffers />
+
+      {/* 4. Price Comparison Tool */}
+      <PriceComparison />
+
+      {/* 5. Add-Ons & Upsells */}
+      <section className="py-24 bg-white px-6">
          <div className="max-w-[1200px] mx-auto">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-16 text-center">What's Included?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-               {[
-                 {title: "EP Plan", desc: "Just the room for the minimalist traveler.", items: ["Luxury Accommodation", "Daily Housekeeping"]},
-                 {title: "CP Plan", desc: "Start your day with a local feast.", items: ["Room", "Grand Buffet Breakfast"]},
-                 {title: "MAP Plan", desc: "Perfect for sightseeing days.", items: ["Room", "Breakfast", "Lunch or Dinner"]},
-                 {title: "AP Plan", desc: "The ultimate worry-free stay.", items: ["Room", "All Meals Included"]}
-               ].map((plan, i) => (
-                 <div key={i} className="bg-white p-10 rounded-[32px] border border-gray-100 shadow-sm hover:border-[#FF9530] transition-all">
-                    <h4 className="text-2xl font-black text-gray-900 mb-4">{plan.title}</h4>
-                    <p className="text-gray-500 text-sm mb-8 leading-relaxed font-medium">{plan.desc}</p>
-                    <ul className="space-y-4">
-                       {plan.items.map((item, j) => (
-                         <li key={j} className="flex items-center gap-3 text-gray-900 font-bold text-sm">
-                            <Check className="w-5 h-5 text-[#FF9530] shrink-0" /> {item}
-                         </li>
-                       ))}
-                    </ul>
-                 </div>
-               ))}
+            <div className="text-center mb-16">
+               <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">Enhance Your Stay</h2>
+               <p className="text-gray-600 text-xl font-medium">Add these exclusive services to your booking for a seamless experience.</p>
             </div>
+            <RateAddOns />
          </div>
       </section>
 
-      {/* 5. Extra Charges & Child Policy */}
-      <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div className="bg-white p-12 rounded-[48px] border border-gray-100 shadow-lg group hover:border-[#FF9530] transition-all duration-500">
-               <div className="flex items-center gap-6 mb-10">
-                  <div className="w-16 h-16 bg-orange-50 rounded-[20px] flex items-center justify-center group-hover:scale-110 transition-transform">
-                     <Users className="w-8 h-8 text-[#FF9530]" />
-                  </div>
-                  <h3 className="text-3xl font-black text-gray-900">Guest Policies</h3>
-               </div>
-               <div className="space-y-6">
-                  <div className="flex justify-between items-center py-4 border-b border-gray-50">
-                     <span className="font-bold text-gray-600">Extra Adult (above 12 yrs)</span>
-                     <span className="font-black text-gray-900">₹1,500 / night</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-50">
-                     <span className="font-bold text-gray-600">Child (6 - 12 yrs)</span>
-                     <span className="font-black text-gray-900">₹800 / night</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4">
-                     <span className="font-bold text-gray-600">Child (below 6 yrs)</span>
-                     <span className="font-black text-[#FF9530]">Complimentary</span>
-                  </div>
-               </div>
-            </div>
+      {/* 6. Guest Reviews */}
+      <BookingReviews />
 
-            <div className="bg-gray-900 p-12 rounded-[48px] text-white shadow-2xl relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#FF9530]/10 rounded-full blur-[80px] -mr-[150px] -mt-[150px]" />
-               <div className="flex items-center gap-6 mb-10 relative z-10">
-                  <div className="w-16 h-16 bg-white/10 rounded-[20px] flex items-center justify-center">
-                     <Calendar className="w-8 h-8 text-[#FF9530]" />
-                  </div>
-                  <h3 className="text-3xl font-black">Cancellation Policy</h3>
-               </div>
-               <div className="space-y-8 relative z-10">
-                  <div className="flex gap-6">
-                     <div className="w-8 h-8 rounded-full border-2 border-[#FF9530] flex items-center justify-center font-black text-sm shrink-0">1</div>
-                     <p className="text-gray-400 font-medium leading-relaxed">Cancel up to <span className="text-white font-bold">48 hours</span> before arrival for a full refund.</p>
-                  </div>
-                  <div className="flex gap-6">
-                     <div className="w-8 h-8 rounded-full border-2 border-[#FF9530] flex items-center justify-center font-black text-sm shrink-0">2</div>
-                     <p className="text-gray-400 font-medium leading-relaxed">Cancellations within <span className="text-white font-bold">48-24 hours</span> incur a 50% charge of the first night.</p>
-                  </div>
-                  <div className="flex gap-6">
-                     <div className="w-8 h-8 rounded-full border-2 border-[#FF9530] flex items-center justify-center font-black text-sm shrink-0">3</div>
-                     <p className="text-gray-400 font-medium leading-relaxed">No-shows or same-day cancellations are <span className="text-white font-bold">Non-Refundable</span>.</p>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </section>
+      {/* 7. Flexible Payment Options */}
+      <PaymentTrust />
 
-      {/* 7. Best Price Guarantee CTA */}
-      <section className="py-24 px-6 text-center">
-         <div className="max-w-[1000px] mx-auto">
-            <ShieldCheck className="w-20 h-20 text-[#FF9530] mx-auto mb-8 animate-pulse" />
-            <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-8">Best Price Guarantee</h2>
-            <p className="text-gray-600 text-xl max-w-[700px] mx-auto mb-12 font-medium">
-               Find a lower price anywhere else? We'll match it and give you an additional <span className="text-[#FF9530] font-black">10% discount</span> on your booking.
-            </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-               <button className="w-full md:w-auto bg-gray-900 text-white px-12 py-6 rounded-2xl font-bold text-xl hover:bg-[#FF9530] transition-all shadow-xl">
-                  Book Directly Now
-               </button>
-               <button className="w-full md:w-auto bg-white text-gray-900 border border-gray-200 px-12 py-6 rounded-2xl font-bold text-xl hover:bg-gray-50 transition-all">
-                  Contact Reservations
-               </button>
-            </div>
+      {/* 8. FAQ */}
+      <TariffFAQ />
+
+      {/* Mobile Sticky CTA Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white/80 backdrop-blur-xl border-t border-gray-100 md:hidden flex justify-between items-center">
+         <div>
+            <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Starting From</p>
+            <p className="text-xl font-black text-gray-900">₹{rooms[0]?.price.toLocaleString()} <span className="text-xs font-bold text-gray-400">/night</span></p>
          </div>
-      </section>
+         <button className="bg-[#FF9530] text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-orange-500/20 flex items-center gap-2">
+            Book Now <ArrowRight className="w-4 h-4" />
+         </button>
+      </div>
 
     </HotelPageShell>
   );
 }
+
