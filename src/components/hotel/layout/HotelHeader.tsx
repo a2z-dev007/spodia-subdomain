@@ -59,17 +59,19 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
   }, [isScrolled, isMenuOpen]);
 
   const navItems: NavItem[] = [
-    { label: "Home", href: `/hotel/${entityKey}` },
-    { label: "Overview", href: `/hotel/${entityKey}/overview` },
+    { label: "Overview", href: `/hotel/${entityKey}` },
+    // { label: "Overview", href: `/hotel/${entityKey}/overview` },
     { label: "About Us", href: `/hotel/${entityKey}/about` },
     { label: "Rooms", href: `/hotel/${entityKey}/rooms` },
     { label: "Dining", href: `/hotel/${entityKey}/dine` },
-    { label: "Weddings", href: `#` },
     { label: "Events", href: `/hotel/${entityKey}/events` },
     { label: "Facilities", href: `/hotel/${entityKey}/services` },
-    { label: "Activities", href: `/hotel/${entityKey}/explore` },
+    { label: "Places to Visit", href: `/hotel/${entityKey}/explore` },
     { label: "Packages", href: `/hotel/${entityKey}/tariff` },
     { label: "Gallery", href: `/hotel/${entityKey}/gallery` },
+    { label: "Sitemap", href: `/hotel/${entityKey}/sitemap` },
+    { label: "Reviews", href: `/hotel/${entityKey}/reviews` },
+    { label: "FAQs", href: `/hotel/${entityKey}/faqs` },
     { label: "Contact", href: `/hotel/${entityKey}/contact` },
   ];
 
