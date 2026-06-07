@@ -68,7 +68,7 @@ export default function RoomCard({
             return (
               <div key={idx} className="flex items-center gap-2">
                 <Icon className="w-4 h-4 text-[#FF7A00]" />
-                <span className="text-[12px] font-medium text-gray-500">
+                <span className="text-[12px] font-medium text-[#FF7A00]">
                   {amenity.name}
                 </span>
               </div>
