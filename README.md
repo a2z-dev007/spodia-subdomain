@@ -186,7 +186,7 @@ All API calls go through `src/lib/api/apiClient.ts` which handles:
 - [Tailwind CSS](https://tailwindcss.com/docs)
 
 
-Routing Analysis for Testing
+Routing Analysis for Testing for local
 Page Name	URL Pattern (Local Dev)	Slug Depth	Purpose for Creation
 Main Platform Home	http://localhost:3000/	-	Primary search and discovery hub.
 Country Page	http://localhost:3000/site/in	1	National discovery (Already implemented).
@@ -194,3 +194,14 @@ State Page	http://localhost:3000/site/in/maharashtra	2	Regional exploration (To 
 City Page	http://localhost:3000/site/in/maharashtra/mumbai	3	High-intent conversion (To be created).
 Location Page	http://localhost:3000/site/in/maharashtra/mumbai/colaba	4	Hyper-local booking focus (To be created).
 Hotel Details	http://localhost:3000/hotel/[hotel-slug]	-	Final conversion and booking page.
+
+
+
+Routing Analysis for Testing for live server
+Page Name	URL Pattern (Local Dev)	Slug Depth	Purpose for Creation
+Main Platform Home	https://spodia-subdomain.netlify.app/	-	Primary search and discovery hub.
+Country Page	https://spodia-subdomain.netlify.app/site/in	1	National discovery (Already implemented).
+State Page	https://spodia-subdomain.netlify.app/site/in/maharashtra	2	Regional exploration (To be created).
+City Page	https://spodia-subdomain.netlify.app/site/in/maharashtra/mumbai	3	High-intent conversion (To be created).
+Location Page	https://spodia-subdomain.netlify.app/site/in/maharashtra/mumbai/colaba	4	Hyper-local booking focus (To be created).
+Hotel Details	https://spodia-subdomain.netlify.app/hotel/[hotel-slug]	-	Final conversion and booking page.
