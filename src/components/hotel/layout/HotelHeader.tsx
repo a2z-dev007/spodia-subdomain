@@ -60,7 +60,6 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
 
   const navItems: NavItem[] = [
     { label: "Overview", href: `/hotel/${entityKey}` },
-    // { label: "Overview", href: `/hotel/${entityKey}/overview` },
     { label: "About Us", href: `/hotel/${entityKey}/about` },
     { label: "Rooms", href: `/hotel/${entityKey}/rooms` },
     { label: "Dining", href: `/hotel/${entityKey}/dine` },

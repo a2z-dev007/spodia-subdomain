@@ -486,7 +486,7 @@ const Footer = () => {
             {/* Copyright and Links - Stack on mobile, wrap on tablet */}
             <div className="flex flex-col sm:flex-row items-center w-full md:w-auto">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 md:gap-4 lg:gap-6 text-xs sm:text-sm footer-text-color-bold">
-                <span className="whitespace-nowrap">© 2025 Spodia</span>
+                <span className="whitespace-nowrap">© {new Date().getFullYear()} Spodia</span>
                 <Link
                   href={LINKS.PRIVACY_POLICY}
                   className="hover:text-[#FF9530] transition-colors whitespace-nowrap"
