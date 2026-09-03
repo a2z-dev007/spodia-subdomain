@@ -12,6 +12,8 @@ import {
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
 
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
+
 const EventsPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
   const { entityKey } = React.use(params);
   const { name, location } = propertyData;
@@ -88,51 +90,18 @@ const EventsPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
       />
 
       {/* 1. Hero Section */}
-      <section className="relative h-screen min-h-[700px] w-full flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src={IMAGES.bgSection.src} 
-            alt="Event Venue" 
-            fill 
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-        
-        <div className="relative z-10 text-center px-6 max-w-[1000px]">
-          <h1 className="text-5xl md:text-8xl font-black text-white mb-8 leading-tight tracking-tighter">
+      <HotelHeroSimple 
+        title={
+          <>
             Host Unforgettable <span className="text-[#FF9530]">Events</span> at {name}
-          </h1>
-          <p className="text-xl md:text-3xl text-white/90 font-medium mb-12">
-            Weddings · Corporate Events · Social Gatherings · Customizable Packages.
-          </p>
-          
-          <div className="flex flex-col md:flex-row justify-center gap-6 mb-16">
-            <button className="bg-[#FF9530] text-white px-12 py-5 rounded-2xl font-black text-xl hover:shadow-[0_10px_30px_rgba(255,149,48,0.4)] transition-all active:scale-95">
-              Request a Quote
-            </button>
-            <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-12 py-5 rounded-2xl font-black text-xl hover:bg-white/20 transition-all active:scale-95">
-              Book a Venue Tour
-            </button>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-6 md:gap-12">
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10">
-              <ShieldCheck className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">AAA Hygiene Rated</span>
-            </div>
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10">
-              <Star className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">500+ Events Hosted</span>
-            </div>
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full border border-white/10">
-              <Award className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">Award-Winning Catering</span>
-            </div>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+        subtitle="Weddings · Corporate Events · Social Gatherings · Customizable Packages & Dedicated Support"
+        badgeText="AAA Hygiene Rated & Verified Venues"
+        primaryBtnText="Request a Quote"
+        primaryBtnHref={`/hotel/${entityKey}/contact`}
+        secondaryBtnText="Book a Venue Tour"
+      />
 
       {/* 2. Multi-Venue Showcase */}
       <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto w-full">

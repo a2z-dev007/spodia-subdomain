@@ -8,6 +8,8 @@ package-lock.json
 /.next/
 /out/
 
+.agent 
+.agents
 # production
 /build
 

@@ -1,11 +1,22 @@
 /**
- * Utility functions to build the final booking payload
- * This matches the exact structure required by the payment success API
+ * Utility functions to build the final booking payload for payment success API
+ * Matches exact structure required by /listing/payment-success/
  */
 
 import { format } from 'date-fns'
 import { PriceDetail } from '@/types/roomInventory'
 import { calculateRoomPlanPromotionalPricing } from './roomPromotionalPricing'
+import { calculateFinalAmount } from './taxCalculation'
+
+const getMealPlanId = (planName: string): number => {
+  const planMap: { [key: string]: number } = {
+    'EP': 2,
+    'CP': 1,
+    'MAP': 4,
+    'AP': 3
+  }
+  return planMap[planName.toUpperCase()] || 1
+}
 
 interface SelectedRoom {
   roomId: number
@@ -43,6 +54,7 @@ interface BookingFormData {
   email?: string
   phone?: string
   mobile?: string
+  mobileWithCountryCode?: string
   specialRequests?: string
   notes?: string
   houseNumber?: string
@@ -54,8 +66,10 @@ interface BookingFormData {
   gstNumber?: string
   companyName?: string
   gstPhone?: string
+  gstPhoneWithCountryCode?: string
   gstAddress?: string
   cancellationPolicyId?: number | null
+  bookingId?: number | string
 }
 
 interface RoomPlanInfo {
@@ -98,7 +112,7 @@ interface PriceInfo {
   discount_qty: number
   discount: number
   discount_type: string | null
-  discount_value: string | null
+  discount_value: number | null
   service_charge: number
 }
 
@@ -114,9 +128,6 @@ interface RoomPayload {
   childage: string
 }
 
-/**
- * Generate dates array between check-in and check-out
- */
 export const generateDateRange = (startDate: string, endDate: string): string[] => {
   const dates: string[] = []
   const start = new Date(startDate)
@@ -131,20 +142,13 @@ export const generateDateRange = (startDate: string, endDate: string): string[] 
   return dates
 }
 
-/**
- * Calculate nights between two dates
- */
 export const calculateNights = (startDate: string, endDate: string): number => {
   const start = new Date(startDate)
   const end = new Date(endDate)
   const diffTime = Math.abs(end.getTime() - start.getTime())
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  return diffDays
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 }
 
-/**
- * Build price_info array for each date in the booking
- */
 const buildPriceInfo = (
   dates: string[],
   pricePerNight: number,
@@ -152,53 +156,97 @@ const buildPriceInfo = (
   noOfRooms: number,
   noOfChild: number,
   childAge: string,
-  gstPercentage: number = 12,
+  taxationDetails: any[] = [],
   roomId?: number,
   planId?: number,
-  promotionDetails?: any[]
+  promotionDetails?: any[],
+  perDatePricingData?: any[],
+  adults?: number,
+  planName?: string,
+  deductionDetails: any[] = []
 ): PriceInfo[] => {
   return dates.map(date => {
     let finalPricePerNight = pricePerNight
     let discountAmount = 0
     let discountType: string | null = null
-    let discountValue: string | null = null
+    let discountValue: number | null = null
 
-    // Calculate promotional discount for this specific date
+    if (perDatePricingData && perDatePricingData.length > 0 && roomId) {
+      const numericRoomId = Number(roomId)
+      let numericPlanId = Number(planId)
+      if (numericPlanId > 10 && planName) {
+        numericPlanId = getMealPlanId(planName)
+      }
+
+      const pricing = perDatePricingData.find((p: any) =>
+        Number(p.room) === numericRoomId &&
+        Number(p.plan) === numericPlanId &&
+        p.season_start === date
+      )
+
+      if (pricing) {
+        const sbrRate = pricing.sbr_rate || 0
+        const dbrRate = pricing.dbr_rate || 0
+        const extraBedRate = pricing.extra_bed_rate || 0
+        const numAdults = adults || 1
+
+        if (numAdults === 1) {
+          finalPricePerNight = sbrRate
+        } else if (numAdults === 2) {
+          finalPricePerNight = dbrRate || sbrRate
+        } else {
+          const baseRate = dbrRate || sbrRate
+          finalPricePerNight = baseRate + ((numAdults - 2) * extraBedRate)
+        }
+      }
+    }
+
     if (roomId && planId && promotionDetails && promotionDetails.length > 0) {
+      let numericPlanId = Number(planId)
+      if (numericPlanId > 10 && planName) {
+        numericPlanId = getMealPlanId(planName)
+      }
       const promotionalPricing = calculateRoomPlanPromotionalPricing(
-        pricePerNight,
-        roomId,
-        planId,
+        finalPricePerNight,
+        Number(roomId),
+        numericPlanId,
         promotionDetails,
-        date, // Check if this specific date is within promotion period
+        date,
         date
       )
 
       if (promotionalPricing.hasPromotion) {
-        // Check if the current date is within the promotion STAY period
         const currentDate = new Date(date)
         const stayStart = promotionalPricing.stayStart ? new Date(promotionalPricing.stayStart) : null
         const stayEnd = promotionalPricing.stayEnd ? new Date(promotionalPricing.stayEnd) : null
 
-        const isWithinStayPeriod = (!stayStart || currentDate >= stayStart) && 
+        const isWithinStayPeriod = (!stayStart || currentDate >= stayStart) &&
                                    (!stayEnd || currentDate <= stayEnd)
 
         if (isWithinStayPeriod) {
-          finalPricePerNight = promotionalPricing.discountedPrice
           discountAmount = promotionalPricing.savings
           discountType = promotionalPricing.offerType
-          discountValue = promotionalPricing.offerType === 'Percentage' 
-            ? `${promotionalPricing.discountPercentage}%` 
-            : `₹${discountAmount}`
+          discountValue = promotionalPricing.offerType === 'Percentage'
+            ? promotionalPricing.discountPercentage
+            : discountAmount
+          finalPricePerNight = promotionalPricing.discountedPrice
         }
       }
     }
 
     const grossPrice = finalPricePerNight * noOfRooms
-    const gstPerDay = Math.round(grossPrice * (gstPercentage / 100))
-    const serviceCharge = Math.round(grossPrice * 0.04)
+
+    const taxResult = taxationDetails.length > 0
+      ? calculateFinalAmount(finalPricePerNight, taxationDetails, [])
+      : { totalTax: 0, taxes: [{ rate: 0 }] }
+    const gstPercentage = taxResult.taxes[0]?.rate || 0
+    const gstPerDay = Math.round(taxResult.totalTax * noOfRooms)
     const totalPrice = grossPrice + gstPerDay
-    
+    const deductionResult = deductionDetails && deductionDetails.length > 0
+      ? calculateFinalAmount(finalPricePerNight, [], deductionDetails)
+      : { totalDeductions: 0 }
+    const serviceCharge = Math.round(deductionResult.totalDeductions * noOfRooms)
+
     return {
       dateS: date,
       price_per_qty: finalPricePerNight,
@@ -222,19 +270,19 @@ const buildPriceInfo = (
   })
 }
 
-/**
- * Build adults_info array for a room plan
- */
 const buildAdultsInfo = (
   room: SelectedRoom,
   dates: string[],
   childrenCount: number,
   childrenAges: number[],
-  promotionDetails?: any[]
+  promotionDetails?: any[],
+  taxationDetails?: any[],
+  perDatePricingData?: any[],
+  deductionDetails?: any[]
 ): AdultInfo[] => {
   const childAge = childrenAges.length > 0 ? childrenAges.join(',') : ''
   const childPrice = room.childPrice || 0
-  
+
   return [{
     no_adults: room.adults,
     no_of_adults: room.adults * room.quantity,
@@ -246,10 +294,14 @@ const buildAdultsInfo = (
       room.quantity,
       childrenCount,
       childAge,
-      12, // gstPercentage
+      taxationDetails || [],
       room.roomId,
       room.planId,
-      promotionDetails
+      promotionDetails,
+      perDatePricingData,
+      room.adults,
+      room.planName,
+      deductionDetails || []
     ),
     no_of_child: childrenCount,
     child_age: childAge,
@@ -257,20 +309,19 @@ const buildAdultsInfo = (
   }]
 }
 
-/**
- * Build room plans array from selected rooms
- */
 const buildRoomPlans = (
   selectedRooms: SelectedRoom[],
   dates: string[],
   childrenCount: number,
   childrenAges: number[],
   roomPricing: PriceDetail[],
-  promotionDetails?: any[]
+  promotionDetails?: any[],
+  taxationDetails?: any[],
+  perDatePricingData?: any[],
+  deductionDetails?: any[]
 ): RoomPlanInfo[] => {
-  // Group rooms by plan
   const planMap = new Map<string, SelectedRoom[]>()
-  
+
   selectedRooms.forEach(room => {
     const key = `${room.planId}-${room.planName}`
     if (!planMap.has(key)) {
@@ -278,14 +329,13 @@ const buildRoomPlans = (
     }
     planMap.get(key)!.push(room)
   })
-  
-  // Build plan info for each unique plan
+
   const plans: RoomPlanInfo[] = []
-  
-  planMap.forEach((rooms, key) => {
+
+  planMap.forEach((rooms) => {
     const firstRoom = rooms[0]
     const totalRoomCount = rooms.reduce((sum, r) => sum + r.quantity, 0)
-    
+
     plans.push({
       plan: firstRoom.planId || 0,
       plan_name: firstRoom.planName,
@@ -296,52 +346,66 @@ const buildRoomPlans = (
       selectedDBLCount: 0,
       isDBLExtraBed: firstRoom.isExtraBed,
       isSGLExtraBed: false,
-      adults_info: buildAdultsInfo(firstRoom, dates, childrenCount, childrenAges, promotionDetails)
+      adults_info: buildAdultsInfo(
+        firstRoom,
+        dates,
+        childrenCount,
+        childrenAges,
+        promotionDetails,
+        taxationDetails,
+        perDatePricingData,
+        deductionDetails
+      )
     })
   })
-  
+
   return plans
 }
 
-/**
- * Build the complete rooms payload
- */
 export const buildRoomsPayload = (
   bookingData: BookingFormData,
   hotelData: any,
   roomPricing: PriceDetail[],
   childrenAges: number[] = [],
-  promotionDetails?: any[]
+  promotionDetails?: any[],
+  taxationDetails?: any[],
+  perDatePricingData?: any[],
+  deductionDetails?: any[]
 ): RoomPayload[] => {
   const dates = generateDateRange(bookingData.checkInDate, bookingData.checkOutDate)
-  
-  // Group selected rooms by room ID
   const roomMap = new Map<number, SelectedRoom[]>()
-  
+
   bookingData.rooms.forEach(room => {
     if (!roomMap.has(room.roomId)) {
       roomMap.set(room.roomId, [])
     }
     roomMap.get(room.roomId)!.push(room)
   })
-  
-  // Build payload for each unique room
+
   const roomsPayload: RoomPayload[] = []
-  
+
   roomMap.forEach((selectedRooms, roomId) => {
-    // Find room details from hotel data
-    const roomDetails = hotelData.rooms?.find((r: any) => r.id === roomId)
-    
+    const roomDetails = hotelData?.rooms?.find((r: any) => r.id === roomId)
     if (!roomDetails) return
-    
+
     const totalRoomCount = selectedRooms.reduce((sum, r) => sum + r.quantity, 0)
     const totalAdults = selectedRooms.reduce((sum, r) => sum + (r.adults * r.quantity), 0)
-    
+
     roomsPayload.push({
       id: roomId,
       room_name: roomDetails.room_name || roomDetails.costume_room_name,
       room_type: roomDetails.room_type_details?.name || roomDetails.room_name,
-      plans: buildRoomPlans(selectedRooms, dates, bookingData.children, childrenAges, roomPricing, promotionDetails),
+      plans: buildRoomPlans(
+        selectedRooms,
+        dates,
+        bookingData.children,
+        childrenAges,
+        roomPricing,
+        promotionDetails,
+        taxationDetails,
+        perDatePricingData,
+        deductionDetails
+      ),
       opted_count: totalRoomCount,
       room_for_adult: totalAdults,
       extra_bed_type: roomDetails.extra_bed_type || '',
@@ -349,13 +413,10 @@ export const buildRoomsPayload = (
       childage: childrenAges.join(',')
     })
   })
-  
+
   return roomsPayload
 }
 
-/**
- * Build the complete booking payload for payment success API
- */
 export const buildBookingPayload = (
   bookingData: BookingFormData,
   hotelData: any,
@@ -368,15 +429,23 @@ export const buildBookingPayload = (
   }
 ) => {
   const dates = generateDateRange(bookingData.checkInDate, bookingData.checkOutDate)
-  const nights = calculateNights(bookingData.checkInDate, bookingData.checkOutDate)
-  
-  // Get promotion details from booking data
+
   const promotionDetails = (bookingData as any).promotionDetails || []
+  const taxationDetails = (bookingData as any).taxationDetails || []
+  const perDatePricingData = (bookingData as any).perDatePricing || []
+  const deductionDetails = (bookingData as any).deductionDetails || []
+
+  const rooms = buildRoomsPayload(
+    bookingData,
+    hotelData,
+    roomPricing,
+    childrenAges,
+    promotionDetails,
+    taxationDetails,
+    perDatePricingData,
+    deductionDetails
+  )
   
-  // Build rooms payload with promotion details
-  const rooms = buildRoomsPayload(bookingData, hotelData, roomPricing, childrenAges, promotionDetails)
-  
-  // Calculate total promotional discount from all rooms' price_info
   let totalRoomPromotionalDiscount = 0
   rooms.forEach(room => {
     room.plans.forEach(plan => {
@@ -388,56 +457,52 @@ export const buildBookingPayload = (
     })
   })
   
-  // Get additional discounts from pricing summary
   const pricingSummary = (bookingData as any).pricingSummary
   const memberOnlyDiscount = pricingSummary?.memberOnlyDiscount || 0
   const couponDiscount = pricingSummary?.couponDiscount || 0
   
-  // Calculate total discount_sum (all promotional discounts combined)
   const totalDiscountSum = totalRoomPromotionalDiscount + memberOnlyDiscount + couponDiscount
   
-  // Calculate totals
   const priceSum = bookingData.hotelPrice
   const childPriceSum = bookingData.childPrice
   const priceSumWithoutChildPrice = priceSum
-  const discountSum = bookingData.discount
+  const discountSum = totalDiscountSum
   const gstSum = bookingData.tax
   const serviceCharge = bookingData.serviceCharge
   const totalWithoutServiceCharge = priceSum + childPriceSum + gstSum
   const total = totalWithoutServiceCharge + serviceCharge
   
-  // Get city, state, country names from location APIs or booking data
-  const locationParts = bookingData.hotelLocation.split(',').map(s => s.trim())
-  const city = locationParts[locationParts.length - 3] || ''
-  const state = locationParts[locationParts.length - 2] || ''
-  const country = locationParts[locationParts.length - 1] || ''
+  const locationParts = (bookingData.hotelLocation || '').split(',').map(s => s.trim())
+  const city = (bookingData as any).cityName || locationParts[locationParts.length - 3] || ''
+  const state = (bookingData as any).stateName || locationParts[locationParts.length - 2] || ''
+  const country = (bookingData as any).countryName || locationParts[locationParts.length - 1] || ''
   
-  // Collect all unique highlights from selected rooms
   const highlights = Array.from(
     new Set(
-      bookingData.rooms.flatMap(room => room.planFeatures)
+      bookingData.rooms.flatMap(room => room.planFeatures || [])
     )
   )
+
+  const appliedCoupon = (bookingData as any).appliedCoupon || null
+  const memberOnlyPromotion = (bookingData as any).memberOnlyPromotion || null
   
   const payload = {
-    // Razorpay data (will be added after payment)
+    booking_id: bookingData.bookingId ? Number(bookingData.bookingId) : null,
+
     ...(razorpayData && {
       razorpay_payment_id: razorpayData.razorpay_payment_id,
       razorpay_order_id: razorpayData.razorpay_order_id,
       razorpay_signature: razorpayData.razorpay_signature
     }),
     
-    // Pricing summary
     price_sum: priceSum,
-    discount_sum: totalDiscountSum, // Total of all promotional discounts (room promotions + member-only + coupon)
+    discount_sum: totalDiscountSum,
     total_price_sum: totalWithoutServiceCharge,
     gst_sum: gstSum,
     
-    // Rooms data
     rooms: rooms,
     roomsCount: bookingData.rooms.reduce((sum, r) => sum + r.quantity, 0),
     
-    // Detailed pricing
     price: priceSum,
     tax: gstSum,
     discount: discountSum,
@@ -448,48 +513,44 @@ export const buildBookingPayload = (
     serviceCharge: serviceCharge,
     total: total.toFixed(2),
     
-    // Highlights
+    coupon_code: appliedCoupon?.coupon_code || '',
+    coupon_id: appliedCoupon?.id || null,
+    member_only_promotion_id: memberOnlyPromotion?.id || null,
+    
     highlights: highlights,
     
-    // Guest information
     fname: bookingData.firstName || '',
     lname: bookingData.lastName || '',
-    mobile: (bookingData as any).mobile || bookingData.phone || '',
+    email: bookingData.email || '',
+    mobile: bookingData.mobileWithCountryCode || bookingData.mobile || bookingData.phone || '',
     message: (bookingData as any).notes || bookingData.specialRequests || '',
     
-    // Booking dates
     start_date: format(new Date(bookingData.checkInDate), 'yyyy-MM-dd'),
     end_date: format(new Date(bookingData.checkOutDate), 'yyyy-MM-dd'),
     dates: dates,
     
-    // Guest counts
     no_of_child: bookingData.children,
     no_of_adult: bookingData.adults,
     childInfo: childrenAges.join(','),
     total_rooms: bookingData.rooms.reduce((sum, r) => sum + r.quantity, 0),
     no_of_guests: bookingData.adults + bookingData.children,
     
-    // Hotel information
     listingid: parseInt(bookingData.hotelId),
     
-    // Billing address
     houseNumber: bookingData.houseNumber || '',
     street: bookingData.street || '',
     city: city,
     state: state,
     country: country,
     
-    // GST information
     gst: bookingData.hasGST || false,
     gst_number: bookingData.gstNumber || '',
     gst_company_name: bookingData.companyName || '',
-    gst_phone_number: bookingData.gstPhone || '',
+    gst_phone_number: bookingData.gstPhoneWithCountryCode || bookingData.gstPhone || '',
     gst_address: bookingData.gstAddress || '',
     
-    // Cancellation policy
     cancellation_policy: bookingData.cancellationPolicyId || null,
     
-    // Booking type
     booking_type: 'b2c'
   }
   

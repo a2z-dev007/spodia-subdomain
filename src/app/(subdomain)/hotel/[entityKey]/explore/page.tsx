@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
 
 const categories = [
   "Cultural & Historical", "Outdoor Adventures", "Shopping & Markets", "Family-Friendly"
@@ -122,41 +123,20 @@ const ExplorePage = ({ params }: { params: Promise<{ entityKey: string }> }) => 
       ))}
 
       {/* 1. Hero Section */}
-      <section className="relative h-screen min-h-[700px] w-full overflow-hidden">
-        {heroSlides.map((slide, index) => (
-          <div 
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentHeroSlide ? 'opacity-100' : 'opacity-0'}`}
-          >
-            <Image src={slide.src} alt={slide.title} fill className="object-cover" priority={index === 0} />
-            <div className="absolute inset-0 bg-black/50 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-          </div>
-        ))}
-
-        <div className="absolute inset-0 flex items-center justify-center text-center px-6">
-          <div className="max-w-[1000px]">
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              {["Local Expert Approved", "Free Travel Guides", "Eco-Friendly Tours"].map(badge => (
-                <span key={badge} className="bg-white/10 backdrop-blur-md px-6 py-2 rounded-full text-white font-black uppercase tracking-widest text-[10px] border border-white/20">
-                  {badge}
-                </span>
-              ))}
-            </div>
-            <h1 className="text-5xl md:text-8xl font-black text-white mb-8 leading-tight">
-              {heroSlides[currentHeroSlide].title} – <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9530] to-[#FFB347]">Discover Hidden Gems.</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/80 font-medium mb-12">
-              Curated Experiences · Insider Tips · Hassle-Free Bookings.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <button className="bg-[#FF9530] text-white px-10 py-5 rounded-2xl font-black text-lg flex items-center gap-4 hover:shadow-2xl transition-all">
-                Download PDF Guide <Download className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HotelHeroSimple 
+        title={
+          <>
+            Explore {location} – <br className="hidden sm:inline" />
+            <span className="text-[#FF9530]">Discover Hidden Gems near {name}</span>
+          </>
+        }
+        subtitle="Curated Experiences · Local Attractions · Sightseeing Guides & Insider Tips."
+        badgeText="Local Expert Approved"
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="Explore Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+      />
 
       {/* 2. Curated Attractions Grid */}
       <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto w-full">

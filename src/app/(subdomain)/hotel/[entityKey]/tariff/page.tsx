@@ -1,5 +1,6 @@
 import React from "react";
 import HotelPageShell from "@/components/hotel/HotelPageShell";
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
 import { propertyData } from "@/lib/hotel/mockData";
 import { ShieldCheck, CheckCircle2, Zap, Headphones, ArrowRight } from "lucide-react";
 import TariffRoomCard from "@/components/hotel/sections/TariffRoomCard";
@@ -57,42 +58,15 @@ export default async function TariffPage({ params }: Props) {
       />
 
       {/* 1. Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={rooms[0]?.images[0] || "/images/hotels/banner1.jpg"} 
-            alt={name} 
-            className="w-full h-full object-cover scale-105 animate-slow-zoom"
-          />
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
-        </div>
-
-        <div className="relative z-10 text-center px-6 max-w-[1000px]">
-          <div className="inline-flex items-center gap-2 bg-[#FF9530] text-white px-4 py-2 rounded-full mb-8 animate-fade-in-up">
-            <ShieldCheck className="w-4 h-4" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Official Direct Rates</span>
-          </div>
-          <h1 className="text-4xl md:text-7xl font-black text-white mb-8 leading-tight animate-fade-in-up delay-100">
-            {heroTitle}
-          </h1>
-          <p className="text-gray-200 text-xl md:text-2xl font-medium mb-12 animate-fade-in-up delay-200">
-            Best Price Guarantee · Free Cancellation · Instant Confirmation
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto animate-fade-in-up delay-300">
-             {[
-               { icon: <CheckCircle2 className="w-5 h-5 text-[#FF9530]" />, text: "No Hidden Fees" },
-               { icon: <Zap className="w-5 h-5 text-[#FF9530]" />, text: "SSL Secure Payments" },
-               { icon: <Headphones className="w-5 h-5 text-[#FF9530]" />, text: "24/7 Support" }
-             ].map((item, i) => (
-               <div key={i} className="flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10">
-                  {item.icon}
-                  <span className="text-white font-black text-sm uppercase tracking-wider">{item.text}</span>
-               </div>
-             ))}
-          </div>
-        </div>
-      </section>
+      <HotelHeroSimple 
+        title={heroTitle}
+        subtitle="Best Price Guarantee · Free Cancellation · Instant Confirmation"
+        badgeText="Official Direct Rates"
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="Explore Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+      />
 
       {/* 2. Room Rates & Booking Widget */}
       <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto">

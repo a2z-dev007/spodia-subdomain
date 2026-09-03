@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
 
 const categories = [
   "All", "Rooms & Suites", "Dining & Bars", "Event Venues", 
@@ -101,57 +102,19 @@ const GalleryPage = ({ params }: { params: Promise<{ entityKey: string }> }) => 
       />
 
       {/* 1. Hero Section */}
-      <section className="relative h-screen min-h-[700px] w-full overflow-hidden">
-        {heroSlides.map((slide, index) => (
-          <div 
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentHeroSlide ? 'opacity-100' : 'opacity-0'}`}
-          >
-            <Image 
-              src={slide.src} 
-              alt={slide.title} 
-              fill 
-              className="object-cover" 
-              priority={index === 0}
-            />
-            <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-          </div>
-        ))}
-
-        <div className="absolute inset-0 flex items-center justify-center text-center px-6">
-          <div className="max-w-[1000px]">
-            <span className="inline-block bg-white/10 backdrop-blur-md px-6 py-2 rounded-full text-white font-black uppercase tracking-[0.3em] text-xs mb-8 animate-fade-in">
-              The Official Gallery
-            </span>
-            <h1 className="text-5xl md:text-8xl font-black text-white mb-8 leading-tight drop-shadow-2xl">
-              {heroSlides[currentHeroSlide].title}
-            </h1>
-            <p className="text-xl md:text-3xl text-white/80 font-medium mb-12">
-              {heroSlides[currentHeroSlide].subtitle}
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-6">
-              <button className="bg-[#FF9530] text-white px-10 py-5 rounded-2xl font-black text-lg flex items-center gap-4 hover:shadow-[0_20px_50px_rgba(255,149,48,0.4)] transition-all">
-                Watch Video Tour <Play className="w-5 h-5 fill-current" />
-              </button>
-              <button className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-5 rounded-2xl font-black text-lg flex items-center gap-4 hover:bg-white/20 transition-all">
-                360° Virtual Tour <Maximize2 className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Slide Indicators */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4">
-          {heroSlides.map((_, index) => (
-            <button 
-              key={index}
-              onClick={() => setCurrentHeroSlide(index)}
-              className={`h-2 transition-all duration-500 rounded-full ${index === currentHeroSlide ? 'w-12 bg-[#FF9530]' : 'w-4 bg-white/30 hover:bg-white/50'}`}
-            />
-          ))}
-        </div>
-      </section>
+      <HotelHeroSimple 
+        title={
+          <>
+            Official Photo Gallery – <span className="text-[#FF9530]">{name}</span>
+          </>
+        }
+        subtitle="Explore our presidential suites, rooftop dining, poolside lawns, and guest moments."
+        badgeText="Official Media Gallery"
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="Explore Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+      />
 
       {/* 2. Categorized Photo Grid */}
       <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto w-full">

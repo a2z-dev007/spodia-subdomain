@@ -12,6 +12,8 @@ import {
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
 
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
+
 const FacilitiesPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
   const { entityKey } = React.use(params);
   const { name, location, type } = propertyData;
@@ -75,42 +77,18 @@ const FacilitiesPage = ({ params }: { params: Promise<{ entityKey: string }> }) 
       />
 
       {/* 1. Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] w-full flex items-center justify-center overflow-hidden">
-        <Image 
-          src={IMAGES.bgSection.src} 
-          alt="Facilities" 
-          fill 
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 text-center px-6 max-w-[1000px]">
-          <h1 className="text-4xl md:text-7xl font-black text-white mb-6 leading-tight">
-            {heroTitle}
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 font-medium mb-12">
-            24/7 Concierge · Free Airport Transfers · Cultural Workshops
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-6 md:gap-12">
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-              <ShieldCheck className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">Hygiene Certified</span>
-            </div>
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-              <Wifi className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">Free WiFi</span>
-            </div>
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-              <Heart className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">Family-Friendly</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HotelHeroSimple 
+        title={heroTitle}
+        subtitle="24/7 Concierge · Free Airport Transfers · Cultural Workshops & World-Class Amenities"
+        badgeText="Hygiene Certified & Verified Facilities"
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="View Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+      />
 
       {/* 2. Sticky Navigation & Filters */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto no-scrollbar">
             {categories.map((cat) => (

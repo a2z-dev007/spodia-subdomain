@@ -76,7 +76,7 @@ export function VenueSearchPage() {
       const gVal = searchParams.get('guests')
 
       if (cityId && cityName) setLocation({ value: cityId, label: cityName })
-      
+
       const newFilters = { ...filtersState }
       if (vtId) {
         const found = venueTypesData.records.find(r => String(r.id) === vtId)
@@ -136,7 +136,7 @@ export function VenueSearchPage() {
   })
 
   const results = data?.records || []
-  
+
   // Real-time Frontend Sorting & Granular Filtering
   const processedResults = useMemo(() => {
     let list = [...results]
@@ -166,11 +166,11 @@ export function VenueSearchPage() {
   const totalRecords = data?.totalRecords || 0
   const totalPages = Math.max(1, Math.ceil(totalRecords / PER_PAGE))
 
-  const isAnyFilterActive = 
-    location !== null || 
-    venueType !== null || 
-    eventType !== null || 
-    date !== null || 
+  const isAnyFilterActive =
+    location !== null ||
+    venueType !== null ||
+    eventType !== null ||
+    date !== null ||
     guests !== null ||
     filtersState.venueTypes.length > 0 ||
     filtersState.eventTypes.length > 0 ||
@@ -231,7 +231,7 @@ export function VenueSearchPage() {
       {/* ── Hero banner ─────────────────────────────────────────────────────── */}
       <div
         className="relative bg-cover bg-center bg-no-repeat flex items-center justify-center pt-20 pb-8 md:pt-28 lg:pt-40 px-4 md:px-8 overflow-hidden"
-        style={{  
+        style={{
           backgroundImage: `url(${IMAGES.listingHeroBg.src})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -268,7 +268,7 @@ export function VenueSearchPage() {
       </div>
 
       {/* ── Results container ────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-4">
 
         {/* Sub-header row */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -283,7 +283,7 @@ export function VenueSearchPage() {
               <div className="flex items-center gap-3 mt-1.5">
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Available for your selection</p>
                 {isAnyFilterActive && (
-                  <button 
+                  <button
                     onClick={clearFilters}
                     className="flex items-center gap-1.5 text-[9px] font-black text-[#FF9530] uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded-md hover:bg-[#FF9530] hover:text-white transition-all border border-orange-100"
                   >
@@ -357,7 +357,7 @@ export function VenueSearchPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   {isAnyFilterActive && (
-                    <button 
+                    <button
                       onClick={clearFilters}
                       className="text-[10px] font-black text-[#FF9530] uppercase tracking-widest hover:underline"
                     >
@@ -405,8 +405,8 @@ export function VenueSearchPage() {
                       <div className="space-y-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 space-y-2">
-                             <div className="h-6 w-3/4 bg-gray-200 rounded-lg" />
-                             <div className="h-4 w-1/2 bg-gray-100 rounded-lg" />
+                            <div className="h-6 w-3/4 bg-gray-200 rounded-lg" />
+                            <div className="h-4 w-1/2 bg-gray-100 rounded-lg" />
                           </div>
                           <div className="w-12 h-12 bg-gray-200 rounded-2xl" />
                         </div>
@@ -419,8 +419,8 @@ export function VenueSearchPage() {
                       <div className="flex flex-col sm:flex-row items-center justify-between gap-5 mt-8 border-t border-gray-50 pt-5">
                         <div className="h-10 w-32 bg-gray-200 rounded-xl" />
                         <div className="flex gap-3 w-full sm:w-auto">
-                           <div className="h-12 flex-1 sm:w-32 bg-gray-100 rounded-2xl" />
-                           <div className="h-12 flex-1 sm:w-40 bg-gray-200 rounded-2xl" />
+                          <div className="h-12 flex-1 sm:w-32 bg-gray-100 rounded-2xl" />
+                          <div className="h-12 flex-1 sm:w-40 bg-gray-200 rounded-2xl" />
                         </div>
                       </div>
                     </div>
@@ -442,8 +442,8 @@ export function VenueSearchPage() {
                 <p className="text-gray-500 font-medium text-base lg:text-lg max-w-md mx-auto mb-10 leading-relaxed">
                   We couldn't find any premium venues matching your current filters. Try relaxing your criteria or search in a different city.
                 </p>
-                <button 
-                  onClick={clearFilters} 
+                <button
+                  onClick={clearFilters}
                   className="bg-gradient-to-r from-[#FF9530] to-[#FF8000] hover:from-[#FF8000] hover:to-[#F97316] text-white font-black uppercase tracking-widest text-[10px] lg:text-xs px-8 lg:px-10 py-4 rounded-xl lg:rounded-2xl shadow-xl shadow-orange-500/20 transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-2"
                 >
                   Clear All Filters
@@ -540,10 +540,10 @@ export function VenueSearchPage() {
               </div>
             ))}
           </div>
-          
+
           {/* Quick Navigation Links */}
           <div className="mt-10 pt-8 border-t border-dashed border-gray-100 grid sm:grid-cols-2 gap-4">
-            <Link 
+            <Link
               href="/event/list"
               className="group bg-gray-50 p-6 rounded-xl lg:rounded-2xl border border-transparent hover:border-[#FF9530] hover:bg-white transition-all shadow-sm"
             >
@@ -559,7 +559,7 @@ export function VenueSearchPage() {
               </div>
             </Link>
 
-            <Link 
+            <Link
               href="/events/venue-types"
               className="group bg-gray-50 p-6 rounded-xl lg:rounded-2xl border border-transparent hover:border-[#FF9530] hover:bg-white transition-all shadow-sm"
             >
@@ -673,7 +673,7 @@ export function VenueSearchPage() {
             className="relative flex items-center justify-center bg-[#FF9530] text-white w-14 h-14 rounded-full shadow-[0_12px_40px_rgba(255,149,48,0.4)] border border-white/20 active:scale-90 hover:scale-105 transition-all duration-300 group ring-4 ring-orange-500/10"
           >
             <SlidersHorizontal className="w-6 h-6" />
-            
+
             <div className="absolute -top-1 -right-1 flex items-center justify-center bg-white text-[#FF9530] w-6 h-6 rounded-full text-[11px] font-black shadow-lg border-2 border-[#FF9530]">
               {Object.values(filters).filter(v => Array.isArray(v) ? v.length > 0 : !!v && v !== 0 && v !== 10000 && v !== 5000).length}
             </div>

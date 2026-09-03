@@ -4,13 +4,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { useAppSelector, useAppDispatch } from "@/lib/hooks"
-import { useMemo, useEffect, useState, useRef } from "react"
+import { useMemo, useEffect, useState } from "react"
 import { calculateFinalAmount } from "@/utils/taxCalculation"
 import { format } from "date-fns"
 import { updateBookingFormData } from "@/lib/features/booking/bookingSlice"
 import { calculateRoomPlanPromotionalPricing } from "@/utils/roomPromotionalPricing"
 import { useSearchParams } from "next/navigation"
-import { X } from "lucide-react"
+import { X, ChevronDown } from "lucide-react"
+import { getBookingSummary } from "@/services/api"
+import { mapBookingSummaryToPricing } from "@/utils/mapBookingSummaryToPricing"
 
 interface PriceBreakdownModalProps {
   isOpen: boolean
@@ -25,23 +27,68 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
   const isMobileOrTablet = useMediaQuery("(max-width: 1023px)")
   const { bookingFormData } = useAppSelector((state) => state?.booking ?? { bookingFormData: {} })
   const [taxDetails, setTaxDetails] = useState<Array<{ name: string; rate: number; amount: number }>>([])
-  const poppedRef = useRef(false)
+  const [showDiscounts, setShowDiscounts] = useState(false)
 
-  // Get per-date pricing directly from Redux - NO API CALL
+  const [apiSummary, setApiSummary] = useState<any>(null)
+  const [apiLoading, setApiLoading] = useState(false)
+  const [apiError, setApiError] = useState<string | null>(null)
+
+  const searchParams = useSearchParams()
+  const bookingIdFromRedux = bookingFormData.bookingId
+  const bookingIdFromUrl = searchParams.get('booking_id')
+  const bookingId = bookingIdFromRedux || bookingIdFromUrl || bookingData?.bookingId
+
+  useEffect(() => {
+    if (isOpen && bookingId) {
+      const cachedSummary = (bookingFormData as any).apiSummary
+      if (cachedSummary) {
+        setApiSummary(cachedSummary)
+        setTaxDetails([
+          { name: "GST", rate: 0, amount: Number(cachedSummary.total_tax) },
+          { name: "Platform Fee", rate: 0, amount: Number(cachedSummary.platform_fee) }
+        ])
+        return
+      }
+
+      const fetchSummary = async () => {
+        setApiLoading(true)
+        setApiError(null)
+        try {
+          const response = await getBookingSummary(bookingId)
+          if (response?.data?.status === "success" && response?.data?.records) {
+            const records = response.data.records
+            setApiSummary(records)
+            setTaxDetails([
+              { name: "GST", rate: 0, amount: Number(records.total_tax) },
+              { name: "Platform Fee", rate: 0, amount: Number(records.platform_fee) }
+            ])
+            dispatch(updateBookingFormData({
+              apiSummary: records,
+              pricingSummary: mapBookingSummaryToPricing(records),
+            }))
+          } else {
+            setApiError("Failed to fetch booking summary")
+          }
+        } catch (error: any) {
+          setApiError(error.message || "Error fetching booking summary")
+        } finally {
+          setApiLoading(false)
+        }
+      }
+      fetchSummary()
+    }
+  }, [isOpen, bookingId, dispatch, bookingFormData])
+
   const perDatePricingData = useMemo(() => {
-    const pricing = (bookingFormData as any).perDatePricing || []
-    return pricing
+    return (bookingFormData as any).perDatePricing || []
   }, [(bookingFormData as any).perDatePricing])
 
-  // Get promotion details from Redux
   const promotionDetails = useMemo(() => {
     return (bookingFormData as any).promotionDetails || []
   }, [(bookingFormData as any).promotionDetails])
 
-  // Get rooms from Redux state
   const rooms = bookingFormData.rooms || []
 
-  // Calculate nights
   const nights = useMemo(() => {
     if (bookingFormData.checkInDate && bookingFormData.checkOutDate) {
       const checkIn = new Date(bookingFormData.checkInDate)
@@ -53,30 +100,23 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
     return 1
   }, [bookingFormData.checkInDate, bookingFormData.checkOutDate])
 
-  // Helper function to map plan name to meal plan ID
   const getMealPlanId = (planName: string): number => {
     const planMap: { [key: string]: number } = {
-      'EP': 2,  // European Plan (Room Only)
-      'CP': 1,  // Continental Plan (Room + Breakfast)
-      'MAP': 4, // Modified American Plan (Room + Breakfast + Dinner)
-      'AP': 3   // American Plan (Room + All Meals)
+      'EP': 2,
+      'CP': 1,
+      'MAP': 4,
+      'AP': 3
     }
-    return planMap[planName.toUpperCase()] || 1 // Default to CP if not found
+    return planMap[planName.toUpperCase()] || 1
   }
 
-  // Helper function to get price for a specific room, plan, and date
   const getPriceForDate = (roomId: number, planId: number, dateStr: string, adults: number, planName?: string) => {
-    // Convert to numbers
     const numericRoomId = Number(roomId)
-
-    // If planId is large (like 1482), it's a rate plan ID, not a meal plan ID
-    // Use planName to get the correct meal plan ID
     let numericPlanId = Number(planId)
     if (numericPlanId > 10 && planName) {
       numericPlanId = getMealPlanId(planName)
     }
 
-    // Find matching pricing entry
     const pricing = perDatePricingData.find((p: any) =>
       Number(p.room) === numericRoomId &&
       Number(p.plan) === numericPlanId &&
@@ -87,46 +127,37 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
       return { rate: 0, childRate: 0, originalRate: 0, hasPromotion: false, promotionDiscount: 0 }
     }
 
-    // Calculate base rate based on adults
     const sbrRate = pricing.sbr_rate || 0
     const dbrRate = pricing.dbr_rate || 0
     const extraBedRate = pricing.extra_bed_rate || 0
 
-    // Calculate rate for the specific number of adults
     let rate = 0
     if (adults === 1) {
       rate = sbrRate
     } else if (adults === 2) {
       rate = dbrRate || sbrRate
     } else {
-      // For 3+ adults, use DBR rate as base and add extra bed rate per additional adult
       const baseRate = dbrRate || sbrRate
       const extraAdults = adults - 2
       rate = baseRate + (extraAdults * extraBedRate)
     }
 
     const childRate = pricing.child_6_10_rate || 0
-    // Original rate should be the calculated rate for the specific adult count BEFORE promotion
     const originalRate = rate
-
-    // Apply promotional pricing if available
     let hasPromotion = false
     let promotionDiscount = 0
 
     if (promotionDetails && promotionDetails.length > 0) {
-      // Pass the current date as both stayStart and stayEnd to check if THIS specific date
-      // falls within the blackout period
       const promotionalPricing = calculateRoomPlanPromotionalPricing(
         rate,
         numericRoomId,
         numericPlanId,
         promotionDetails,
-        dateStr, // Pass current date as stay start
-        dateStr  // Pass current date as stay end (single day check)
+        dateStr,
+        dateStr
       )
 
       if (promotionalPricing.hasPromotion) {
-        // Check if the current date is within the promotion STAY period (not booking period)
         const currentDate = new Date(dateStr)
         const stayStart = promotionalPricing.stayStart ? new Date(promotionalPricing.stayStart) : null
         const stayEnd = promotionalPricing.stayEnd ? new Date(promotionalPricing.stayEnd) : null
@@ -145,431 +176,278 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
     return { rate, childRate, originalRate, hasPromotion, promotionDiscount }
   }
 
-  // Get children count and ages from URL
-  const searchParams = useSearchParams()
   const childrenCount = bookingFormData.children || 0
-  
-  // Parse children ages from URL parameter 'childInfo' (comma-separated ages)
   const childInfoParam = searchParams.get('childInfo') || ''
   const childrenAges = childInfoParam 
     ? childInfoParam.split(',').map(age => parseInt(age, 10)).filter(age => !isNaN(age))
     : (bookingFormData as any).childrenAges || []
 
-  // Calculate TAXES per room per date but DEDUCTIONS on total
   const roomsWithTax = useMemo(() => {
     const taxationDetails = (bookingFormData as any).taxationDetails || []
 
-    return rooms.map((room: any) => {
-      // Calculate per-date pricing for this room
+    return rooms.map((room: any, roomIndex: number) => {
       let roomSubtotal = 0
       let totalRoomTax = 0
       let totalPromotionDiscount = 0
       const perDateTaxes: any[] = []
 
-      // Loop through each night to calculate pricing
       for (let dayOffset = 0; dayOffset < nights; dayOffset++) {
         const currentDate = new Date(bookingFormData.checkInDate!)
         currentDate.setDate(currentDate.getDate() + dayOffset)
         const dateStr = format(currentDate, 'yyyy-MM-dd')
 
-        // Get pricing for this specific date (default planId to 1 if not provided)
         const pricingForDate = getPriceForDate(
           room.roomId,
           room.planId || 1,
           dateStr,
           room.adults || 1,
-          room.planName // Pass plan name for conversion
+          room.planName
         )
 
         const roomRateForDate = pricingForDate.rate
         const childRateForDate = pricingForDate.childRate
-        const originalRateForDate = pricingForDate.originalRate
         const hasPromotion = pricingForDate.hasPromotion
         const promotionDiscount = pricingForDate.promotionDiscount
 
-        // Calculate tax for this specific date's rate using slab-based taxation
         const taxResult = calculateFinalAmount(roomRateForDate, taxationDetails, [])
 
-        // Calculate child pricing and tax for this date - CHECK CHILD AGE
-        const roomIndex = rooms.indexOf(room)
         const roomChildPrice = room.childPrice || 0
-        // Only charge if: 1) room has a child assigned, 2) child price exists, 3) child is 6+ years old
         const childAge = roomIndex < childrenAges.length ? childrenAges[roomIndex] : 0
         const hasChildInRoom = roomIndex < childrenCount && roomChildPrice > 0 && childAge >= 6
         const childPriceForDate = hasChildInRoom ? childRateForDate : 0
         const childTaxResult = childPriceForDate > 0 ? calculateFinalAmount(childPriceForDate, taxationDetails, []) : { totalTax: 0 }
 
-        // Add room rate, child rate, room tax, and child tax to subtotal
-        roomSubtotal += (roomRateForDate + childPriceForDate) * room.quantity
-        totalRoomTax += (taxResult.totalTax + childTaxResult.totalTax) * room.quantity
-        totalPromotionDiscount += promotionDiscount * room.quantity
+        const totalTaxForDate = taxResult.totalTax + childTaxResult.totalTax
+        const totalForDate = (roomRateForDate + childPriceForDate) + totalTaxForDate
+
+        roomSubtotal += roomRateForDate + childPriceForDate
+        totalRoomTax += totalTaxForDate
+        totalPromotionDiscount += promotionDiscount
 
         perDateTaxes.push({
           date: dateStr,
           rate: roomRateForDate,
-          originalRate: originalRateForDate,
+          taxes: taxResult.taxes,
+          totalTax: taxResult.totalTax,
           hasPromotion,
           promotionDiscount,
-          tax: taxResult.totalTax,
-          childTax: childTaxResult.totalTax, // Add child tax to per-date tracking
-          taxRate: taxResult.taxes[0]?.rate || 0,
-          taxCategory: taxationDetails[0]?.tax_entries?.find(
-            (entry: any) => roomRateForDate >= entry.amount_from && roomRateForDate <= entry.amount_to
-          )?.tax_category || 'percentage'
+          childPrice: childPriceForDate,
+          childTax: childTaxResult.totalTax,
+          totalForDate
         })
       }
 
-
-
-      // Aggregate taxes for this room (sum across all dates)
-      const aggregatedTaxes: { [key: string]: { name: string; rate: number; amount: number } } = {}
-
-      perDateTaxes.forEach(dayTax => {
-        const taxName = 'GST' // Assuming GST for now
-        const totalDayTax = dayTax.tax + (dayTax.childTax || 0) // Include both room tax and child tax
-        if (aggregatedTaxes[taxName]) {
-          aggregatedTaxes[taxName].amount += totalDayTax * room.quantity
-        } else {
-          aggregatedTaxes[taxName] = {
-            name: taxName,
-            rate: dayTax.taxRate,
-            amount: totalDayTax * room.quantity
-          }
-        }
-      })
+      const totalRoomPrice = roomSubtotal + totalRoomTax
 
       return {
         ...room,
-        roomSubtotal,
+        subtotal: roomSubtotal,
         totalTax: totalRoomTax,
-        totalPromotionDiscount,
-        taxes: Object.values(aggregatedTaxes), // Add taxes array
+        totalPrice: totalRoomPrice,
         perDateTaxes,
-        roomTotal: roomSubtotal + totalRoomTax
+        totalPromotionDiscount
       }
     })
-  }, [rooms, nights, bookingFormData, perDatePricingData, promotionDetails, childrenCount, childrenAges])
+  }, [rooms, bookingFormData.checkInDate, nights, perDatePricingData, promotionDetails, childrenCount, childrenAges])
 
-  // Calculate total tax amount across all rooms
-  const totalTaxAmount = useMemo(() =>
-    roomsWithTax.reduce((sum, room) => sum + room.totalTax, 0),
-    [roomsWithTax]
-  )
-
-  // Calculate total promotional discount across all rooms
-  const totalPromotionalDiscount = useMemo(() =>
-    roomsWithTax.reduce((sum, room) => sum + (room.totalPromotionDiscount || 0), 0),
-    [roomsWithTax]
-  )
-
-  // Calculate total subtotal for all rooms
-  const totalRoomSubtotal = useMemo(() =>
-    roomsWithTax.reduce((sum, room) => sum + room.roomSubtotal, 0),
-    [roomsWithTax]
-  )
-
-  // Calculate deductions on TOTAL subtotal (not per room)
-  const totalDeductionsResult = useMemo(() => {
-    const deductionDetails = (bookingFormData as any).deductionDetails || []
-    return calculateFinalAmount(totalRoomSubtotal, [], deductionDetails)
-  }, [totalRoomSubtotal, bookingFormData])
-
-  const totalDeductionAmount = useMemo(() =>
-    totalDeductionsResult.totalDeductions,
-    [totalDeductionsResult]
-  )
-
-  // Combine taxes (aggregated from rooms) and deductions (calculated on total)
-  const aggregatedTaxDetails = useMemo(() => {
-    const combinedTaxes: { [key: string]: { name: string; rate: number; amount: number } } = {}
-
-    // Add taxes from all rooms
-    roomsWithTax.forEach(room => {
-      // Safety check: ensure room.taxes exists and is an array
-      if (room.taxes && Array.isArray(room.taxes)) {
-        room.taxes.forEach((tax: any) => {
-          if (combinedTaxes[tax.name]) {
-            combinedTaxes[tax.name].amount += tax.amount
-          } else {
-            combinedTaxes[tax.name] = { ...tax }
-          }
-        })
-      }
-    })
-
-    // Add deductions calculated on total
-    if (totalDeductionsResult.deductions && Array.isArray(totalDeductionsResult.deductions)) {
-      totalDeductionsResult.deductions.forEach((deduction: any) => {
-        combinedTaxes[deduction.name] = deduction
+  const dateHeaders = useMemo(() => {
+    if (!bookingFormData.checkInDate) return []
+    const dates = []
+    for (let dayOffset = 0; dayOffset < nights; dayOffset++) {
+      const currentDate = new Date(bookingFormData.checkInDate)
+      currentDate.setDate(currentDate.getDate() + dayOffset)
+      dates.push({
+        display: format(currentDate, "dd MMM (EEE)"),
+        api: format(currentDate, "yyyy-MM-dd")
       })
     }
-    return Object.values(combinedTaxes)
-  }, [roomsWithTax])
+    return dates
+  }, [bookingFormData.checkInDate, nights])
 
-  // Get dates for column headers with both display and API formats
-  const dateHeaders = useMemo(() => {
-    if (bookingFormData.checkInDate && bookingFormData.checkOutDate) {
-      const checkIn = new Date(bookingFormData.checkInDate)
-      const dates = []
+  const modalPricingSummary = (bookingFormData as any).pricingSummary || {}
 
-      for (let i = 0; i < nights; i++) {
-        const date = new Date(checkIn)
-        date.setDate(date.getDate() + i)
-        dates.push({
-          display: date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }),
-          api: format(date, 'yyyy-MM-dd')
-        })
-      }
-      return dates
+  const hotelPrice = useMemo(() => {
+    if (apiSummary?.rooms) {
+      return apiSummary.rooms.reduce((sum: number, r: any) => sum + Number(r.original_hotel_price || 0), 0)
     }
-    return []
-  }, [bookingFormData.checkInDate, bookingFormData.checkOutDate, nights])
+    return modalPricingSummary.originalHotelPrice || bookingFormData.originalHotelPrice || bookingFormData.hotelPrice || 0
+  }, [apiSummary, modalPricingSummary, bookingFormData])
 
-  // Use actual pricing from Redux with separate hotel and child pricing
-  // const discount = bookingFormData.discount || 0 // COMMENTED: Not using fake discounts
-  // const originalHotelPrice = (bookingFormData as any).originalHotelPrice || 0 // COMMENTED: Not using fake original prices
-  // const discountPercentage = (bookingFormData as any).discountPercentage || 0 // COMMENTED
+  const subtotal = useMemo(() => {
+    if (apiSummary) return Number(apiSummary.total_base_price || 0)
+    return modalPricingSummary.subtotal || roomsWithTax.reduce((sum, room) => sum + (room.subtotal * (room.quantity || 1)), 0)
+  }, [apiSummary, modalPricingSummary, roomsWithTax])
 
-  // Calculate original hotel price (before discount)
-  const originalHotelPrice = totalRoomSubtotal + totalPromotionalDiscount
-
-  // Use totalRoomSubtotal (calculated from per-date pricing) as the subtotal (after discount)
-  const subtotal = totalRoomSubtotal
-  const hotelPrice = originalHotelPrice // Show original price, not discounted
-
-  // Total Payment = Subtotal + Taxes + Deductions (subtotal already has discount applied)
-  const total = Math.round(subtotal + totalTaxAmount + totalDeductionAmount)
-
-  // Track if we've already dispatched to prevent infinite loops
-  const lastDispatchedTotal = useRef<number | null>(null)
-  const lastDispatchedTaxDetails = useRef<string | null>(null)
-
-  // Update state with aggregated tax details and store in Redux
-  useEffect(() => {
-    const calculatedTotal = Math.round(totalRoomSubtotal + totalTaxAmount + totalDeductionAmount)
-    const taxDetailsString = JSON.stringify(aggregatedTaxDetails)
-
-    // Only update if the total or tax details have changed (to prevent infinite loops)
-    if (lastDispatchedTotal.current !== calculatedTotal || lastDispatchedTaxDetails.current !== taxDetailsString) {
-      lastDispatchedTotal.current = calculatedTotal
-      lastDispatchedTaxDetails.current = taxDetailsString
-
-      setTaxDetails(aggregatedTaxDetails)
-
-      // Store pricing summary in Redux for sidebar to use
-      dispatch(updateBookingFormData({
-        pricingSummary: {
-          subtotal: totalRoomSubtotal,
-          totalTax: totalTaxAmount,
-          totalDeductions: totalDeductionAmount,
-          total: calculatedTotal, // Already rounded
-          taxDetails: aggregatedTaxDetails,
-          totalPromotionalDiscount: totalPromotionalDiscount // Add promotional discount
-        }
-      }))
-    }
-  }, [aggregatedTaxDetails, totalTaxAmount, totalDeductionAmount, totalRoomSubtotal, dispatch])
-
-  // Handle back button on mobile
-  useEffect(() => {
-    if (!isMobileOrTablet || !isOpen) return
-
-    poppedRef.current = false
-    // Push a state when modal opens
-    window.history.pushState({ modalOpen: true }, "")
-
-    const handlePopState = (e: PopStateEvent) => {
-      // If user presses back, close the modal
-      poppedRef.current = true
-      onClose()
-    }
-
-    window.addEventListener("popstate", handlePopState)
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState)
-      // Check if the current state is the one we pushed, then go back to clean history
-      if (!poppedRef.current && window.history.state?.modalOpen) {
-        window.history.back()
-      }
-    }
-  }, [isOpen, isMobileOrTablet, onClose])
+  const total = useMemo(() => {
+    if (apiSummary) return Number(apiSummary.grand_total || 0)
+    return modalPricingSummary.total || bookingFormData.finalPrice || bookingFormData.totalPrice || 0
+  }, [apiSummary, modalPricingSummary, bookingFormData])
 
   const headerTitleContent = (
-    <div className="flex items-center justify-between gap-3 w-full text-left">
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
-          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="flex items-center justify-between w-full">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
           </svg>
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="truncate text-lg sm:text-xl font-bold text-white leading-tight">Price Summary</div>
-          <div className="text-xs sm:text-sm font-normal text-orange-100 mt-0.5 truncate">
-            Detailed breakdown of your booking
-          </div>
+        <div>
+          <h2 className="text-xl font-black text-gray-900 tracking-tight">Price Breakdown</h2>
+          <p className="text-xs text-gray-500 font-medium">Transparent pricing details & night-by-night rates</p>
         </div>
       </div>
-      <button 
-        onClick={(e) => {
-          e.stopPropagation();
-          onClose();
-        }}
-        className="p-2 hover:bg-white/10 rounded-full transition-colors shrink-0"
+      <button
+        onClick={onClose}
+        className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors"
       >
-        <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+        <X className="w-4 h-4" />
       </button>
     </div>
   )
 
   const mainBodyContent = (
     <>
-      <div className="overflow-y-auto max-h-[calc(95vh-250px)] lg:max-h-[calc(85vh-250px)] px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        {/* Content */}
-        {perDatePricingData.length === 0 ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading pricing data...</p>
-            </div>
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4">
+        {apiLoading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500 mb-4"></div>
+            <p className="text-sm font-semibold text-gray-600">Loading accurate price breakdown...</p>
+          </div>
+        ) : apiError ? (
+          <div className="text-center py-12 text-red-500">
+            <p className="text-sm font-semibold mb-2">{apiError}</p>
           </div>
         ) : rooms.length > 0 ? (
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mx-1 sm:mx-0">
-            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-              <table className="w-full text-xs sm:text-[11px] border-collapse">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm border-collapse min-w-[500px]">
                 <thead>
-                  <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-orange-200">
-                    <th className="text-left p-2 sm:p-3 font-semibold text-gray-700 border-r border-gray-200 min-w-[140px] sm:min-w-[160px] sticky left-0 bg-gradient-to-r from-gray-50 to-gray-100 z-10">
-                      <div className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                        </svg>
-                        Room Details
-                      </div>
+                  <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                    <th className="p-3 text-left font-extrabold text-gray-700 w-1/3 min-w-[140px] sticky left-0 bg-gradient-to-r from-gray-50 to-gray-100 z-10 border-r border-gray-200">
+                      Room Details
                     </th>
-                    {dateHeaders.map((date, idx) => (
-                      <th key={idx} className="text-center p-2 sm:p-3 font-semibold text-gray-700 border-r border-gray-200 min-w-[110px] sm:min-w-[130px]">
-                        <div className="flex flex-col items-center gap-1">
-                          <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          <span>{date.display}</span>
-                        </div>
+                    {dateHeaders.map((date: any, idx: number) => (
+                      <th key={idx} className="p-3 text-center font-extrabold text-gray-700 border-r border-gray-200 last:border-r-0 min-w-[120px]">
+                        {date.display}
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {roomsWithTax.map((room: any, idx: number) => {
-                    const roomChildPrice = room.childPrice || 0
-                    const childAge = idx < childrenAges.length ? childrenAges[idx] : 0
-                    const hasChildInRoom = idx < childrenCount && roomChildPrice > 0 && childAge >= 6
-                    const roomQuantity = room.quantity || 1
-                    const taxationDetails = (bookingFormData as any).taxationDetails || []
+                  {(apiSummary?.rooms || roomsWithTax).map((roomItem: any, roomIdx: number) => {
+                    const isApi = !!apiSummary
+                    const roomName = isApi ? roomItem.room_name : roomItem.roomName || roomItem.room
+                    const planName = isApi ? roomItem.plan_name : roomItem.planName || roomItem.plan
+                    const roomQty = isApi ? roomItem.qty : roomItem.quantity || 1
 
                     return (
-                      <tr key={idx} className="border-b border-gray-100 hover:bg-orange-50/30 transition-colors">
-                        <td className="p-2 sm:p-3 border-r border-gray-200 bg-gradient-to-r from-gray-50 to-white sticky left-0 z-10">
+                      <tr key={roomIdx} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                        <td className="p-3 text-left font-medium text-gray-900 border-r border-gray-200 sticky left-0 bg-white z-10">
                           <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${room.planName === 'EP' ? 'bg-green-100 text-green-700' :
-                                room.planName === 'CP' ? 'bg-blue-100 text-blue-700' :
-                                  room.planName === 'MAP' ? 'bg-orange-100 text-orange-700' :
-                                    'bg-red-100 text-red-700'
-                                }`}>
-                                {room.planName || 'CP'}
-                              </span>
-                            </div>
-                            <div className="font-semibold text-gray-900 text-xs">
-                              {room.roomName || 'Deluxe Room'}
-                            </div>
-                            <div className="grid grid-cols-2 gap-x-2 text-[10px] text-gray-600">
-                              <div>Rooms: {roomQuantity}</div>
-                              <div>Adults: {room.adults || 0}</div>
-                              <div>Childs: {hasChildInRoom ? 1 : 0}</div>
-                            </div>
+                            <span className="font-bold text-gray-900 text-xs sm:text-sm block">
+                              {roomQty}× {roomName}
+                            </span>
+                            <span className="inline-block text-[10px] sm:text-xs font-semibold px-2 py-0.5 bg-orange-50 text-orange-700 rounded border border-orange-100">
+                              {planName}
+                            </span>
                           </div>
                         </td>
-                        {dateHeaders.map((date, dateIdx) => {
-                          const pricingForDate = getPriceForDate(
-                            room.roomId,
-                            room.planId || 1,
-                            date.api,
-                            room.adults || 1,
-                            room.planName
-                          )
-                          const roomRateForDate = pricingForDate.rate
-                          const childRateForDate = pricingForDate.childRate
-                          const taxResult = calculateFinalAmount(roomRateForDate, taxationDetails, [])
-                          const gstAmount = taxResult.totalTax
-                          const gstRate = taxResult.taxes[0]?.rate || 0
-                          const taxEntry = taxationDetails[0]?.tax_entries?.find(
-                            (entry: any) => roomRateForDate >= entry.amount_from && roomRateForDate <= entry.amount_to
-                          )
-                          const taxCategory = taxEntry?.tax_category || 'percentage'
-                          const isPercentage = taxCategory === 'percentage'
-                          const childPriceForDate = hasChildInRoom ? childRateForDate : 0
-                          const childTaxResult = childPriceForDate > 0 ? calculateFinalAmount(childPriceForDate, taxationDetails, []) : { totalTax: 0, taxes: [] }
-                          const childGstAmount = childTaxResult.totalTax
-                          const childGstRate = childTaxResult.taxes[0]?.rate || 0
-                          const childTaxEntry = taxationDetails[0]?.tax_entries?.find(
-                            (entry: any) => childPriceForDate >= entry.amount_from && childPriceForDate <= entry.amount_to
-                          )
-                          const childTaxCategory = childTaxEntry?.tax_category || 'percentage'
-                          const isChildPercentage = childTaxCategory === 'percentage'
-                          const totalForDate = roomRateForDate + gstAmount + childPriceForDate + childGstAmount
+                        {dateHeaders.map((date: any, dateIdx: number) => {
+                          if (isApi) {
+                            const dp = roomItem.daily_prices?.find((d: any) => d.date === date.api)
+                            if (!dp) return <td key={dateIdx} className="p-3 text-center text-gray-400">--</td>
+
+                            const baseRate = Number(dp.base_price || 0)
+                            const taxAmt = Number(dp.tax_amount || 0)
+                            const promoDisc = Number(dp.promotional_discount || 0)
+                            const childRate = Number(dp.child_price || 0)
+                            const childTaxAmt = Number(dp.child_tax_amount || 0)
+                            const totalPrice = Number(dp.total_price || 0)
+                            const hasChild = childRate > 0
+
+                            return (
+                              <td key={dateIdx} className="p-3 text-center border-r border-gray-200 last:border-r-0 align-top">
+                                <div className="space-y-1 text-[11px]">
+                                  <div className="flex justify-between items-center text-gray-600">
+                                    <span>Rate:</span>
+                                    <span className="font-semibold text-gray-900">₹{Math.round(baseRate)}</span>
+                                  </div>
+                                  {promoDisc > 0 && (
+                                    <div className="flex justify-between items-center text-green-600 font-medium">
+                                      <span>Promo:</span>
+                                      <span>-₹{Math.round(promoDisc)}</span>
+                                    </div>
+                                  )}
+                                  <div className="flex justify-between items-center text-gray-500">
+                                    <span>GST:</span>
+                                    <span>₹{Math.round(taxAmt)}</span>
+                                  </div>
+                                  {hasChild && (
+                                    <>
+                                      <div className="flex justify-between items-center text-blue-700">
+                                        <span>Child Rate:</span>
+                                        <span className="font-semibold">₹{Math.round(childRate)}</span>
+                                      </div>
+                                      {childTaxAmt > 0 && (
+                                        <div className="flex justify-between items-center text-blue-600">
+                                          <span>Child GST:</span>
+                                          <span>₹{Math.round(childTaxAmt)}</span>
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
+                                  <div className="flex justify-between items-center pt-1 border-t border-gray-200 font-bold text-orange-600">
+                                    <span>Total:</span>
+                                    <span>₹{Math.round(totalPrice)}</span>
+                                  </div>
+                                </div>
+                              </td>
+                            )
+                          }
+
+                          const perDateData = roomItem.perDateTaxes?.[dateIdx]
+                          if (!perDateData) return <td key={dateIdx} className="p-3 text-center text-gray-400">--</td>
+
+                          const { rate, taxes, hasPromotion, promotionDiscount, childPrice: childPriceForDate, childTax, totalForDate } = perDateData
+                          const mainTax = taxes?.[0] || { name: 'GST', rate: 0, amount: 0 }
+                          const roomChildPrice = roomItem.childPrice || 0
+                          const childAge = roomIdx < childrenAges.length ? childrenAges[roomIdx] : 0
+                          const hasChildInRoom = roomIdx < childrenCount && roomChildPrice > 0 && childAge >= 6
 
                           return (
-                            <td key={dateIdx} className="p-2 sm:p-3 border-r border-gray-200 bg-white">
-                              <div className="space-y-1">
-                                {pricingForDate.hasPromotion ? (
-                                  <>
-                                    <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                      <span className="text-gray-600">Original Rate:</span>
-                                      <span className=" text-gray-500">₹{Math.round(pricingForDate.originalRate)}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                      <span className="text-green-600 font-semibold">Promo Discount:</span>
-                                      <span className="font-semibold text-green-600">-₹{Math.round(pricingForDate.promotionDiscount)}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                      <span className="text-gray-600">Room Rate:</span>
-                                      <span className="font-semibold text-gray-900">₹{Math.round(roomRateForDate)}</span>
-                                    </div>
-                                  </>
-                                ) : (
-                                  <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                    <span className="text-gray-600">Room Rate:</span>
-                                    <span className="font-semibold text-gray-900">₹{Math.round(roomRateForDate)}</span>
+                            <td key={dateIdx} className="p-3 text-center border-r border-gray-200 last:border-r-0 align-top">
+                              <div className="space-y-1 text-[11px]">
+                                <div className="flex justify-between items-center text-gray-600">
+                                  <span>Rate:</span>
+                                  <span className="font-semibold text-gray-900">₹{Math.round(rate)}</span>
+                                </div>
+                                {hasPromotion && promotionDiscount > 0 && (
+                                  <div className="flex justify-between items-center text-green-600 font-medium">
+                                    <span>Promo:</span>
+                                    <span>-₹{Math.round(promotionDiscount)}</span>
                                   </div>
                                 )}
-                                {gstAmount > 0 && (
-                                  <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                    <span className="text-gray-600">
-                                      GST ({isPercentage ? `${gstRate}%` : `₹${gstRate}`}):
-                                    </span>
-                                    <span className="font-medium text-gray-800">₹{Math.round(gstAmount)}</span>
-                                  </div>
-                                )}
+                                <div className="flex justify-between items-center text-gray-500">
+                                  <span>GST ({mainTax.rate}%):</span>
+                                  <span>₹{Math.round(mainTax.amount)}</span>
+                                </div>
                                 {hasChildInRoom && childPriceForDate > 0 && (
                                   <>
-                                    <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                      <span className="text-blue-700">Child Rate:</span>
-                                      <span className="font-semibold text-blue-700">₹{Math.round(childPriceForDate)}</span>
+                                    <div className="flex justify-between items-center text-blue-700">
+                                      <span>Child Rate:</span>
+                                      <span className="font-semibold">₹{Math.round(childPriceForDate)}</span>
                                     </div>
-                                    {childGstAmount > 0 && (
-                                      <div className="flex justify-between items-center text-[10px] sm:text-[11px]">
-                                        <span className="text-blue-600">
-                                          Child GST ({isChildPercentage ? `${childGstRate}%` : `₹${childGstRate}`}):
-                                        </span>
-                                        <span className="font-medium text-blue-700">₹{Math.round(childGstAmount)}</span>
+                                    {childTax > 0 && (
+                                      <div className="flex justify-between items-center text-blue-600">
+                                        <span>Child GST:</span>
+                                        <span>₹{Math.round(childTax)}</span>
                                       </div>
                                     )}
                                   </>
                                 )}
-                                <div className="flex justify-between items-center pt-1 border-t border-gray-200 text-[10px] sm:text-[11px]">
-                                  <span className="text-gray-700 font-semibold">Total:</span>
-                                  <span className="font-bold text-orange-600">₹{Math.round(totalForDate)}</span>
+                                <div className="flex justify-between items-center pt-1 border-t border-gray-200 font-bold text-orange-600">
+                                  <span>Total:</span>
+                                  <span>₹{Math.round(totalForDate)}</span>
                                 </div>
                               </div>
                             </td>
@@ -578,53 +456,12 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
                       </tr>
                     )
                   })}
-                  <tr className="bg-gradient-to-r from-orange-50 to-orange-100 border-t-2 border-orange-300">
-                    <td className="p-2 sm:p-3 text-center font-bold text-gray-900 border-r border-orange-200 sticky left-0 bg-gradient-to-r from-orange-50 to-orange-100 z-10">
-                      <div className="flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                        Daily Total
-                      </div>
-                    </td>
-                    {dateHeaders.map((date, idx) => {
-                      const taxationDetails = (bookingFormData as any).taxationDetails || []
-                      const dailyTotal = roomsWithTax.reduce((sum: number, room: any, roomIdx: number) => {
-                        const roomQuantity = room.quantity || 1
-                        const pricingForDate = getPriceForDate(
-                          room.roomId,
-                          room.planId || 1,
-                          date.api,
-                          room.adults || 1,
-                          room.planName
-                        )
-                        const roomRateForDate = pricingForDate.rate
-                        const childRateForDate = pricingForDate.childRate
-                        const taxResult = calculateFinalAmount(roomRateForDate, taxationDetails, [])
-                        const roomChildPrice = room.childPrice || 0
-                        const childAge = roomIdx < childrenAges.length ? childrenAges[roomIdx] : 0
-                        const hasChildInRoom = roomIdx < childrenCount && roomChildPrice > 0 && childAge >= 6
-                        const childPriceForDate = hasChildInRoom ? childRateForDate : 0
-                        const childTaxResult = childPriceForDate > 0 ? calculateFinalAmount(childPriceForDate, taxationDetails, []) : { totalTax: 0 }
-                        const unitTotal = roomRateForDate + taxResult.totalTax + childPriceForDate + childTaxResult.totalTax
-                        return sum + (unitTotal * roomQuantity)
-                      }, 0)
-                      return (
-                        <td key={idx} className="p-2 sm:p-3 text-center font-bold text-orange-600 border-r border-orange-200 text-xs sm:text-sm">
-                          ₹{Math.round(dailyTotal).toLocaleString()}
-                        </td>
-                      )
-                    })}
-                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         ) : (
-          <div className="text-center py-16 text-gray-500 bg-white rounded-xl shadow-lg mx-1 sm:mx-0">
-            <svg className="w-20 h-20 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
+          <div className="text-center py-16 text-gray-500 bg-white rounded-xl shadow-lg">
             <p className="text-lg font-semibold mb-2">No rooms selected</p>
             <p className="text-sm">Please select rooms to view the price breakdown</p>
           </div>
@@ -635,94 +472,100 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-700">Hotel Price</span>
-            <span className="font-semibold text-gray-900">₹{hotelPrice.toLocaleString()}</span>
+            <span className="font-semibold text-gray-900">₹{Math.round(hotelPrice).toLocaleString()}</span>
           </div>
 
-          {totalPromotionalDiscount > 0 && (
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-green-600 font-semibold">Promotional Discount</span>
-              <span className="font-semibold text-green-600">-₹{Math.round(totalPromotionalDiscount).toLocaleString()}</span>
-            </div>
-          )}
+          {(() => {
+            const promoDiscount = Number(modalPricingSummary.totalPromotionalDiscount || 0)
+            const memberDiscount = Number(modalPricingSummary.memberOnlyDiscount || 0)
+            const couponDiscount = Number(modalPricingSummary.couponDiscount || 0)
+            const appliedCoupon = bookingFormData?.appliedCoupon
 
-          {totalPromotionalDiscount > 0 && (
+            const modalDiscountRows = [
+              { key: "promo", label: "Hotel Promotion", amount: promoDiscount },
+              { key: "member", label: "Member Discount", amount: memberDiscount },
+              {
+                key: "coupon",
+                label: appliedCoupon
+                  ? `Coupon · ${appliedCoupon.coupon_code.toUpperCase()}`
+                  : "Coupon Discount",
+                amount: couponDiscount,
+              },
+            ].filter((row) => row.amount > 0)
+            const modalTotalDiscount = promoDiscount + memberDiscount + couponDiscount
+
+            if (modalDiscountRows.length === 0) return null
+
+            return (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setShowDiscounts((s) => !s)}
+                  className="w-full flex items-center justify-between text-sm focus:outline-none"
+                >
+                  <span className="flex items-center gap-1 text-green-600 font-bold">
+                    Total Discount
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${showDiscounts ? "rotate-180" : ""}`}
+                    />
+                  </span>
+                  <span className="font-bold text-green-600 tabular-nums">
+                    -₹{Math.round(modalTotalDiscount).toLocaleString()}
+                  </span>
+                </button>
+
+                {showDiscounts && (
+                  <div className="space-y-1 pl-3 pt-1.5 border-l-2 border-green-100 ml-1 mt-1">
+                    {modalDiscountRows.map((row) => (
+                      <div key={row.key} className="flex items-center justify-between text-[13px]">
+                        <span className="text-gray-600 font-semibold">{row.label}</span>
+                        <span className="font-semibold text-green-600 tabular-nums">
+                          -₹{Math.round(row.amount).toLocaleString()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })()}
+
+          {subtotal > 0 && (
             <div className="flex items-center justify-between text-sm pt-1.5 border-t border-gray-100">
               <span className="text-gray-700">Subtotal (All Rooms)</span>
-              <span className="font-semibold text-gray-900">₹{subtotal.toLocaleString()}</span>
+              <span className="font-semibold text-gray-900">₹{Math.round(subtotal).toLocaleString()}</span>
             </div>
           )}
 
-          {taxDetails.length > 0 && (
+          {((modalPricingSummary.taxDetails && modalPricingSummary.taxDetails.length > 0) ? modalPricingSummary.taxDetails : taxDetails).length > 0 && (
             <div className="pt-1.5 border-t border-gray-100">
-              <p className="text-[10px] text-gray-500 mb-1 italic uppercase font-bold tracking-wider">Total Taxes & Charges (All Rooms)</p>
-              {taxDetails.map((taxItem, index) => (
+              <p className="text-[10px] text-gray-500 mb-1 italic uppercase font-bold tracking-wider">Total Taxes &amp; Charges (All Rooms)</p>
+              {((modalPricingSummary.taxDetails && modalPricingSummary.taxDetails.length > 0) ? modalPricingSummary.taxDetails : taxDetails).map((taxItem, index) => (
                 <div key={index} className="flex items-center justify-between text-sm mb-0.5">
-                  <span className="text-gray-700">{taxItem.name} {taxItem.name?.toLowerCase() !== "gst" &&
-                    <span className="text-gray-500">
-                      ({taxItem.rate}%)
-                    </span>
-                  } </span>
+                  <span className="text-gray-700">{taxItem.name}</span>
                   <span className="font-semibold text-gray-900">₹{Math.round(taxItem.amount).toLocaleString()}</span>
                 </div>
               ))}
             </div>
           )}
 
-          {bookingFormData.memberOnlyPromotion && bookingFormData.memberOnlyPromotion.discount_amount > 0 && (
-            <div className="flex items-center justify-between text-sm pt-1.5 border-t border-gray-100">
-              <span className="text-purple-600 font-semibold">
-                Member-Only Discount
-              </span>
-              <span className="font-semibold text-purple-600">
-                -₹{Math.round(bookingFormData.memberOnlyPromotion.discount_amount).toLocaleString()}
-              </span>
-            </div>
-          )}
-
-          {bookingFormData?.appliedCoupon && bookingFormData?.appliedCoupon?.discount_amount > 0 && (
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-green-600 font-semibold">
-                Coupon Discount ({bookingFormData?.appliedCoupon?.coupon_code})
-              </span>
-              <span className="font-semibold text-green-600">
-                -₹{Math.round(bookingFormData?.appliedCoupon?.discount_amount)?.toLocaleString()}
-              </span>
-            </div>
-          )}
-
           <div className="flex items-center justify-between pt-2 border-t-2 border-gray-200">
             <span className="text-lg font-black text-gray-900">Total</span>
             <span className="text-xl font-black text-orange-600">
-              ₹{total.toLocaleString()}
+              ₹{Math.round(total).toLocaleString()}
             </span>
           </div>
 
-          <div className="mt-2">
-            {showBookButton && onBookNow && (
-              <div className="flex gap-2 w-full">
-                <button
-                  onClick={onBookNow}
-                  className="flex-1 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  Book Now
-                </button>
-                {isMobileOrTablet && (
-                  <button
-                    onClick={onClose}
-                    className="aspect-square bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center rounded-xl p-3 transition-colors shadow-sm"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                )}
-              </div>
-            )}
-            
-            {showBookButton && onBookNow && (
-              <p className="text-[10px] text-center text-gray-500 mt-1">
-                You won't be charged yet
-              </p>
-            )}
-          </div>
+          {showBookButton && onBookNow && (
+            <div className="mt-2">
+              <button
+                onClick={onBookNow}
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                Book Now
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -732,7 +575,7 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
     return (
       <Drawer open={isOpen} onOpenChange={onClose}>
         <DrawerContent className="bg-gradient-to-br from-white to-gray-50 p-0 gap-0 max-h-[95vh] flex flex-col z-[1001] overflow-hidden">
-          <DrawerHeader className="bg-gradient-to-r from-orange-500 to-orange-400 text-white px-4 sm:px-6 lg:px-8 py-4 m-0 border-b-0 shadow-sm text-left shrink-0 rounded-none">
+          <DrawerHeader className="bg-white border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-4 m-0 shadow-sm text-left shrink-0 rounded-none">
             <DrawerTitle asChild>
               {headerTitleContent}
             </DrawerTitle>
@@ -748,8 +591,7 @@ const PriceBreakdownModal = ({ isOpen, onClose, bookingData, showBookButton = fa
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-[80%] max-h-[90vh] overflow-hidden bg-gradient-to-br from-white to-gray-50 p-0 gap-0 rounded-3xl flex flex-col z-[1001] [&>button:last-child]:hidden">
-        {/* Header with gradient */}
-        <DialogHeader className="bg-gradient-to-r from-orange-500 to-orange-400 text-white px-4 sm:px-6 lg:px-8 py-4 rounded-t-lg shrink-0">
+        <DialogHeader className="bg-white border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-4 rounded-t-3xl shrink-0">
           <DialogTitle asChild>
             {headerTitleContent}
           </DialogTitle>

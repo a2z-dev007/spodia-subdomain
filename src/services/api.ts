@@ -196,12 +196,16 @@ export const searchHotelsApi = (filters: {
 
 
 // Booking APIs
-export const getRecentReservations = (params: { page_number?: number; number_of_records?: number }) => {
+export const getRecentReservations = (params: { page_number?: number; number_of_records?: number; status?: string }) => {
+    const apiParams: Record<string, any> = {
+        page_number: params.page_number || 1,
+        number_of_records: params.number_of_records || 10
+    }
+    if (params.status && params.status !== "all") {
+        apiParams.status = params.status
+    }
     return handleApiCall(() => apiClient.get("/recent-reservations/", { 
-        params: {
-            page_number: params.page_number || 1,
-            number_of_records: params.number_of_records || 10
-        }
+        params: apiParams
     }))
 }
 
@@ -216,6 +220,29 @@ export const sendReservationMail = (reservationId: number, typeOfMail: string = 
             type_of_mail: typeOfMail
         }
     }))
+}
+
+export const saveBooking = (payload: {
+    property_id: number;
+    check_in: string;
+    check_out: string;
+    rooms: Array<{
+        room_id: number;
+        plan_id: number;
+        adults: number;
+        children: number;
+        qty: number;
+    }>;
+}) => {
+    return handleApiCall(() => apiClient.post("/save-booking/", payload))
+}
+
+export const getBookingSummary = (bookingId: string | number) => {
+    return handleApiCall(() => apiClient.get(`/booking-summary/${bookingId}/`))
+}
+
+export const getSelectedRooms = (bookingId: string | number) => {
+    return handleApiCall(() => apiClient.get(`/selected-rooms/${bookingId}/`))
 }
 
 // Profile APIs
@@ -337,6 +364,37 @@ export const getHotelOfferPromotions = (propertyId: string | number) => {
 
 export const getMemberOnlyPromotions = (propertyId: string | number) => {
     return handleApiCall(() => apiClient.get(`/list-member-only-promotion/${propertyId}/`))
+}
+
+export const updateBookingAndApplyMemberOnlyPromotion = (
+    bookingId: string | number,
+    userLogout?: boolean
+) => {
+    const payload: Record<string, any> = {
+        booking_id: bookingId,
+    }
+    if (userLogout) {
+        payload.user_logout = true
+    }
+    return handleApiCall(() => apiClient.post("/update-booking-and-apply-member-only-promotion/", payload))
+}
+
+/** Apply or remove a coupon on a booking. Pass null couponId to remove. */
+export const applyBookingCoupon = (
+    bookingId: string | number,
+    couponId: number | null,
+    userLogout?: boolean
+) => {
+    const payload: Record<string, any> = {
+        booking_id: bookingId,
+    }
+    if (!userLogout && couponId !== null && couponId !== undefined) {
+        payload.coupon_id = couponId
+    }
+    if (userLogout) {
+        payload.user_logout = true
+    }
+    return handleApiCall(() => apiClient.post("/booking_coupon_apply/", payload))
 }
 
 // Cancellation APIs

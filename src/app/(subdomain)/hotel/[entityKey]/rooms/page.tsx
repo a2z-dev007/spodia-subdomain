@@ -33,8 +33,8 @@ export default async function RoomsPage({ params }: Props) {
         subtitle="Free Cancellation · Best Price Guarantee · Premium Bedding"
       />
 
-      {/* 2. Sticky Filters (Simulated) */}
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 py-6 px-6">
+      {/* 2. Sticky Filters */}
+      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 px-6 shadow-sm">
         <div className="max-w-[1200px] mx-auto flex flex-wrap items-center justify-between gap-6">
           <div className="flex gap-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
             {["All Rooms", "Suites", "Villas", "Specials"].map((tab) => (

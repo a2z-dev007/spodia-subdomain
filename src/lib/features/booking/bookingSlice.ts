@@ -44,6 +44,7 @@ export interface PricingSummary {
   totalPromotionalDiscount?: number
   couponDiscount?: number
   memberOnlyDiscount?: number
+  originalHotelPrice?: number
 }
 
 export interface AppliedCoupon {
@@ -78,6 +79,8 @@ export interface BookingFormData {
   lastName: string
   email: string
   mobile: string
+  mobileCountryCode?: string
+  mobileWithCountryCode?: string
   phone?: string
   notes: string
   specialRequests?: string
@@ -96,6 +99,8 @@ export interface BookingFormData {
   gstNumber?: string
   companyName?: string
   gstPhone?: string
+  gstPhoneCountryCode?: string
+  gstPhoneWithCountryCode?: string
   gstAddress?: string
   
   // Hotel & Booking Details
@@ -107,10 +112,10 @@ export interface BookingFormData {
   checkOutDate?: string
   adults?: number
   children?: number
-  childrenAges?: number[] // Add children ages array
+  childrenAges?: number[]
   rooms?: any[]
-  cancellationPolicies?: any[] // Cancellation policies from hotel
-  cancellationPolicyId?: number | null // Selected cancellation policy ID
+  cancellationPolicies?: any[]
+  cancellationPolicyId?: number | null
   totalPrice?: number
   discount?: number
   tax?: number
@@ -119,17 +124,21 @@ export interface BookingFormData {
   hotelPrice?: number
   childPrice?: number
   hotelRating?: number
+  hotelCheckInTime?: string
+  hotelCheckOutTime?: string
   originalHotelPrice?: number
   discountPercentage?: number
   taxationDetails?: TaxationDetail[]
   deductionDetails?: DeductionDetail[]
-  perDatePricing?: PriceDetail[] // Per-date pricing from API
-  promotionDetails?: any[] // Promotion details from API
-  pricingSummary?: PricingSummary // Calculated pricing summary from modal
-  appliedCoupon?: AppliedCoupon | null // Applied coupon details
-  memberOnlyPromotion?: MemberOnlyPromotion | null // Applied member-only promotion
-  
-  // Initial Search Parameters (for validation)
+  perDatePricing?: PriceDetail[]
+  promotionDetails?: any[]
+  pricingSummary?: PricingSummary
+  appliedCoupon?: AppliedCoupon | null
+  memberOnlyPromotion?: MemberOnlyPromotion | null
+  bookingId?: number | string
+  apiSummary?: any
+
+  // Initial Search Parameters
   initialSearchAdults?: number
   initialSearchChildren?: number
   initialSearchRooms?: number
@@ -168,15 +177,12 @@ const initialState: BookingState = {
   error: null,
 }
 
-// Async thunk for creating a booking
 export const createBooking = createAsyncThunk<Booking, Partial<Booking>, { rejectValue: string }>(
   "booking/createBooking",
   async (bookingData, { rejectWithValue }) => {
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      // Random failure for testing (10% chance)
       if (Math.random() < 0.1) {
         return rejectWithValue("Payment failed. Please try again.")
       }
@@ -197,7 +203,6 @@ export const createBooking = createAsyncThunk<Booking, Partial<Booking>, { rejec
         createdAt: new Date().toISOString(),
       }
 
-      // Save to localStorage
       if (typeof window !== "undefined") {
         const existingBookings = JSON.parse(localStorage.getItem("spodia_bookings") || "[]")
         existingBookings.push(booking)
@@ -205,7 +210,7 @@ export const createBooking = createAsyncThunk<Booking, Partial<Booking>, { rejec
       }
 
       return booking
-    } catch (error) {
+    } catch {
       return rejectWithValue("Booking failed. Please try again.")
     }
   },
@@ -256,7 +261,6 @@ const bookingSlice = createSlice({
       const booking = state.bookings.find((b) => b.id === action.payload)
       if (booking) {
         booking.status = "cancelled"
-        // Update localStorage
         if (typeof window !== "undefined") {
           localStorage.setItem("spodia_bookings", JSON.stringify(state.bookings))
         }
@@ -297,4 +301,5 @@ export const {
   cancelBooking, 
   clearError 
 } = bookingSlice.actions
+
 export default bookingSlice.reducer

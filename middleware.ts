@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next";
 import type { NextRequest } from "next/server";
 import { isDiscoveryCountrySegment } from "@/lib/resolver/discoveryCountry";
 
@@ -24,7 +24,6 @@ function stripPort(host: string): string {
 
 /**
  * Hosts that serve the marketing app at `/` (no subdomain → /hotel/* rewrite).
- * https://spodia-subdomain.netlify.app/ must hit `/`, not `/hotel/spodia-subdomain-netlify-app`.
  */
 function isMainMarketingHost(host: string): boolean {
   if (!host) return true;
@@ -32,7 +31,6 @@ function isMainMarketingHost(host: string): boolean {
   const hostNoPort = stripPort(host);
 
   if (hostNoPort === "localhost" || hostNoPort === "127.0.0.1") return true;
-
   if (hostNoPort === "spodia.com" || hostNoPort === "www.spodia.com") return true;
 
   if (hostNoPort.endsWith(".netlify.app")) return true;
@@ -56,6 +54,12 @@ function withTenantRequestHeaders(req: NextRequest, subdomainKey: string): Heade
 export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = getPublicHost(req);
+
+  // If path starts with /hotels/, alias/rewrite to /hotel/ for compatibility
+  if (url.pathname.startsWith("/hotels/")) {
+    const newPathname = url.pathname.replace(/^\/hotels\//, "/hotel/");
+    return NextResponse.rewrite(new URL(newPathname, req.url));
+  }
 
   if (isMainMarketingHost(hostname)) {
     return NextResponse.next();

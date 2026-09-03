@@ -30,11 +30,10 @@ const ReviewPoliciesStep = () => {
 
   const agreeToTerms = watch("agreeToTerms")
   const cancellationPolicies = bookingFormData.cancellationPolicies || []
-  console.log("cancellationPolicies",cancellationPolicies)
+
   const onSubmit = (data: ReviewPoliciesFormData) => {
-    // Extract cancellation policy ID (always single item in array)
     const cancellationPolicyId = cancellationPolicies.length > 0 ? cancellationPolicies[0]?.cancellation_policy : null
-    
+
     dispatch(updateBookingFormData({
       ...data,
       cancellationPolicyId
@@ -55,17 +54,6 @@ const ReviewPoliciesStep = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Check-in/out Times */}
-          {/* <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Check-in: 12 PM</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Check-out: 12 PM</p>
-            </div>
-          </div> */}
-
-          {/* Cancellation Policy */}
           <div>
             <h3 className="text-lg font-bold text-gray-900 mb-3">Cancellation Policy</h3>
             {cancellationPolicies.length > 0 ? (
@@ -81,8 +69,8 @@ const ReviewPoliciesStep = () => {
                       <div className="flex-1">
                         <p className="text-sm font-bold text-gray-900 mb-1">{policy.policy_name}</p>
                         {policy.policy_description && (
-                          <div 
-                            className="text-sm text-gray-700 prose prose-sm max-w-none"
+                          <div
+                            className="text-sm text-gray-700 max-w-none"
                             dangerouslySetInnerHTML={{ __html: policy.policy_description }}
                           />
                         )}
@@ -98,7 +86,6 @@ const ReviewPoliciesStep = () => {
             )}
           </div>
 
-          {/* Terms & Conditions Checkbox */}
           <div className="space-y-4">
             <div className="flex items-start gap-3">
               <Checkbox
@@ -108,7 +95,7 @@ const ReviewPoliciesStep = () => {
                 className="mt-1"
               />
               <label htmlFor="agreeToTerms" className="text-sm text-gray-700 cursor-pointer">
-                I have read and agree{" "}
+                I have read and agree to the{" "}
                 <a href="/terms-conditions" target="_blank" className="text-[#078ED8] underline">
                   terms and conditions
                 </a>
@@ -127,7 +114,6 @@ const ReviewPoliciesStep = () => {
             )}
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 pt-4 sm:pt-6">
             <Button
               type="button"

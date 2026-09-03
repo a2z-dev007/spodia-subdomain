@@ -181,11 +181,15 @@ export default async function SitemapPage({ params }: Props) {
         backgroundImage="/images/hotels/banner1.jpg"
         title={
           <>
-            Site Navigation – <br/>
+            Site Navigation – <br className="hidden sm:inline" />
             Explore <span className="text-[#FF9530]">{name}</span> with Ease.
           </>
         }
         subtitle="Find everything you need in one place. Jump to any page quickly!"
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="Explore Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
         badges={[
           { icon: <ShieldCheck className="w-5 h-5" />, text: "Secure Booking" },
           { icon: <ShieldCheck className="w-5 h-5" />, text: "Verified Reviews" },

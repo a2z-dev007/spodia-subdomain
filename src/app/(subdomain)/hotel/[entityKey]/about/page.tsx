@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
 import { 
   Leaf, Heart, Trophy, MapPin, CheckCircle2, ChevronDown, 
   CalendarDays, Star, Banknote
@@ -51,8 +52,8 @@ const propertyData = {
   ]
 };
 
-export default function AboutPage({ params }: { params: { entityKey: string } }) {
-  // In a real implementation, you would fetch entity-specific data using params.entityKey
+export default async function AboutPage({ params }: { params: Promise<{ entityKey: string }> }) {
+  const { entityKey } = await params;
   
   const { name, location, type } = propertyData;
   const isHotel = type === "Hotel" || type === "Resort";
@@ -83,33 +84,21 @@ export default function AboutPage({ params }: { params: { entityKey: string } })
       />
 
       {/* 1. Hero Section */}
-      <section className="relative min-h-[500px] h-[80vh] w-full flex items-center justify-center overflow-hidden">
-        {/* Hero Background */}
-        <div className="absolute inset-0">
-          <Image
-            src={IMAGES.bgSection.src}
-            alt="Hotel Hero"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/45"></div>
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-[1440px] mx-auto text-center px-6 -mt-10 md:-mt-20">
-          <h1 className="text-4xl md:text-6xl lg:text-[80px] font-extrabold text-white mb-6 leading-[1.1] tracking-tight">
-            {isHotel ? (
-               <>Welcome to {name} – <br className="hidden md:block" /> Where Luxury Meets {location}'s Charm.</>
-            ) : (
-               <>Discover {name} – <br className="hidden md:block" /> Your Home Away from Home in {location}.</>
-            )}
-          </h1>
-          <p className="text-[15px] md:text-[18px] lg:text-[20px] text-white/90 max-w-[900px] mx-auto leading-relaxed font-medium">
-            Rooted in sustainability, community, and unmatched excellence. Discover the true meaning of hospitality at {name}.
-          </p>
-        </div>
-      </section>
+      <HotelHeroSimple 
+        title={
+          isHotel ? (
+            <>Welcome to {name} – <br className="hidden md:block" /> Where Luxury Meets {location}'s Charm.</>
+          ) : (
+            <>Discover {name} – <br className="hidden md:block" /> Your Home Away from Home in {location}.</>
+          )
+        }
+        subtitle={`Rooted in sustainability, community, and unmatched excellence. Discover hospitality at ${name}.`}
+        badgeText="Our Heritage & Story"
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="Explore Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+      />
 
       {/* 2. Our Story */}
       <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">

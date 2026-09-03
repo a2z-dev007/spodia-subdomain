@@ -9,6 +9,8 @@ import {
   HelpCircle, CreditCard, Wifi, MapPin, Car, Briefcase
 } from "lucide-react";
 
+import HotelHeroPremium from "@/components/hotel/sections/HotelHeroPremium";
+
 const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
   const { entityKey } = React.use(params);
   const { name, location } = propertyData;
@@ -97,35 +99,29 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
       />
 
       {/* 1. Hero Section */}
-      <section className="bg-gray-900 py-32 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF9530]/10 rounded-full blur-[120px] -mr-[300px] -mt-[300px]" />
-        <div className="max-w-[1000px] mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-7xl font-black text-white mb-8 leading-tight">
-            Frequently Asked Questions – <span className="text-[#FF9530]">Your Stay, Simplified.</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-400 font-medium mb-12">
-            Find quick answers about bookings, amenities, policies, and more.
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-6 md:gap-12">
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-              <Clock className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">24/7 Support</span>
-            </div>
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-              <Star className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">Verified Reviews</span>
-            </div>
-            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-              <ShieldCheck className="w-5 h-5 text-[#FF9530]" />
-              <span className="text-white font-bold text-sm">Free Cancellation</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HotelHeroPremium 
+        pillIcon={<HelpCircle className="w-4 h-4" />}
+        pillText="24/7 Guest Support"
+        title={
+          <>
+            Frequently Asked Questions – <br className="hidden sm:inline" />
+            <span className="text-[#FF9530]">Your Stay, Simplified.</span>
+          </>
+        }
+        subtitle="Find quick answers about bookings, amenities, policies, and more."
+        primaryBtnText="Book Now"
+        primaryBtnHref={`/hotel/${entityKey}/book`}
+        secondaryBtnText="Explore Rooms"
+        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+        badges={[
+          { icon: <Clock className="w-4 h-4" />, text: "24/7 Support" },
+          { icon: <Star className="w-4 h-4" />, text: "Verified Reviews" },
+          { icon: <ShieldCheck className="w-4 h-4" />, text: "Free Cancellation" }
+        ]}
+      />
 
       {/* 2. Sticky Search Bar */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-gray-100 shadow-sm print:hidden">
+      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/90 backdrop-blur-2xl border-b border-gray-100 shadow-sm print:hidden">
         <div className="max-w-[1200px] mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="relative w-full md:w-[600px]">
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />

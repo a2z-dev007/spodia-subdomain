@@ -71,12 +71,12 @@ function categoryToMetaName(category: string): string {
 
 // Fetch hotels with category and multi-level location support
 async function fetchHotels(
-    cityId: number | null, 
+    cityId: number | null,
     stateId: number | null,
     countryId: number | null,
-    category: string | undefined, 
-    sortBy: string, 
-    page: number, 
+    category: string | undefined,
+    sortBy: string,
+    page: number,
     recordsPerPage: number
 ) {
     const params: any = {
@@ -117,15 +117,15 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const hotelListRef = useRef<HTMLDivElement>(null);
     const isButtonsVisible = useScrollDirection();
-    
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 6;
-    
+
     // Use ref to store random selection - persists across re-renders
     const randomSelectionRef = useRef<any[] | null>(null);
     const hasInitializedRef = useRef(false);
-    
+
     // Read search parameters from URL
     const urlStartDate = typeof searchParams.start_date === 'string' ? searchParams.start_date : "";
     const urlEndDate = typeof searchParams.end_date === 'string' ? searchParams.end_date : "";
@@ -133,18 +133,18 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
     const urlChildren = Number(searchParams.no_of_child || 0);
     const urlRooms = Number(searchParams.rooms || 1);
     const urlChildInfo = typeof searchParams.childInfo === 'string' ? searchParams.childInfo : "";
-    
+
     // Read IDs from URL query params
     const urlCityId = typeof searchParams.city_id === 'string' ? searchParams.city_id : undefined;
     const urlStateId = typeof searchParams.state_id === 'string' ? searchParams.state_id : undefined;
     const urlCountryId = typeof searchParams.country_id === 'string' ? searchParams.country_id : undefined;
-    
+
     // Parse children ages from URL
     const urlChildrenAges = urlChildInfo ? urlChildInfo.split(',').map(Number) : [];
-    
+
     const { cityId } = initialData;
     const sortBy = searchFilters.sortBy || "top_reviewed";
-    
+
     // Query for amenities
     const { data: amenitiesData } = useQuery<AmenitiesResponse>({
         queryKey: ["amenities"],
@@ -157,31 +157,31 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
     // Query for hotels with client-side filtering
     const { data: hotelsData, isLoading: hotelsLoading, isFetching: hotelsFetching } = useQuery({
         queryKey: [
-            "hotels", 
-            initialData.cityId, 
-            initialData.stateId, 
-            initialData.countryId, 
+            "hotels",
+            initialData.cityId,
+            initialData.stateId,
+            initialData.countryId,
             category,
-            urlStartDate, 
-            urlEndDate, 
-            urlAdults, 
-            urlChildren, 
-            urlChildInfo, 
-            searchFilters.priceRange, 
-            searchFilters.starRating, 
-            searchFilters.amenities, 
-            searchFilters.propertyTypes, 
-            searchFilters.propertyChains, 
+            urlStartDate,
+            urlEndDate,
+            urlAdults,
+            urlChildren,
+            urlChildInfo,
+            searchFilters.priceRange,
+            searchFilters.starRating,
+            searchFilters.amenities,
+            searchFilters.propertyTypes,
+            searchFilters.propertyChains,
             sortBy,
             currentPage
         ],
         queryFn: () => fetchHotels(
-            initialData.cityId || null, 
-            initialData.stateId || null, 
-            initialData.countryId || null, 
-            category, 
-            sortBy, 
-            currentPage, 
+            initialData.cityId || null,
+            initialData.stateId || null,
+            initialData.countryId || null,
+            category,
+            sortBy,
+            currentPage,
             recordsPerPage
         ),
         enabled: !!(initialData.cityId || initialData.stateId || initialData.countryId),
@@ -224,7 +224,7 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
         const cityContentData = initialData.cityContent;
         if (cityContentData && Array.isArray(cityContentData) && cityContentData.length > 0 && !hasInitializedRef.current) {
             const contentArray = cityContentData;
-            
+
             if (contentArray.length === 1) {
                 randomSelectionRef.current = [contentArray[0]];
             } else if (contentArray.length === 2) {
@@ -233,17 +233,17 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
                 const shuffled = [...contentArray].sort(() => 0.5 - Math.random());
                 randomSelectionRef.current = shuffled.slice(0, 2);
             }
-            
+
             hasInitializedRef.current = true;
         }
     }, [initialData.cityContent]);
-    
+
     // Reset when city changes
     useEffect(() => {
         hasInitializedRef.current = false;
         randomSelectionRef.current = null;
     }, [city]);
-    
+
     const randomCityContent = randomSelectionRef.current || [];
 
     // Prefill search bar from URL params
@@ -279,7 +279,7 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
         }
 
         const newCitySlug = params.location.toLowerCase().replace(/\s+/g, '-');
-        const targetUrl = category 
+        const targetUrl = category
             ? `/in/hotels/${newCitySlug}/${category}?${currentParams.toString()}`
             : `/in/hotels/${newCitySlug}?${currentParams.toString()}`;
         router.push(targetUrl);
@@ -336,7 +336,7 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
                 </div>
             </div>
 
-            <div ref={hotelListRef} className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+            <div ref={hotelListRef} className="max-w-7xl mx-auto px-4 py-6 sm:py-4">
                 {hasActiveFilters && (
                     <div className="bg-white rounded-lg p-4 mb-6 shadow-sm border">
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -517,14 +517,14 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 mt-6 sm:mt-8">
-                    <div className="hidden lg:block lg:col-span-1">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 mt-6 sm:mt-4">
+                    <div className="hidden lg:block lg:col-span-1 sticky top-20 self-start">
                         {hotelsLoading ? (
                             <FilterShimmer />
                         ) : (
                             <>
                                 <div className="relative w-full h-36 rounded-xl overflow-hidden bg-gray-100 mb-3">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 object-cover to-gray-300" style={{background:"url(/map.jpg)",backgroundSize:'cover'}}></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 object-cover to-gray-300" style={{ background: "url(/map.jpg)", backgroundSize: 'cover' }}></div>
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                                         <button onClick={() => router.push(`/hotels-on-map/hotels/${city}`)} className="bg-[#FF9530] hover:bg-[#e8851c] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 font-medium transition-all duration-200 hover:scale-105">
                                             <MapPin size={20} />
@@ -578,17 +578,17 @@ export default function CityHotelsClient({ city, category, initialData, searchPa
 
                 {/* Additional Sections for Category Pages */}
                 {category && availableRooms.length > 0 && (
-                    <HotelBookingInterface 
-                        hotels={availableRooms} 
-                        isLoading={false} 
+                    <HotelBookingInterface
+                        hotels={availableRooms}
+                        isLoading={false}
                         title={`Top Rated ${category.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())} in ${city.replace(/\b\w/g, (char) => char.toUpperCase())}`}
                     />
                 )}
-                
+
                 {category && restaurants.length > 0 && (
                     <div className="mt-8 sm:mt-12">
-                        <RestaurantCarousel 
-                            hotels={restaurants} 
+                        <RestaurantCarousel
+                            hotels={restaurants}
                             isLoading={false}
                             title={`5 Stars ${category.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())} in ${city.replace(/\b\w/g, (char) => char.toUpperCase())}`}
                         />
