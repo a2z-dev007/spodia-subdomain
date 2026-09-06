@@ -13,7 +13,7 @@ export interface SelectOption {
   label: string
 }
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyCceQMy1CtM2Cgz8A42W3roEKhUpHhSRSA"
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
 
 /**
  * Parses Google Maps Geocoding address_components to extract Country, State, and City.
