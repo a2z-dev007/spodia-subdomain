@@ -44,6 +44,27 @@ function isMainMarketingHost(host: string): boolean {
   return false;
 }
 
+/** App routes shared across marketing + tenant hosts (not rewritten under /hotel/{slug}). */
+const SHARED_APP_ROUTE_PREFIXES = [
+  "/booking",
+  "/dashboard",
+  "/my-bookings",
+  "/booking-details",
+  "/manage-booking",
+  "/profile",
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/recover_password",
+  "/bookings",
+] as const;
+
+function isSharedAppRoute(pathname: string): boolean {
+  return SHARED_APP_ROUTE_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
 function withTenantRequestHeaders(req: NextRequest, subdomainKey: string): Headers {
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set("x-subdomain", subdomainKey);
@@ -62,6 +83,10 @@ export function middleware(req: NextRequest) {
   }
 
   if (isMainMarketingHost(hostname)) {
+    return NextResponse.next();
+  }
+
+  if (isSharedAppRoute(url.pathname)) {
     return NextResponse.next();
   }
 

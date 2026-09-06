@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function MarketingHomePage() {
   return (
     <>
-      <div className="min-h-screen">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden">
         <div id="home" className="relative">
           <Header />
           <div id="search" style={{ paddingTop: 'var(--header-height)' }}>

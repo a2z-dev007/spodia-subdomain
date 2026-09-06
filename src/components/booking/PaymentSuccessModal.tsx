@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { CheckCircle2, Calendar, Mail, MapPin, ExternalLink, Home, LayoutDashboard, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import type { RazorpaySuccessResponse } from "@/utils/razorpay"
 
 const formatINR = (value: number) =>
   `₹${Math.round(value).toLocaleString("en-IN")}`
@@ -37,7 +38,7 @@ function getResponseField(data: unknown, ...keys: string[]) {
 
 export interface PaymentSuccessModalProps {
   bookingResponse?: { data?: unknown } | null
-  razorpayPaymentData?: any
+  razorpayPaymentData?: RazorpaySuccessResponse | null
   hotelName?: string
   hotelLocation?: string
   checkInDate?: string
@@ -146,7 +147,7 @@ export default function PaymentSuccessModal({
           </div>
         )}
 
-        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-3">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain scrollbar-hide hide-scrollbar p-4 sm:p-5 space-y-3">
           {isProcessing && (
             <div className="rounded-xl border border-sky-200 bg-sky-50/80 p-3 text-center space-y-1.5 animate-pulse">
               <div className="flex items-center justify-center gap-2 text-sky-800 font-bold text-xs sm:text-sm">

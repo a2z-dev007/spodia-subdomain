@@ -155,11 +155,11 @@ const CardsWithGallerySlider: FC<CardsWithGallerySliderProps> = ({
         </div>
 
         <div
-          className={`grid gap-3 sm:gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-full`}
+          className="flex sm:grid overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory scrollbar-hide gap-3.5 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-2 sm:pb-0 px-4 -mx-4 sm:px-0 sm:mx-0 h-full"
         >
           {displayedStays.map((stay) => (
-            <div key={stay.id} className="h-full">
-              <StayCard data={stay} />
+            <div key={stay.id} className="w-[250px] xs:w-[270px] shrink-0 snap-start sm:w-auto h-full">
+              <StayCard data={stay} size="small" />
             </div>
           ))}
         </div>

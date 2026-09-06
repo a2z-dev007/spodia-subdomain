@@ -1,32 +1,20 @@
 "use client";
 
 import React from "react";
-import {
-  CreditCard,
-  Tag,
-  Utensils,
-  Landmark,
-  Coffee,
-  Percent,
-} from "lucide-react";
+import { CreditCard, Tag, Utensils, Landmark, Coffee, Percent } from "lucide-react";
+import StaticDataBadge from "@/components/common/StaticDataBadge";
+import type { ListingDetail } from "@/types/hotelDetails";
 
-interface Offer {
-  id: number;
-  bank: string;
-  title: string;
-  description: string;
-  bgColor: string;
-  accentColor: string;
-  icon: React.ReactNode;
-  bgIcon: React.ReactNode;
-}
+type Props = {
+  hotelData?: ListingDetail | null;
+};
 
-const offers: Offer[] = [
+const offers = [
   {
     id: 1,
     bank: "HDFC BANK",
     title: "Flat 10% Off",
-    description: "on International Hotels with HDFC Bank Cards",
+    description: "on International & Domestic Stays with HDFC Cards",
     bgColor: "bg-[#EEF4FF]",
     accentColor: "text-[#3B4CB8]",
     icon: <Landmark className="w-4 h-4" />,
@@ -46,7 +34,7 @@ const offers: Offer[] = [
     id: 3,
     bank: "MEMBERS ONLY",
     title: "Free Breakfast",
-    description: "on all LuxeStay curated boutique hotels",
+    description: "on all Spodia curated boutique properties",
     bgColor: "bg-[#FFFBEC]",
     accentColor: "text-[#996A12]",
     icon: <Coffee className="w-4 h-4" />,
@@ -54,16 +42,20 @@ const offers: Offer[] = [
   },
 ];
 
-export default function HotelOffers() {
+export default function HotelOffers({ hotelData }: Props) {
   return (
-    <section className="pt-16 pb-4 px-4 max-w-[1600px] mx-auto w-full">
+    <section className="pt-12 pb-4 px-4 max-w-[1600px] mx-auto w-full">
+      <div className="flex items-center justify-between mb-4 px-4">
+        <h3 className="text-lg font-bold text-gray-800">Special Bank & Member Offers</h3>
+        <StaticDataBadge text="static data - need this data on the api" />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {offers.map((offer) => (
           <div
             key={offer.id}
             className={`${offer.bgColor} rounded-[32px] px-8 py-5 flex flex-col justify-center h-[190px] transition-all hover:shadow-xl cursor-pointer relative overflow-hidden group`}
           >
-            {/* Content Container */}
             <div className="relative z-10 pl-2">
               <div className="flex items-center gap-2 mb-4">
                 <div
@@ -81,12 +73,11 @@ export default function HotelOffers() {
               <h3 className="text-[26px] font-black text-[#1a1a1a] mb-2 leading-tight">
                 {offer.title}
               </h3>
-              <p className="text-[13px] text-gray-400 font-medium leading-relaxed">
+              <p className="text-[13px] text-gray-500 font-medium leading-relaxed">
                 {offer.description}
               </p>
             </div>
 
-            {/* Faint Background Icon */}
             <div className="absolute right-12 top-1/2 -translate-y-1/2 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6 pointer-events-none">
               {offer.bgIcon}
             </div>

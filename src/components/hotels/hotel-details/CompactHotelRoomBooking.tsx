@@ -127,4 +127,8 @@ export default function CompactHotelRoomBooking({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between bg-white p-3 rounded-lg border">
-        <h2 className="text-base sm:text-lg font
+        <h2 className="text-base sm:text-lg font-bold text-gray-900">Select Room</h2>
+      </div>
+    </div>
+  );
+}

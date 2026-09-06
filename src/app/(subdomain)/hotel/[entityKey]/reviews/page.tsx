@@ -1,13 +1,9 @@
 import React from "react";
 import HotelPageShell from "@/components/hotel/HotelPageShell";
-import { propertyData } from "@/lib/hotel/mockData";
-import ReviewHero from "@/components/hotel/sections/ReviewHero";
-import RatingBreakdown from "@/components/hotel/sections/RatingBreakdown";
-import ReviewFilters from "@/components/hotel/sections/ReviewFilters";
-import ReviewGrid from "@/components/hotel/sections/ReviewGrid";
+import HotelHeroSimple from "@/components/hotel/HotelHeroSimple";
 import HotelTestimonials from "@/components/hotel/sections/HotelTestimonials";
-import WriteReviewForm from "@/components/hotel/sections/WriteReviewForm";
-import GuestQA from "@/components/hotel/sections/GuestQA";
+import { fetchHotelDetails } from "@/lib/api/hotelDetails";
+import { buildHotelSegmentMetadata } from "@/lib/seo/metadata";
 
 type Props = {
   params: Promise<{ entityKey: string }>;
@@ -15,65 +11,25 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { entityKey } = await params;
-  const { name, location } = propertyData;
-  
-  return {
-    title: `${name} Reviews | Real Guest Experiences & Ratings | ${location}`,
-    description: `Read 1,200+ verified reviews of ${name}. Guests rate us 4.8/5 for service, cleanliness & location. Book your stay in ${location} today!`,
-  };
+  return buildHotelSegmentMetadata({ entityKey, segment: "reviews" });
 }
 
 export default async function ReviewsPage({ params }: Props) {
   const { entityKey } = await params;
-  const { name } = propertyData;
+  const hotelData = await fetchHotelDetails(entityKey);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Hotel",
-    "name": name,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "1200"
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "author": "Rajesh K.",
-        "datePublished": "2024-06-15",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5"
-        },
-        "description": "Perfect family getaway! The staff went above and beyond to make our stay memorable."
-      }
-    ]
-  };
+  const name = hotelData?.name || entityKey.replace(/-/g, " ");
 
   return (
     <HotelPageShell entityKey={entityKey}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <HotelHeroSimple
+        title={`${name} – Verified Guest Reviews`}
+        subtitle="Real experiences and ratings from verified guests"
       />
 
-      <ReviewHero hotelName={name} />
-      
-      <RatingBreakdown />
-
-      <ReviewFilters />
-
-      <ReviewGrid />
-
-      {/* 5. Featured Testimonials Carousel */}
-      <div className="bg-gray-50 py-12">
-        <HotelTestimonials />
+      <div className="py-8">
+        <HotelTestimonials hotelData={hotelData} />
       </div>
-
-      <WriteReviewForm />
-
-      <GuestQA />
-      
     </HotelPageShell>
   );
 }

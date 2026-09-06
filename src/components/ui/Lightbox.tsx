@@ -196,7 +196,7 @@ export function Lightbox({
 
     return (
         <div
-            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center"
+            className="fixed inset-0 z-[999999] bg-black/95 backdrop-blur-md flex items-center justify-center"
             {...generalHandlers}
         >
             <div className="relative w-full h-full flex flex-col items-center justify-center p-2 sm:p-4">
@@ -297,7 +297,7 @@ export function Lightbox({
                 )}
 
                 {/* Main Image */}
-                <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[55vh] px-2 sm:px-12 md:px-16 flex items-center justify-center">
+                <div className="relative w-full h-[65vh] sm:h-[75vh] md:h-[78vh] px-2 sm:px-12 md:px-16 flex items-center justify-center">
                     {/* Main Image Container with Enhanced Swipe and Zoom */}
                     <div
                         className="relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing touch-pan-x"
@@ -317,7 +317,7 @@ export function Lightbox({
                                 alt={`${altText} ${currentIndex + 1}`}
                                 width={1920}
                                 height={1080}
-                                className="select-none rounded-2xl md:rounded-[1rem] w-auto h-auto max-w-full max-h-[50vh] sm:max-h-[60vh] md:h-[55vh] object-contain drop-shadow-2xl"
+                                className="select-none rounded-2xl sm:rounded-3xl border border-white/10 w-auto h-auto max-w-full max-h-[63vh] sm:max-h-[73vh] md:max-h-[76vh] object-contain shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)]"
                                 sizes="100vw"
                                 priority
                                 draggable={false}
@@ -368,7 +368,10 @@ export function Lightbox({
 
                 {/* Thumbnail Strip (scrollable & auto-center) */}
                 {images.length > 1 && showThumbnails && (
-                    <div className="absolute bottom-24 sm:bottom-24 left-1/2 transform -translate-x-1/2 flex gap-2 max-w-full overflow-x-auto px-2 sm:p-2 hide-scrollbar transition-opacity duration-300">
+                    <div
+                        className="absolute bottom-24 sm:bottom-24 left-1/2 transform -translate-x-1/2 flex gap-2 max-w-full overflow-x-auto px-2 sm:p-2 hide-scrollbar scrollbar-none [::-webkit-scrollbar]:hidden transition-opacity duration-300"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                    >
                         {images.map((image, index) => (
                             <button
                                 key={index}

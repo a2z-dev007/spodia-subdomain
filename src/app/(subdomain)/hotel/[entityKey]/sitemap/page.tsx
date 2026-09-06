@@ -187,7 +187,7 @@ export default async function SitemapPage({ params }: Props) {
         }
         subtitle="Find everything you need in one place. Jump to any page quickly!"
         primaryBtnText="Book Now"
-        primaryBtnHref={`/hotel/${entityKey}/book`}
+        primaryBtnHref={`/hotel/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
         secondaryBtnHref={`/hotel/${entityKey}/rooms`}
         badges={[

@@ -89,12 +89,14 @@ const BookingCardNew = ({ booking, onBookingUpdate }: BookingCardProps) => {
     })
   }
 
-  const formatPrice = (price: string) => {
+  const formatPrice = (price: string | number) => {
+    const amount = Math.round(typeof price === "number" ? price : parseFloat(price) || 0)
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0
-    }).format(parseFloat(price))
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount)
   }
 
   const getCoverImage = () => {
@@ -141,20 +143,26 @@ const BookingCardNew = ({ booking, onBookingUpdate }: BookingCardProps) => {
       const response = await getCancellationPreview(booking.id)
       const data = response.data
       
-      if (data.status === "success") {
+      if (data.status === "success" || data.status === true) {
         setCancellationData(data)
         setShowCancelModal(true)
       } else {
         toast.error(data.message || "Unable to fetch cancellation details", {
           position: "top-right",
-          autoClose: 3000,
+          autoClose: 4000,
         })
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching cancellation preview:", error)
-      toast.error("Failed to load cancellation details. Please try again.", {
+      const apiErrorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.detail ||
+        error?.data?.message ||
+        error?.message
+
+      toast.error(apiErrorMessage || "Failed to load cancellation details. Please try again.", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 4000,
       })
     } finally {
       setIsLoadingCancel(false)

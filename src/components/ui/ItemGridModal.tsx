@@ -39,7 +39,7 @@ export function ItemGridModal({
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 

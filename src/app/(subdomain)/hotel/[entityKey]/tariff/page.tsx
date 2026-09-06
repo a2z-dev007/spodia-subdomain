@@ -63,7 +63,7 @@ export default async function TariffPage({ params }: Props) {
         subtitle="Best Price Guarantee · Free Cancellation · Instant Confirmation"
         badgeText="Official Direct Rates"
         primaryBtnText="Book Now"
-        primaryBtnHref={`/hotel/${entityKey}/book`}
+        primaryBtnHref={`/hotel/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
         secondaryBtnHref={`/hotel/${entityKey}/rooms`}
       />

@@ -94,6 +94,7 @@ export const singleStepBookingSchema = z
     companyName: z.string().optional(),
     gstPhone: z.string().optional(),
     gstAddress: z.string().optional(),
+    // Billing address fields
     street: z.string().optional(),
     houseNumber: z.string().optional(),
     countryId: z.string().optional(),

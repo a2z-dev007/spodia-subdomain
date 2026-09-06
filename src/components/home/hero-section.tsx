@@ -29,7 +29,7 @@ const TRUST_BADGES: { icon: LucideIcon; label: string }[] = [
 ];
 
 const TRUST_PILL_CLASS =
-  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/35 bg-white/35 backdrop-blur-sm px-3.5 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.2)]';
+  'inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/35 bg-white/35 backdrop-blur-sm px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-[9px] xs:text-[10px] sm:text-[11px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.2)]';
 
 const TRUST_ICON_CLASS =
   'w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#FF9530] drop-shadow-[0_0_8px_rgba(255,149,48,0.45)]';
@@ -139,13 +139,13 @@ export default function HeroSection() {
   const heroDestSwiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <section className="relative z-10 w-full bg-white pb-12 sm:pb-16">
+    <section className="relative z-10 w-full bg-white pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-12 sm:pb-16">
       {/* pt clears fixed header + ~24–32px breathing room (aligned with main nav px) */}
       <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10">
         <div className="relative w-full">
           {/* Inner box height = image only so search bar bottom-0 + translate-y-1/2 straddles the hero edge */}
           <div className="relative w-full">
-            <div className="relative w-full h-[300px] sm:h-[380px] md:h-[420px] lg:h-[440px] xl:h-[480px] rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.08)]">
+            <div className="relative w-full h-[310px] sm:h-[350px] md:h-[420px] lg:h-[440px] xl:h-[480px] rounded-[1.25rem] sm:rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.08)]">
               <Image
                 src={IMAGES.heroSearchBg}
                 alt="Luxury resort pool at dusk"
@@ -155,18 +155,18 @@ export default function HeroSection() {
                 sizes="100vw"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/35 pointer-events-none"
+                className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/20 to-black/50 pointer-events-none"
                 aria-hidden
               />
 
-              {/* Headline + pills: vertically centered in the hero image */}
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-12 py-6 sm:py-8">
-                <h1 className="text-white font-bold tracking-tight text-[1.625rem] sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] xl:text-[3rem] leading-[2rem] max-w-[20rem] sm:max-w-[44rem] lg:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.4)]">
+              {/* Headline + pills: positioned in upper portion of hero image */}
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-start md:justify-center text-center px-4 sm:px-8 lg:px-12 pt-6 sm:pt-10 md:py-8">
+                <h1 className="text-white font-bold tracking-tight text-xl xs:text-2xl sm:text-4xl md:text-[2.5rem] lg:text-[2.75rem] xl:text-[3rem] leading-tight max-w-[20rem] sm:max-w-[44rem] lg:max-w-[48rem] [text-shadow:0_2px_24px_rgba(0,0,0,0.5)]">
                   <span className="block">Find your perfect stay,</span>
-                  <span className="block mt-2 sm:mt-2">Anywhere in the World</span>
+                  <span className="block mt-1 sm:mt-2">Anywhere in the World</span>
                 </h1>
 
-                <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-2.5 mt-5 sm:mt-7 max-w-[min(100%,58rem)]">
+                <div className="flex flex-wrap justify-center items-center gap-1.5 sm:gap-2.5 mt-3 sm:mt-6 max-w-[min(100%,58rem)]">
                   {TRUST_BADGES.map(({ icon: Icon, label }) => (
                     <div key={label} className={TRUST_PILL_CLASS}>
                       <Icon className={TRUST_ICON_CLASS} strokeWidth={2.25} />
@@ -177,15 +177,16 @@ export default function HeroSection() {
               </div>
             </div>
 
-            <div className="absolute left-1/2 bottom-0 z-20 w-full -translate-x-1/2 translate-y-1/2 px-2 sm:px-3 md:px-4 lg:px-6">
+            {/* Search bar: straddles middle half of hero image bottom edge on mobile (-mt-24 = ~96px overlap) */}
+            <div className="relative md:absolute md:left-1/2 md:bottom-0 z-20 w-full -mt-24 sm:-mt-28 md:mt-0 md:-translate-x-1/2 md:translate-y-1/2 px-1.5 sm:px-3 md:px-4 lg:px-6">
               <MainSearchBar
-                className="!bg-white/95 !backdrop-blur-xl border border-white/20"
+                className="!bg-white/95 !backdrop-blur-xl border border-white/20 shadow-xl"
               />
             </div>
           </div>
 
           <div
-            className="h-12 sm:h-14 md:h-[3.75rem] lg:h-16 xl:h-[4.25rem] shrink-0"
+            className="hidden md:block h-[3.75rem] lg:h-16 xl:h-[4.25rem] shrink-0"
             aria-hidden
           />
         </div>

@@ -130,16 +130,16 @@ const StayCard: FC<StayCardProps> = ({
 
   const renderContent = () => {
     return (
-      <div className="px-3 sm:px-5 py-3 sm:py-5">
-        <div className="space-y-3">
+      <div className="px-3 py-2.5 sm:px-5 sm:py-4">
+        <div className="space-y-2 sm:space-y-3">
           {/* Hotel Name */}
-          <h2 className="capitalize card-text-heading text-[13px] sm:text-[15px] lg:text-[17px] line-clamp-1 group-hover:text-orange-600 transition-colors">
+          <h2 className="capitalize card-text-heading text-xs sm:text-[15px] lg:text-[17px] font-bold line-clamp-1 group-hover:text-orange-600 transition-colors">
             {title}
           </h2>
 
           {/* Location and Rating */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-x-1 card-text-subheading flex-1 min-w-0 text-[10px] sm:text-sm">
+          <div className="flex items-center justify-between gap-1.5">
+            <span className="flex items-center gap-x-1 card-text-subheading flex-1 min-w-0 text-[10px] sm:text-sm text-gray-500">
               <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500 flex-shrink-0" />
               <span className="truncate">
                 {city_name || "Address not available"}
@@ -154,28 +154,28 @@ const StayCard: FC<StayCardProps> = ({
           </div>
 
           {/* Pricing Section */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end pt-2 gap-2">
+          <div className="flex items-center justify-between pt-1 gap-1.5">
             <div className="flex flex-col">
               {promotionData.hasPromotion ? (
                 <>
-                  <div className="flex items-baseline gap-1 sm:gap-1.5">
-                    <span className="text-[10px] sm:text-sm text-red-500 line-through font-medium">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-[9px] sm:text-xs text-red-500 line-through font-medium">
                       ₹{promotionData.originalPrice.toLocaleString()}
                     </span>
-                    <span className="text-sm sm:text-xl font-bold text-gray-900">
+                    <span className="text-xs sm:text-lg font-bold text-gray-900">
                       ₹{promotionData.discountedPrice.toLocaleString()}
                     </span>
                   </div>
-                  <span className="text-[10px] sm:text-xs text-neutral-500">
+                  <span className="text-[9px] sm:text-xs text-neutral-500">
                     / person
                   </span>
                 </>
               ) : (
                 <>
-                  <span className="text-sm sm:text-xl font-bold text-gray-900">
+                  <span className="text-xs sm:text-lg font-bold text-gray-900">
                     ₹{Math.round(originalPrice).toLocaleString()}
                   </span>
-                  <span className="text-[10px] sm:text-xs text-neutral-500">
+                  <span className="text-[9px] sm:text-xs text-neutral-500">
                     / person
                   </span>
                 </>
@@ -184,7 +184,7 @@ const StayCard: FC<StayCardProps> = ({
             <BookNowButton
               size="sm"
               variant="gradient"
-              className="w-full sm:w-auto text-[10px] sm:text-xs py-1 px-3"
+              className="text-[9px] sm:text-xs py-1 px-2.5 h-7 sm:h-8 rounded-full font-bold text-white shrink-0"
             />
           </div>
         </div>

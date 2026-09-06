@@ -9,6 +9,11 @@ import {
   CarFront, 
   XCircle 
 } from "lucide-react";
+import type { ListingDetail } from "@/types/hotelDetails";
+
+type Props = {
+  hotelData?: ListingDetail | null;
+};
 
 const advantages = [
   {
@@ -49,33 +54,35 @@ const advantages = [
   }
 ];
 
-export default function HotelAdvantages() {
+export default function HotelAdvantages({ hotelData }: Props) {
+  const name = hotelData?.name || "Our Property";
+
   return (
-    <section className="bg-[#0A0A0A] py-24 px-6 w-full overflow-hidden relative">
+    <section className="bg-[#0A0A0A] py-20 md:py-24 px-6 w-full overflow-hidden relative">
       {/* Decorative Blobs */}
       <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[600px] h-[600px] bg-[#EA580C]/10 rounded-full blur-[120px] -ml-[300px] pointer-events-none" />
       <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[600px] h-[600px] bg-[#EA580C]/10 rounded-full blur-[120px] -mr-[300px] pointer-events-none" />
 
       <div className="max-w-[1200px] mx-auto relative z-10 px-4 md:px-8">
         {/* Section Header */}
-        <div className="text-center mb-20">
-          <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">
+        <div className="text-center mb-16 md:mb-20">
+          <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-3">
             OUR UNIQUE EDGE
           </span>
           <h2 className="text-3xl md:text-[44px] font-bold text-white leading-tight tracking-tight">
-            The Nandan Advantages
+            {name} Advantages
           </h2>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
           {advantages.map((item) => (
             <div 
               key={item.id} 
               className="flex flex-col items-center text-center group"
             >
               {/* Icon Container */}
-              <div className="bg-[#121212] border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.4)] inset-0 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:-translate-y-1">
+              <div className="bg-[#121212] border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.4)] w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:-translate-y-1 shrink-0">
                 {item.icon}
               </div>
               
@@ -93,3 +100,4 @@ export default function HotelAdvantages() {
     </section>
   );
 }
+

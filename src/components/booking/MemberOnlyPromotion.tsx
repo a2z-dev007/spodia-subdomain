@@ -32,6 +32,7 @@ interface MemberPromotion {
   }>
 }
 
+/** Survives Strict Mode remounts — ensures apply API fires once per booking while logged in */
 const memberPromoApplyLocks = new Set<string>()
 
 const MemberOnlyPromotion = () => {
@@ -101,13 +102,16 @@ const MemberOnlyPromotion = () => {
     } catch (error) {
       memberPromoApplyLocks.delete(lockKey)
       console.error("Failed to apply member-only promotion on backend:", error)
+      toast.error("Failed to apply member-only promotion on backend.")
     }
   }
 
+  // Fetch promo for UI; auto-apply once when logged in
   useEffect(() => {
     let cancelled = false
 
     const run = async () => {
+      // Guests: never call update-booking-and-apply-member-only-promotion
       if (!accessToken || !hotelId) {
         setPromotion(null)
         return
@@ -126,7 +130,10 @@ const MemberOnlyPromotion = () => {
         const memberPromo = data.records[0] as MemberPromotion
         setPromotion(memberPromo)
 
+        // Need a booking id to apply on backend
         if (!bookingId) return
+
+        // Already applied in Redux for this session
         if (bookingFormData.memberOnlyPromotion) return
 
         const lockKey = String(bookingId)
@@ -135,6 +142,7 @@ const MemberOnlyPromotion = () => {
         const validation = validatePromotion(memberPromo)
         if (!validation.isValid) return
 
+        // Lock before await so Strict Mode remount cannot double-hit apply
         memberPromoApplyLocks.add(lockKey)
         await applyPromotionOnBackend(memberPromo, bookingId)
       } catch (error) {
@@ -150,7 +158,8 @@ const MemberOnlyPromotion = () => {
     return () => {
       cancelled = true
     }
-  }, [hotelId, bookingId, accessToken, bookingFormData.memberOnlyPromotion])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hotelId, bookingId, accessToken])
 
   if (!accessToken || !promotion) return null
 
@@ -173,7 +182,7 @@ const MemberOnlyPromotion = () => {
           <Gift className="w-4.5 h-4.5 text-purple-600" />
         </div>
 
-        <div className="flex-1 min-w-0 pr-4">
+        <div className="flex-1 min-w-0 pr-16">
           <p className="text-sm font-extrabold text-purple-955 leading-snug">{promotion.name}</p>
           <div className="flex gap-2.5 items-center mt-1.5 text-[10px] text-purple-700 font-bold uppercase tracking-wider">
             <span className="text-purple-600 bg-purple-50 border border-purple-100 px-1.5 py-0.2 rounded">
@@ -189,6 +198,14 @@ const MemberOnlyPromotion = () => {
             </p>
           )}
         </div>
+
+        {memberOnlyPromotion && (
+          <div className="absolute right-4 top-4 text-right">
+            <span className="text-xs font-black text-emerald-600">
+              -₹{Math.round(memberOnlyPromotion.discount_amount).toLocaleString()}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   )

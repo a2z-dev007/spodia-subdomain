@@ -1,23 +1,31 @@
-type Props = { heading?: string; entityKey: string };
+import React from "react";
+import type { ListingDetail } from "@/types/hotelDetails";
+import HotelRooms from "@/components/hotel/sections/HotelRooms";
 
-export default function BookingEngine({ heading = "Book online", entityKey }: Props) {
+type Props = {
+  heading?: string;
+  entityKey: string;
+  hotelData?: ListingDetail | null;
+};
+
+export default function BookingEngine({ heading = "Book your stay", entityKey, hotelData }: Props) {
+  const name = hotelData?.name || entityKey.replace(/-/g, " ");
+
   return (
     <section
-      className="rounded-2xl border border-gray-200/80 bg-white p-6 shadow-sm md:p-8"
+      className="w-full rounded-3xl border border-gray-100 bg-white p-6 md:p-10 shadow-sm"
       aria-labelledby="booking-engine-heading"
     >
-      <h2 id="booking-engine-heading" className="text-xl font-semibold text-gray-900 md:text-2xl">
-        {heading}
-      </h2>
-      <p className="mt-2 text-sm text-gray-600 md:text-base">
-        Booking flow for <span className="font-medium text-gray-800">{entityKey.replace(/-/g, " ")}</span>{" "}
-        will plug in here (dates, rooms, guests).
-      </p>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        <div className="h-12 rounded-xl bg-gray-100" aria-hidden />
-        <div className="h-12 rounded-xl bg-gray-100" aria-hidden />
-        <div className="h-12 rounded-xl bg-gray-100 sm:col-span-2" aria-hidden />
+      <div className="mb-6">
+        <h2 id="booking-engine-heading" className="text-2xl md:text-3xl font-black text-gray-900">
+          {heading} – {name}
+        </h2>
+        <p className="mt-1 text-sm text-gray-500 font-medium">
+          Select your dates, preferred room type, and number of guests.
+        </p>
       </div>
+
+      <HotelRooms hotelData={hotelData} entityKey={entityKey} />
     </section>
   );
 }

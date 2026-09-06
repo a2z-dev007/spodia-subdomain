@@ -13,6 +13,7 @@ import Badge from "@/shared/Badge";
 import { generateBadgeColor } from "@/lib/utils";
 import { BASE_URL } from "@/lib/api/apiClient";
 import { calculatePromotionalPricing } from "@/utils/promotionalPricing";
+import { parseListingSbrRate } from "@/utils/helper";
 
 // Get current date in YYYY-MM-DD format
 const getCurrentDate = () => {
@@ -73,12 +74,13 @@ const mapApiToStay = (item: any): StayDataType => {
   const hotelSlug =
     item.slug ||
     `${item.name}-${item.city_name}`.replace(/\s+/g, "-").toLowerCase();
+  const sbrRate = parseListingSbrRate(item.sbr_rate);
   return {
     id: item.id,
     author,
     city_name: typeof item.city_name === "string" ? item.city_name : "",
     date: typeof item.created === "string" ? item.created : "",
-    href: `/hotels/${hotelSlug}`,
+    href: `/hotel/${hotelSlug}`,
     title: typeof item.name === "string" ? item.name : "",
     featuredImage:
       typeof item.images?.find((img: any) => img.cover_photo)?.file === "string"
@@ -104,10 +106,7 @@ const mapApiToStay = (item: any): StayDataType => {
           .map((img: any) => (typeof img.file === "string" ? img.file : ""))
           .filter(Boolean)
       : [],
-    price:
-      typeof item.sbr_rate === "number"
-        ? `₹${Math.round(item.sbr_rate)}`
-        : "₹0",
+    price: sbrRate > 0 ? `₹${Math.round(sbrRate)}` : "₹0",
     listingCategory: category,
     maxGuests: typeof item.no_of_rooms === "number" ? item.no_of_rooms : 2,
     bedrooms: typeof item.no_of_floors === "number" ? item.no_of_floors : 1,
@@ -122,7 +121,7 @@ const mapApiToStay = (item: any): StayDataType => {
     has_promotion:
       typeof item.has_promotion === "boolean" ? item.has_promotion : false,
     best_promotion: item.best_promotion || null,
-    sbr_rate: typeof item.sbr_rate === "number" ? item.sbr_rate : 0,
+    sbr_rate: sbrRate,
   };
 };
 

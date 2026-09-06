@@ -35,7 +35,7 @@ export default function MainSearchBar({
   const [startDate, setStartDate] = useState<Date | null>(initialData?.checkIn || null);
   const [endDate, setEndDate] = useState<Date | null>(initialData?.checkOut || null);
   const [rooms, setRooms] = useState(initialData?.rooms || 1);
-  const [guests, setGuests] = useState(initialData?.guests || { adults: 2, children: 0 });
+  const [guests, setGuests] = useState(initialData?.guests || { adults: 1, children: 0 });
   const [childrenAges, setChildrenAges] = useState<number[]>(initialData?.childrenAges || []);
 
   const handleSearch = () => {
@@ -95,13 +95,13 @@ export default function MainSearchBar({
   };
 
   return (
-    <div className={`bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 rounded-full p-2 max-w-7xl mx-auto w-full flex items-center transition-all hover:shadow-[0_8px_35px_rgb(0,0,0,0.15)] ${className}`}>
+    <div className={`bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 rounded-2xl md:rounded-full p-3 sm:p-3.5 md:p-2 max-w-7xl mx-auto w-full flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-0 transition-all hover:shadow-[0_8px_35px_rgb(0,0,0,0.15)] ${className}`}>
       
       {/* Location */}
-      <div className="flex-1 flex items-center px-6 border-r border-gray-100 hover:bg-gray-50/50 rounded-l-full transition-colors group h-full py-2">
-        <MapPin className="w-5 h-5 text-[#FF9530] mr-4 shrink-0" strokeWidth={2.5} />
+      <div className="flex-1 flex items-center px-3.5 sm:px-4 md:px-6 py-2.5 md:py-2 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 rounded-xl md:rounded-l-full md:rounded-r-none transition-colors group">
+        <MapPin className="w-5 h-5 text-[#FF9530] mr-3 md:mr-4 shrink-0" strokeWidth={2.5} />
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">Location</p>
+          <p className="text-[10px] sm:text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">Location</p>
           <PremiumLocationSelect
             value={location}
             onChange={setLocation}
@@ -115,10 +115,10 @@ export default function MainSearchBar({
       </div>
 
       {/* Date Range (Check In - Check Out) */}
-      <div className="flex-1 flex items-center px-6 border-r border-gray-100 hover:bg-gray-50/50 transition-colors group h-full py-2">
-        <Calendar className="w-5 h-5 text-[#FF9530] mr-4 shrink-0" strokeWidth={2.5} />
+      <div className="flex-1 flex items-center px-3.5 sm:px-4 md:px-6 py-2.5 md:py-2 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors group">
+        <Calendar className="w-5 h-5 text-[#FF9530] mr-3 md:mr-4 shrink-0" strokeWidth={2.5} />
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">Date</p>
+          <p className="text-[10px] sm:text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">Date</p>
           <div className="w-full">
             <PremiumDatePicker
               selectsRange
@@ -136,10 +136,10 @@ export default function MainSearchBar({
       </div>
 
       {/* Guests */}
-      <div className="flex-1 flex items-center px-6 hover:bg-gray-50/50 transition-colors group h-full py-2">
-        <Users className="w-5 h-5 text-[#FF9530] mr-4 shrink-0" strokeWidth={2.5} />
+      <div className="flex-1 flex items-center px-3.5 sm:px-4 md:px-6 py-2.5 md:py-2 hover:bg-gray-50/50 rounded-xl md:rounded-none transition-colors group">
+        <Users className="w-5 h-5 text-[#FF9530] mr-3 md:mr-4 shrink-0" strokeWidth={2.5} />
         <div className="flex-1 min-w-0 relative">
-          <p className="text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">Guests</p>
+          <p className="text-[10px] sm:text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">Guests</p>
           <PremiumGuestSelect
             rooms={rooms}
             setRooms={setRooms}
@@ -154,13 +154,14 @@ export default function MainSearchBar({
         </div>
       </div>
 
-      {/* Search Button (Circular) */}
-      <div className="pl-4 pr-1">
+      {/* Search Button */}
+      <div className="pt-1 md:pt-0 md:pl-4 md:pr-1 w-full md:w-auto">
         <Button
           onClick={handleSearch}
-          className="gradient-btn h-14 w-14 rounded-full flex items-center justify-center p-0 shadow-lg hover:shadow-orange-200 transition-all duration-300 hover:scale-105 active:scale-95"
+          className="gradient-btn h-12 md:h-14 w-full md:w-14 rounded-xl md:rounded-full flex items-center justify-center p-0 shadow-lg hover:shadow-orange-200 transition-all duration-300 hover:scale-105 active:scale-95 text-white font-bold text-sm"
         >
-          <Search className="w-6 h-6 text-white" strokeWidth={3} />
+          <Search className="w-5 h-5 md:w-6 md:h-6 text-white shrink-0" strokeWidth={2.75} />
+          <span className="inline md:hidden ml-2 font-semibold">Search Stays</span>
         </Button>
       </div>
     </div>

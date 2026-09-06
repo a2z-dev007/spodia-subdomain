@@ -24,7 +24,10 @@ import { format } from "date-fns"
 
 type HydratePayload = Record<string, unknown>
 
+/** Shared in-flight/completed hydrates — survives Strict Mode remounts without double API calls */
 const hydratePromises = new Map<string, Promise<HydratePayload>>()
+
+/** Locks for login/logout API transitions — prevents duplicate calls in Strict Mode or concurrent triggers */
 const authActionLocks = new Set<string>()
 
 function mapBackendSelectionToSelectedRooms(records: any[], hotelData: any, pricing: any[]) {
@@ -82,8 +85,18 @@ async function fetchBookingHydratePayload(params: {
   if (existing) return existing
 
   const promise = (async () => {
+    console.log(`🔄 [HYDRATE] Starting state hydration for booking ID: ${bookingId}`, {
+      hotelId,
+      checkIn,
+      checkOut,
+      adults,
+      children,
+      childrenAges,
+    })
+
     const hotelResponse = await getPropertyById(hotelId)
     const hotel = hotelResponse?.data?.listing_detail
+    console.log("🔄 [HYDRATE] Fetched hotel metadata response:", hotelResponse?.data)
 
     if (!hotel) {
       throw new Error("Hotel not found")
@@ -97,14 +110,21 @@ async function fetchBookingHydratePayload(params: {
     })
     const perDatePricing = pricingResponse?.data?.price_detail || []
     const promotionDetails = pricingResponse?.data?.promotion_detail || []
+    console.log("🔄 [HYDRATE] Fetched inventory & pricing response:", {
+      perDatePricingCount: perDatePricing.length,
+      promotionDetailsCount: promotionDetails.length,
+    })
 
     const selectedRoomsResponse = await getSelectedRooms(bookingId)
     const backendRooms = selectedRoomsResponse.data?.records || []
+    console.log("🔄 [HYDRATE] Fetched selected rooms response:", selectedRoomsResponse.data)
 
     const summaryResponse = await getBookingSummary(bookingId)
     const summaryRecords = summaryResponse.data?.records
+    console.log("🔄 [HYDRATE] Fetched booking summary response:", summaryResponse.data)
 
     const mappedRooms = mapBackendSelectionToSelectedRooms(backendRooms, hotel, perDatePricing)
+    console.log("🔄 [HYDRATE] Reconstructed mapped selected rooms:", mappedRooms)
 
     let parsedCheckInDate = ""
     let parsedCheckOutDate = ""
@@ -174,17 +194,20 @@ const BookingFlow = () => {
     setShowLoginModal(true)
   }
 
+  // Check if booking data exists in Redux
   const hasBookingData = bookingFormData &&
     bookingFormData.hotelId &&
     bookingFormData.hotelName &&
     bookingFormData.rooms &&
     bookingFormData.rooms.length > 0
 
+  // We are hydrating if we have a booking_id in URL to ensure we always use backend API details
   const [isHydrating, setIsHydrating] = useState(() => {
     const bookingId = searchParams.get("booking_id")
     return !!bookingId
   })
 
+  // Stabilize URL params so identity changes on searchParams don't re-trigger hydration
   const bookingIdParam = searchParams.get("booking_id")
   const hotelIdParam = searchParams.get("hotelId")
   const checkInParam = searchParams.get("checkIn")
@@ -223,7 +246,10 @@ const BookingFlow = () => {
         })
 
         if (cancelled) return
+
+        console.log("📦 [HYDRATE] Dispatching hydrated state to Redux:", reduxUpdatePayload)
         dispatch(updateBookingFormData(reduxUpdatePayload))
+        console.log("✅ [HYDRATE] State successfully hydrated from backend")
       } catch (error) {
         if (!cancelled) {
           console.error("Error during booking page state hydration:", error)
@@ -255,17 +281,20 @@ const BookingFlow = () => {
   ])
 
   useEffect(() => {
+    // If not hydrating and booking data is still missing, go back to details page
     if (!isHydrating && !hasBookingData) {
       router.back()
     }
   }, [isHydrating, hasBookingData, router])
 
+  // Refreshes booking summary after login to update pricing summary on booking page entirely (single call lock)
   const handleLoginOnBooking = async (bookingId: string | number) => {
     const lockKey = `login_${bookingId}`
     if (authActionLocks.has(lockKey)) return
     authActionLocks.add(lockKey)
     authActionLocks.delete(`logout_${bookingId}`)
 
+    console.log("🔓 [LOGIN API] Executing login promotions update for booking:", bookingId)
     try {
       if (bookingFormData.hotelId) {
         try {
@@ -307,15 +336,24 @@ const BookingFlow = () => {
     }
   }
 
+  // Refreshes booking summary after logout (single call lock with user_logout: true)
   const handleLogoutOnBooking = async (activeBookingId: string | number) => {
     const lockKey = `logout_${activeBookingId}`
     if (authActionLocks.has(lockKey)) return
     authActionLocks.add(lockKey)
     authActionLocks.delete(`login_${activeBookingId}`)
 
+    console.log("🔒 [LOGOUT API 1/3] Sending user_logout: true to update-booking-and-apply-member-only-promotion for booking:", activeBookingId)
     try {
+      // 1. Call update-booking-and-apply-member-only-promotion first
       await updateBookingAndApplyMemberOnlyPromotion(activeBookingId, true)
+
+      // 2. Call booking_coupon_apply after success response from promotion API
+      console.log("🔒 [LOGOUT API 2/3] Success from promotion API. Sending user_logout: true to booking_coupon_apply for booking:", activeBookingId)
       await applyBookingCoupon(activeBookingId, null, true)
+
+      // 3. Recall booking-summary API
+      console.log("🔒 [LOGOUT API 3/3] Success from coupon API. Recalling booking-summary API for booking:", activeBookingId)
 
       const summaryResponse = await getBookingSummary(activeBookingId)
       const summaryRecords = summaryResponse.data?.records
@@ -347,6 +385,7 @@ const BookingFlow = () => {
     }
   }
 
+  // Handle user login and logout state transitions on the booking page
   useEffect(() => {
     const wasLoggedIn = Boolean(prevAccessTokenRef.current)
     const isLoggedIn = Boolean(accessToken)
@@ -359,8 +398,10 @@ const BookingFlow = () => {
     } else if (wasLoggedIn && !isLoggedIn && activeBookingId) {
       handleLogoutOnBooking(activeBookingId)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, bookingFormData.bookingId, bookingIdParam])
 
+  // Show loading state while hydrating
   if (isHydrating) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -373,6 +414,7 @@ const BookingFlow = () => {
     )
   }
 
+  // Show loading state while redirecting (if no data and not hydrating)
   if (!hasBookingData) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -386,16 +428,20 @@ const BookingFlow = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 sm:py-6 md:py-6">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8  sm:py-6 md:py-6 ">
+      {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-start">
+        {/* Top Left - Hotel Details */}
         <div className="lg:col-span-2">
           <BookingHotelDetailsCard />
         </div>
 
+        {/* Right Side - Booking Summary (Desktop: Column 3, Mobile & Tablet: Shown above Guest Details Form) */}
         <div className="lg:col-span-1 lg:row-span-2 lg:sticky lg:top-24 lg:self-start lg:h-fit">
           <BookingSummaryCard onRequestLogin={() => openLoginModal()} />
         </div>
 
+        {/* Bottom Left - Guest Details Form */}
         <div className="lg:col-span-2">
           <SingleStepBookingForm onRequestLogin={openLoginModal} />
         </div>

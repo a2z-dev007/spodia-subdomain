@@ -11,6 +11,7 @@ export interface User {
   last_name: string
   email: string
   mobile: string
+  country_code?: string | number
   profile_image: string | null
   permissions: string[]
   role_id: string

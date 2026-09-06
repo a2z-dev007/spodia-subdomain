@@ -1,11 +1,10 @@
 import React from "react";
 import HotelPageShell from "@/components/hotel/HotelPageShell";
 import { propertyData } from "@/lib/hotel/mockData";
+import { fetchHotelDetails } from "@/lib/api/hotelDetails";
 import { Phone, Mail, MapPin, MessageSquare, Send, Clock, ShieldCheck, Award, Lock, RotateCcw, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
 import { IMAGES } from "@/assets/images";
-
-import { buildHotelSegmentMetadata } from "@/lib/seo/metadata";
 
 type Props = {
   params: Promise<{ entityKey: string }>;
@@ -13,7 +12,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { entityKey } = await params;
-  const { name, location } = propertyData;
+  const hotelData = await fetchHotelDetails(entityKey);
+  const name = hotelData?.name || propertyData.name;
+  const location = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
+  
   return {
     title: `Contact ${name} | Address, Phone & Support | ${location}`,
     description: `Reach ${name} via phone, email, or live chat. Find our address, business hours, and quick-contact form. We’re here to assist!`,
@@ -22,7 +24,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ContactPage({ params }: Props) {
   const { entityKey } = await params;
-  const { name, location } = propertyData;
+  const hotelData = await fetchHotelDetails(entityKey);
+  const name = hotelData?.name || propertyData.name;
+  const location = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
+  const phone = hotelData?.mobile_number || "+91 7399888855";
+  const email = hotelData?.email || `bookings@spodia.com`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -30,21 +36,20 @@ export default async function ContactPage({ params }: Props) {
     "name": name,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 MG Road",
-      "addressLocality": location,
-      "addressRegion": "Assam",
-      "postalCode": "781001",
+      "streetAddress": location,
+      "addressLocality": hotelData?.city_name || location,
       "addressCountry": "India"
     },
-    "telephone": "+91 12345-67890",
-    "email": `support@${name.toLowerCase().replace(/\s/g, "")}.com`,
+    "telephone": phone,
+    "email": email,
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
-      "closes": "20:00"
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
     }
   };
+
 
   return (
     <HotelPageShell entityKey={entityKey}>

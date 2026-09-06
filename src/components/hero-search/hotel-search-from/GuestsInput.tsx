@@ -23,7 +23,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
   buttonSubmitHref = "/listing-stay-map",
   hasButtonSubmit = true,
 }) => {
-  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(2);
+  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(1);
   const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(1);
   const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(1);
 

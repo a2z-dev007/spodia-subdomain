@@ -6,12 +6,13 @@ import { useQuery } from "@tanstack/react-query"
 import { getPropertyById } from "@/services/api"
 import { Card, CardContent } from "@/components/ui/card"
 import {
-  MapPin, Users, ChevronDown, ChevronUp, Check,
-  ChevronLeft, ChevronRight, X, Bed, Maximize2,
-  Cigarette, Baby, Eye, Layers, ZoomIn
+  MapPin, Users, ChevronDown, ChevronUp, Check, ShieldCheck,
+  ChevronLeft, ChevronRight, X, Bed, Maximize2, Wind, Cigarette,
+  Baby, Eye, Layers, ZoomIn
 } from "lucide-react"
 import { format } from "date-fns"
 
+/* ─────────────────────────────── LightBox ─────────────────────────────── */
 interface LightBoxProps {
   images: string[]
   startIndex: number
@@ -44,6 +45,7 @@ function LightBox({ images, startIndex, hotelName, onClose }: LightBoxProps) {
       className="fixed inset-0 z-[9999] bg-black/95 flex flex-col"
       onClick={onClose}
     >
+      {/* Top bar */}
       <div
         className="flex items-center justify-between px-4 py-3 text-white flex-shrink-0"
         onClick={(e) => e.stopPropagation()}
@@ -60,6 +62,7 @@ function LightBox({ images, startIndex, hotelName, onClose }: LightBoxProps) {
         </div>
       </div>
 
+      {/* Main image */}
       <div
         className="flex-1 flex items-center justify-center relative px-12 min-h-0"
         onClick={(e) => e.stopPropagation()}
@@ -69,9 +72,11 @@ function LightBox({ images, startIndex, hotelName, onClose }: LightBoxProps) {
           src={images[current]}
           alt={`${hotelName} - Photo ${current + 1}`}
           className="max-h-full max-w-full object-contain rounded-lg select-none"
+          style={{ animation: "fadeIn 0.2s ease" }}
           onError={(e) => { e.currentTarget.style.display = "none" }}
         />
 
+        {/* Nav arrows */}
         {images.length > 1 && (
           <>
             <button
@@ -90,6 +95,7 @@ function LightBox({ images, startIndex, hotelName, onClose }: LightBoxProps) {
         )}
       </div>
 
+      {/* Thumbnail strip */}
       <div
         className="flex-shrink-0 px-4 pb-4 pt-3"
         onClick={(e) => e.stopPropagation()}
@@ -108,10 +114,17 @@ function LightBox({ images, startIndex, hotelName, onClose }: LightBoxProps) {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { scrollbar-width: none; }
+      `}</style>
     </div>
   )
 }
 
+/* ─────────────────────── Image Slider (5 thumbnails) ──────────────────── */
 interface ImageSliderProps {
   images: string[]
   hotelName: string
@@ -135,6 +148,7 @@ function ImageSlider({ images, hotelName, onImageClick }: ImageSliderProps) {
 
   return (
     <div className="relative">
+      {/* Scroll container */}
       <div
         ref={scrollRef}
         className="flex gap-2 overflow-x-auto px-4 py-4 scrollbar-none"
@@ -156,9 +170,11 @@ function ImageSlider({ images, hotelName, onImageClick }: ImageSliderProps) {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => { e.currentTarget.src = "/placeholder.jpg" }}
                 />
+                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                   <ZoomIn className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
                 </div>
+                {/* +More overlay on last visible image */}
                 {isLast && (
                   <div className="absolute inset-0 bg-black/55 flex flex-col items-center justify-center rounded-xl">
                     <span className="text-white font-black text-xl">+{extraCount + 1}</span>
@@ -166,6 +182,7 @@ function ImageSlider({ images, hotelName, onImageClick }: ImageSliderProps) {
                   </div>
                 )}
               </div>
+              {/* Index pill */}
               {!isLast && (
                 <div className="absolute bottom-2 left-2 bg-black/40 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
                   {i + 1}/{images.length}
@@ -176,14 +193,21 @@ function ImageSlider({ images, hotelName, onImageClick }: ImageSliderProps) {
         })}
       </div>
 
+      {/* Photo count badge */}
       <div className="absolute top-6 right-6 bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 pointer-events-none">
         <Maximize2 className="w-3 h-3" />
         {images.length} Photos
       </div>
+
+      <style>{`
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { scrollbar-width: none; }
+      `}</style>
     </div>
   )
 }
 
+/* ─────────────────────────── Main Component ───────────────────────────── */
 const BookingHotelDetailsCard = () => {
   const { bookingFormData } = useAppSelector((state) => state?.booking ?? { bookingFormData: {} })
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -192,6 +216,7 @@ const BookingHotelDetailsCard = () => {
 
   const hotelId = bookingFormData.hotelId
 
+  // Fetch full hotel data for room images (cached by react-query)
   const { data: hotelApiResponse } = useQuery({
     queryKey: ["hotelDetails", hotelId],
     queryFn: () => getPropertyById(String(hotelId)),
@@ -200,6 +225,7 @@ const BookingHotelDetailsCard = () => {
   })
   const hotelApiData = hotelApiResponse?.data?.listing_detail
 
+  // Get images specifically for the selected room(s)
   const roomImages = useMemo(() => {
     if (!hotelApiData?.rooms || !bookingFormData.rooms?.length) return []
     const selectedRoomIds = new Set(bookingFormData.rooms.map((r: any) => r.roomId))
@@ -214,12 +240,14 @@ const BookingHotelDetailsCard = () => {
     return imgs
   }, [hotelApiData, bookingFormData.rooms])
 
+  // Get selected room details from hotel API (for chip info)
   const selectedRoomDetails = useMemo(() => {
     if (!hotelApiData?.rooms || !bookingFormData.rooms?.length) return null
     const firstSelectedId = bookingFormData.rooms[0]?.roomId
     return hotelApiData.rooms.find((r: any) => r.id === firstSelectedId) || null
   }, [hotelApiData, bookingFormData.rooms])
 
+  // Calculate nights
   const nights = useMemo(() => {
     if (bookingFormData.checkInDate && bookingFormData.checkOutDate) {
       const checkIn = new Date(bookingFormData.checkInDate)
@@ -250,6 +278,7 @@ const BookingHotelDetailsCard = () => {
   return (
     <>
       <Card className="border border-gray-200 bg-white rounded-xl overflow-hidden shadow-sm">
+        {/* Collapsible Header */}
         <div
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="flex items-center justify-between px-6 py-4 border-b border-gray-100 cursor-pointer select-none bg-white hover:bg-gray-50/50 transition-colors"
@@ -264,6 +293,7 @@ const BookingHotelDetailsCard = () => {
 
         {!isCollapsed && (
           <>
+            {/* ── Image Slider ── */}
             <ImageSlider
               images={roomImages}
               hotelName={bookingFormData.hotelName || "Hotel"}
@@ -271,10 +301,11 @@ const BookingHotelDetailsCard = () => {
             />
 
             <CardContent className="p-6 space-y-5">
+              {/* Hotel name + location */}
               <div className="space-y-1">
                 {(bookingFormData as any).hotelRating > 0 && (
                   <div className="flex items-center gap-1.5 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-md text-[10px] font-bold text-amber-700 w-fit">
-                    {(bookingFormData as any).hotelRating}-Star Hotel
+                     {(bookingFormData as any).hotelRating}-Star Hotel
                   </div>
                 )}
                 <h4 className="text-lg font-extrabold text-gray-900 tracking-tight leading-tight">
@@ -288,6 +319,7 @@ const BookingHotelDetailsCard = () => {
                 )}
               </div>
 
+              {/* ── Room spec chips (from real API) ── */}
               {selectedRoomDetails && (
                 <div className="flex flex-wrap gap-2">
                   {selectedRoomDetails.bed_type && (
@@ -328,6 +360,7 @@ const BookingHotelDetailsCard = () => {
                 </div>
               )}
 
+              {/* ── Check-in / Check-out / Guests ── */}
               <div className="grid grid-cols-3 gap-3 border border-gray-100 rounded-xl p-4 bg-gray-50/40">
                 <div>
                   <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider block mb-1">Check In</span>
@@ -350,6 +383,7 @@ const BookingHotelDetailsCard = () => {
                 </div>
               </div>
 
+              {/* ── Room Details Block ── */}
               {bookingFormData.rooms?.length > 0 && (
                 <div className="border border-gray-100 rounded-xl p-5 bg-white space-y-4">
                   <div className="flex items-center gap-2">
@@ -361,6 +395,7 @@ const BookingHotelDetailsCard = () => {
 
                   {bookingFormData.rooms.map((room: any, idx: number) => (
                     <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 first:pt-0 border-t first:border-0 border-gray-100">
+                      {/* Left */}
                       <div className="space-y-2">
                         <p className="text-sm font-extrabold text-gray-800">
                           {room.quantity || 1}× {room.roomName || room.room}
@@ -373,6 +408,7 @@ const BookingHotelDetailsCard = () => {
                           {room.planName || room.plan}
                         </span>
                       </div>
+                      {/* Right — Plan inclusions */}
                       {room.planFeatures?.length > 0 && (
                         <div className="space-y-1.5 border-l border-gray-100 md:pl-5">
                           {room.planFeatures.map((feat: string, fIdx: number) => (
@@ -388,6 +424,7 @@ const BookingHotelDetailsCard = () => {
                 </div>
               )}
 
+              {/* ── Room facilities from API ── */}
               {selectedRoomDetails?.facilitiesDetails?.length > 0 && (
                 <div>
                   <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider block mb-2">Room Amenities</span>
@@ -410,6 +447,7 @@ const BookingHotelDetailsCard = () => {
         )}
       </Card>
 
+      {/* Full-screen LightBox */}
       {lightboxOpen && roomImages.length > 0 && (
         <LightBox
           images={roomImages}

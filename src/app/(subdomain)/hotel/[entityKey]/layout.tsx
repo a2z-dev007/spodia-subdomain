@@ -1,6 +1,7 @@
 import HotelHeader from "@/components/hotel/layout/HotelHeader";
 import HotelFooter from "@/components/hotel/HotelFooter";
 import HotelFABs from "@/components/hotel/HotelFABs";
+import { fetchHotelDetails } from "@/lib/api/hotelDetails";
 import { propertyData } from "@/lib/hotel/mockData";
 
 export default async function HotelTenantLayout({
@@ -11,7 +12,13 @@ export default async function HotelTenantLayout({
   params: Promise<{ entityKey: string }>;
 }>) {
   const { entityKey } = await params;
-  const { name, location } = propertyData;
+  
+  // Fetch dynamic hotel details
+  const hotelData = await fetchHotelDetails(entityKey);
+
+  const name = hotelData?.name || propertyData.name;
+  const location = hotelData?.address 
+    || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
 
   return (
     <div className="flex flex-col min-h-screen font-manrope">
@@ -24,3 +31,4 @@ export default async function HotelTenantLayout({
     </div>
   );
 }
+

@@ -24,7 +24,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess, defaultEmail }: LoginModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md p-5 sm:p-6 max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl">
+      <DialogContent className="sm:max-w-md p-5 sm:p-6 max-h-[90vh] overflow-y-auto scrollbar-hide hide-scrollbar overscroll-contain rounded-2xl sm:rounded-3xl">
         <DialogHeader className="sr-only">
           <DialogTitle>Sign in to Spodia</DialogTitle>
           <DialogDescription>
@@ -34,7 +34,10 @@ const LoginModal = ({ isOpen, onClose, onSuccess, defaultEmail }: LoginModalProp
         {isOpen && (
           <LoginForm
             key={`login-modal-${defaultEmail || "empty"}`}
+            compact
             defaultEmail={defaultEmail}
+            redirectOnSuccess={false}
+            openLinksInNewTab
             onSuccess={handleSuccess}
           />
         )}

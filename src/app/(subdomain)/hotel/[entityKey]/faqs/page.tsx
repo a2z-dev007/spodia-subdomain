@@ -1,23 +1,35 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import HotelPageShell from "@/components/hotel/HotelPageShell";
 import { propertyData } from "@/lib/hotel/mockData";
+import { fetchHotelDetails } from "@/lib/api/hotelDetails";
+import type { ListingDetail } from "@/types/hotelDetails";
 import { 
   Search, Plus, Minus, MessageSquare, Phone, Mail, 
   ChevronRight, Printer, ShieldCheck, Star, Clock, 
-  HelpCircle, CreditCard, Wifi, MapPin, Car, Briefcase
+  HelpCircle, CreditCard, Wifi, MapPin, Sparkles
 } from "lucide-react";
 
 import HotelHeroPremium from "@/components/hotel/sections/HotelHeroPremium";
+import StaticDataBadge from "@/components/common/StaticDataBadge";
 
 const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
   const { entityKey } = React.use(params);
-  const { name, location } = propertyData;
+  const [hotelData, setHotelData] = useState<ListingDetail | null>(null);
   
   const [searchQuery, setSearchQuery] = useState("");
-  const [openItems, setOpenItems] = useState<string[]>([]);
+  const [openItems, setOpenItems] = useState<string[]>(["b1", "p1"]);
   const [activeCategory, setActiveCategory] = useState("All");
+
+  useEffect(() => {
+    fetchHotelDetails(entityKey).then((data) => {
+      if (data) setHotelData(data);
+    });
+  }, [entityKey]);
+
+  const name = hotelData?.name || propertyData.name;
+  const location = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
 
   const toggleItem = (id: string) => {
     setOpenItems(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -29,9 +41,10 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
       title: "Booking & Reservations",
       icon: CreditCard,
       items: [
-        { id: "b1", q: "How do I modify or cancel my booking?", a: "Visit ‘My Bookings’ or contact our support team. Free cancellation up to 48 hours before check-in." },
-        { id: "b2", q: "Is advance payment required?", a: "A small deposit secures your reservation. Pay the balance at check-in." },
-        { id: "b3", q: "Is butler service available?", a: "Yes, our premium suites include 24/7 dedicated butler service for a truly bespoke experience." }
+        { id: "b1", q: "How do I modify or cancel my booking?", a: `Cancellations and modifications for ${name} can be managed via 'My Bookings' according to property cancellation policies.` },
+        { id: "b2", q: "Is advance payment required?", a: "A minimal booking deposit or online payment secures your reservation instantly. Pay balance upon arrival." },
+        { id: "b3", q: "Is butler or room service available?", a: `Yes, ${name} provides 24/7 in-room dining and guest service assistance.` },
+        { id: "b4", q: "What payment methods are accepted?", a: "We accept all major Credit/Debit Cards, Net Banking, UPI (Google Pay, PhonePe, Paytm), and Razorpay." }
       ]
     },
     {
@@ -39,27 +52,28 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
       title: "Amenities & Services",
       icon: Wifi,
       items: [
-        { id: "a1", q: "Do you offer airport transfers?", a: "Yes! Book in advance for discounted rates. We offer luxury sedans and spacious SUVs." },
-        { id: "a2", q: "Is WiFi free?", a: "Complimentary high-speed WiFi is available in all rooms and common areas for our guests." },
-        { id: "a3", q: "Do rooms have minibars?", a: "All our luxury rooms and suites are equipped with well-stocked minibars featuring local and international treats." }
+        { id: "a1", q: "Do you offer airport or railway transfers?", a: "Yes, airport and railway station pickup/drop-off can be arranged upon request with our front desk." },
+        { id: "a2", q: "Is high-speed Wi-Fi complimentary?", a: "Complimentary high-speed fiber Wi-Fi is available across all guest rooms and public areas." },
+        { id: "a3", q: "Are dining options available on-site?", a: `Yes, ${name} features authentic multi-cuisine dining options with room service availability.` }
       ]
     },
     {
       id: "policies",
-      title: "Policies",
+      title: "Check-in & Stay Policies",
       icon: ShieldCheck,
       items: [
-        { id: "p1", q: "What’s the check-in/check-out time?", a: "Check-in: 2 PM · Check-out: 12 PM. Early/late options available on request subject to availability." },
-        { id: "p2", q: "Are pets allowed?", a: "Yes, in select rooms with a ₹1,000/day fee. Breed restrictions apply, please contact us for details." }
+        { id: "p1", q: "What are standard check-in and check-out times?", a: "Standard check-in is 12:00 PM and check-out is 11:00 AM. Early check-in or late check-out is subject to availability." },
+        { id: "p2", q: "What ID documents are required at check-in?", a: "All guests must present a valid government-issued photo ID (Aadhaar, Passport, Driving License)." },
+        { id: "p3", q: "Are pets allowed at the property?", a: "Pet policies vary by room category. Please contact reception prior to arrival if traveling with pets." }
       ]
     },
     {
       id: "location",
-      title: "Location & Transport",
+      title: "Location & Access",
       icon: MapPin,
       items: [
-        { id: "l1", q: `How far is the hotel from ${location} city center?`, a: `We’re 2 km from the city center and approximately 10 km from the nearest international airport.` },
-        { id: "l2", q: "Is parking available?", a: "Yes, we provide complimentary secured parking for all our guests with 24/7 surveillance." }
+        { id: "l1", q: `Where is ${name} located?`, a: `${name} is located at ${location}.` },
+        { id: "l2", q: "Is parking available for guests?", a: "Yes, complimentary secured guest parking is available on-site." }
       ]
     }
   ];
@@ -71,21 +85,12 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
         item.q.toLowerCase().includes(searchQuery.toLowerCase()) || 
         item.a.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    })).filter(cat => cat.items.length > 0);
-  }, [searchQuery]);
+    })).filter(cat => cat.items.length > 0 && (activeCategory === "All" || cat.id === activeCategory));
+  }, [searchQuery, activeCategory]);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqCategories.flatMap(cat => cat.items).map(item => ({
-      "@type": "Question",
-      "name": item.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.a
-      }
-    }))
-  };
+  const totalFaqCount = useMemo(() => {
+    return faqCategories.reduce((acc, cat) => acc + cat.items.length, 0);
+  }, []);
 
   const handlePrint = () => {
     window.print();
@@ -93,130 +98,170 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
 
   return (
     <HotelPageShell entityKey={entityKey}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
       {/* 1. Hero Section */}
       <HotelHeroPremium 
-        pillIcon={<HelpCircle className="w-4 h-4" />}
-        pillText="24/7 Guest Support"
+        pillIcon={<HelpCircle className="w-4 h-4 text-[#FF9530]" />}
+        pillText="24/7 Guest Support & Policies"
         title={
           <>
-            Frequently Asked Questions – <br className="hidden sm:inline" />
-            <span className="text-[#FF9530]">Your Stay, Simplified.</span>
+            {name} FAQs – <br className="hidden sm:inline" />
+            <span className="text-[#FF9530]">Your Complete Stay Guide.</span>
           </>
         }
-        subtitle="Find quick answers about bookings, amenities, policies, and more."
-        primaryBtnText="Book Now"
-        primaryBtnHref={`/hotel/${entityKey}/book`}
+        subtitle={`Everything you need to know about stay policies, check-in rules, amenities, and booking details at ${name}.`}
+        primaryBtnText="Book Stay Now"
+        primaryBtnHref={`/hotel/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
         secondaryBtnHref={`/hotel/${entityKey}/rooms`}
         badges={[
           { icon: <Clock className="w-4 h-4" />, text: "24/7 Support" },
-          { icon: <Star className="w-4 h-4" />, text: "Verified Reviews" },
-          { icon: <ShieldCheck className="w-4 h-4" />, text: "Free Cancellation" }
+          { icon: <Star className="w-4 h-4" />, text: "Best Price Guarantee" },
+          { icon: <ShieldCheck className="w-4 h-4" />, text: "Instant Confirmation" }
         ]}
       />
 
-      {/* 2. Sticky Search Bar */}
-      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/90 backdrop-blur-2xl border-b border-gray-100 shadow-sm print:hidden">
-        <div className="max-w-[1200px] mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="relative w-full md:w-[600px]">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+      {/* 2. Interactive Search & Category Filter Bar */}
+      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/95 backdrop-blur-2xl border-b border-gray-150 shadow-sm print:hidden py-4 px-4 sm:px-8">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="relative w-full md:w-[540px]">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input 
               type="text" 
-              placeholder="Search FAQs (e.g., ‘check-in time’, ‘WiFi’, ‘parking’)..."
+              placeholder="Search FAQs (e.g. check-in time, WiFi, cancellation)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-50 border-none rounded-2xl py-4 pl-14 pr-6 font-bold text-lg focus:ring-2 focus:ring-[#FF9530] transition-all outline-none"
+              className="w-full bg-gray-50/90 border border-gray-200/80 rounded-2xl py-3 pl-12 pr-4 font-bold text-sm sm:text-base focus:ring-2 focus:ring-[#FF9530] focus:bg-white transition-all outline-none"
             />
           </div>
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={handlePrint}
-              className="flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-2xl font-black hover:bg-[#FF9530] transition-colors"
+
+          {/* Quick Category Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2 overflow-x-auto max-w-full w-full md:w-auto pb-1 md:pb-0">
+            <button
+              onClick={() => setActiveCategory("All")}
+              className={`px-4 py-2 rounded-full text-xs font-black transition-all shrink-0 ${
+                activeCategory === "All"
+                  ? "bg-[#FF9530] text-white shadow-md shadow-orange-500/20"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
             >
-              <Printer className="w-5 h-5" /> Print FAQ
+              All FAQs ({totalFaqCount})
             </button>
+            {faqCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 py-2 rounded-full text-xs font-black transition-all shrink-0 ${
+                  activeCategory === cat.id
+                    ? "bg-[#FF9530] text-white shadow-md shadow-orange-500/20"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {cat.title}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* 3. Jump Links & FAQ Content */}
-      <section className="py-24 px-6 max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-16">
-          {/* Jump Links Sidebar */}
-          <div className="hidden lg:block space-y-4 sticky top-32 h-fit">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Categories</p>
+      {/* 3. Main FAQ Content Area */}
+      <section className="py-12 md:py-20 px-4 md:px-12 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Left Sidebar Category Navigation */}
+          <div className="hidden lg:block lg:col-span-4 space-y-3 sticky top-36">
+            <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 mb-2">
+              <span className="text-xs font-black text-gray-400 uppercase tracking-widest block mb-1">
+                Property Guide
+              </span>
+              <p className="text-sm font-bold text-gray-900 truncate">{name}</p>
+              <p className="text-xs text-gray-500 truncate">{location}</p>
+            </div>
+
             {faqCategories.map(cat => (
               <button 
                 key={cat.id}
                 onClick={() => {
-                  document.getElementById(cat.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  setActiveCategory(cat.id);
+                  setActiveCategory("All");
+                  setTimeout(() => {
+                    document.getElementById(cat.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }, 50);
                 }}
-                className={`w-full flex items-center justify-between p-4 rounded-2xl font-black text-left transition-all ${activeCategory === cat.id ? 'bg-gray-900 text-white shadow-xl translate-x-2' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}
+                className={`w-full flex items-center justify-between p-4 rounded-2xl font-bold text-left transition-all border ${
+                  activeCategory === cat.id
+                    ? 'bg-[#FF9530] text-white border-[#FF9530] shadow-lg shadow-orange-500/20'
+                    : 'bg-white border-gray-200/80 text-gray-800 hover:border-orange-200 hover:bg-orange-50/40'
+                }`}
               >
                 <div className="flex items-center gap-3">
-                  <cat.icon className={`w-5 h-5 ${activeCategory === cat.id ? 'text-[#FF9530]' : 'text-gray-400'}`} />
-                  {cat.title}
+                  <cat.icon className={`w-5 h-5 ${activeCategory === cat.id ? 'text-white' : 'text-[#FF9530]'}`} />
+                  <span className="text-sm">{cat.title}</span>
                 </div>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className={`w-4 h-4 ${activeCategory === cat.id ? 'text-white' : 'text-gray-400'}`} />
               </button>
             ))}
           </div>
 
-          {/* FAQ Accordions */}
-          <div className="lg:col-span-3 space-y-20">
+          {/* Right Accordion List */}
+          <div className="lg:col-span-8 space-y-12">
             {filteredFaqs.map((cat) => (
               <div key={cat.id} id={cat.id} className="scroll-mt-40">
-                <div className="flex items-center gap-4 mb-10">
-                  <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center">
-                    <cat.icon className="w-6 h-6 text-[#FF9530]" />
+                <div className="flex items-center gap-3 mb-6 pb-2 border-b border-gray-150">
+                  <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center shrink-0 border border-orange-200/60">
+                    <cat.icon className="w-5 h-5 text-[#FF9530]" />
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900">{cat.title}</h2>
+                  <h2 className="text-xl sm:text-2xl font-black text-gray-900">{cat.title}</h2>
                 </div>
                 
                 <div className="space-y-4">
-                  {cat.items.map((item) => (
-                    <div 
-                      key={item.id} 
-                      className={`rounded-[32px] border transition-all duration-300 overflow-hidden ${openItems.includes(item.id) ? 'bg-white border-[#FF9530] shadow-2xl scale-[1.02]' : 'bg-gray-50 border-gray-100 hover:border-gray-200'}`}
-                    >
-                      <button 
-                        onClick={() => toggleItem(item.id)}
-                        className="w-full p-8 flex items-center justify-between text-left"
+                  {cat.items.map((item) => {
+                    const isOpen = openItems.includes(item.id);
+                    return (
+                      <div 
+                        key={item.id} 
+                        className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                          isOpen 
+                            ? 'bg-white border-[#FF9530] shadow-lg shadow-orange-500/10' 
+                            : 'bg-white border-gray-200/80 hover:border-orange-200'
+                        }`}
                       >
-                        <span className="text-xl font-black text-gray-900 pr-8">{item.q}</span>
-                        <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all ${openItems.includes(item.id) ? 'bg-gray-900 text-[#FF9530] rotate-180' : 'bg-white text-gray-400 shadow-sm'}`}>
-                          {openItems.includes(item.id) ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
-                        </div>
-                      </button>
-                      <div className={`transition-all duration-300 ease-in-out ${openItems.includes(item.id) ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                        <div className="p-8 pt-0 text-gray-600 text-lg font-medium leading-relaxed border-t border-gray-100/50 mt-2">
-                          {item.a}
+                        <button 
+                          onClick={() => toggleItem(item.id)}
+                          className="w-full p-5 sm:p-6 flex items-center justify-between text-left gap-4"
+                        >
+                          <span className={`text-base sm:text-lg font-bold pr-2 ${isOpen ? 'text-[#FF9530]' : 'text-gray-900'}`}>
+                            {item.q}
+                          </span>
+                          <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${isOpen ? 'bg-[#FF9530] text-white rotate-180' : 'bg-gray-100 text-gray-600'}`}>
+                            {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                          </div>
+                        </button>
+
+                        <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                          <div className="p-5 sm:p-6 pt-0 text-gray-600 text-sm sm:text-base font-medium leading-relaxed border-t border-gray-100 mt-1">
+                            {item.a}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
 
             {filteredFaqs.length === 0 && (
-              <div className="py-20 text-center">
-                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <HelpCircle className="w-12 h-12 text-gray-300" />
+              <div className="py-16 text-center bg-gray-50 rounded-3xl border border-gray-200/70 p-8">
+                <div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <HelpCircle className="w-8 h-8 text-[#FF9530]" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-900 mb-4">No results found for "{searchQuery}"</h3>
-                <p className="text-gray-500 font-medium">Try searching for other keywords or contact our support team.</p>
+                <h3 className="text-xl font-black text-gray-900 mb-2">No results found for "{searchQuery}"</h3>
+                <p className="text-gray-500 text-sm font-medium">Try searching for alternative terms or contact our support team.</p>
                 <button 
-                  onClick={() => setSearchQuery("")}
-                  className="mt-8 text-[#FF9530] font-black"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveCategory("All");
+                  }}
+                  className="mt-6 text-[#FF9530] font-black text-sm hover:underline"
                 >
-                  Clear Search
+                  Reset Search &amp; Filters
                 </button>
               </div>
             )}
@@ -224,39 +269,49 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
         </div>
       </section>
 
-      {/* 4. Guest Support Section */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="bg-gray-900 rounded-[64px] p-12 md:p-20 relative overflow-hidden text-white">
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#FF9530]/5 rounded-full blur-[100px] -ml-[250px] -mt-[250px]" />
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* 4. Guest Support CTA Section */}
+      <section className="py-16 px-4 sm:px-8 bg-gray-50">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="bg-gray-900 rounded-[36px] p-8 sm:p-12 md:p-16 relative overflow-hidden text-white shadow-2xl">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#FF9530]/10 rounded-full blur-[100px] -mr-[200px] -mt-[200px]" />
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               <div>
-                <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">Need More <br /><span className="text-[#FF9530]">Help?</span></h2>
-                <p className="text-gray-400 text-xl font-medium mb-12 leading-relaxed">
-                  Our dedicated guest support team is available 24/7 to assist you with any questions or special requests.
+                <span className="text-[#FF9530] text-xs font-black uppercase tracking-widest block mb-2">
+                  DIRECT ASSISTANCE
+                </span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 leading-tight">
+                  Still Have <span className="text-[#FF9530]">Questions?</span>
+                </h2>
+                <p className="text-gray-300 text-sm sm:text-base font-medium mb-8 leading-relaxed max-w-[500px]">
+                  Our dedicated guest support team is available 24/7 to assist you with special requests, room customization, or direct booking queries.
                 </p>
-                <button className="bg-[#FF9530] text-white px-10 py-5 rounded-2xl font-black text-xl flex items-center gap-4 hover:shadow-2xl transition-all">
-                  Chat Now with Our Team <MessageSquare className="w-6 h-6" />
-                </button>
+                <a
+                  href={`/hotel/${entityKey}/contact`}
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white px-8 py-4 rounded-2xl font-black text-base shadow-xl shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                >
+                  <span>Contact Front Desk</span>
+                  <MessageSquare className="w-5 h-5" />
+                </a>
               </div>
               
-              <div className="space-y-6">
-                <div className="bg-white/5 border border-white/10 p-8 rounded-[40px] flex items-center gap-8 group hover:bg-white/10 transition-all">
-                  <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-[#FF9530] transition-colors">
-                    <Phone className="w-8 h-8 text-white" />
+              <div className="space-y-4">
+                <div className="bg-white/5 border border-white/10 p-6 rounded-2xl flex items-center gap-5 hover:bg-white/10 transition-all">
+                  <div className="w-12 h-12 bg-[#FF9530]/20 rounded-xl flex items-center justify-center shrink-0">
+                    <Phone className="w-6 h-6 text-[#FF9530]" />
                   </div>
                   <div>
-                    <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">Call Us 24/7</p>
-                    <p className="text-2xl font-black text-white">+91 98765 43210</p>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Call Reservations 24/7</p>
+                    <p className="text-lg sm:text-xl font-black text-white">+91 7399888855</p>
                   </div>
                 </div>
-                <div className="bg-white/5 border border-white/10 p-8 rounded-[40px] flex items-center gap-8 group hover:bg-white/10 transition-all">
-                  <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-[#FF9530] transition-colors">
-                    <Mail className="w-8 h-8 text-white" />
+
+                <div className="bg-white/5 border border-white/10 p-6 rounded-2xl flex items-center gap-5 hover:bg-white/10 transition-all">
+                  <div className="w-12 h-12 bg-[#FF9530]/20 rounded-xl flex items-center justify-center shrink-0">
+                    <Mail className="w-6 h-6 text-[#FF9530]" />
                   </div>
                   <div>
-                    <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">Email Us</p>
-                    <p className="text-2xl font-black text-white">support@spodia.com</p>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Email Guest Support</p>
+                    <p className="text-lg sm:text-xl font-black text-white">bookings@spodia.com</p>
                   </div>
                 </div>
               </div>
@@ -264,24 +319,9 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
           </div>
         </div>
       </section>
-
-      {/* 5. Policy Links */}
-      <section className="py-24 px-6 text-center border-t border-gray-100">
-        <p className="text-gray-400 font-bold mb-8 uppercase tracking-widest text-xs">Important Policies</p>
-        <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-          {["Privacy Policy", "Terms of Use", "Cancellation Policy", "Refund Policy"].map(policy => (
-            <button key={policy} className="text-gray-600 font-black hover:text-[#FF9530] transition-colors">
-              {policy}
-            </button>
-          ))}
-        </div>
-        <div className="mt-16 flex items-center justify-center gap-2 text-gray-400 font-bold">
-          <Star className="w-5 h-5 text-[#FF9530] fill-current" /> Rated 4.8/5 by 1K+ Guests
-        </div>
-      </section>
-
     </HotelPageShell>
   );
 };
 
 export default FAQPage;
+

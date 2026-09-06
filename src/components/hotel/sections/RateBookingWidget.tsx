@@ -6,7 +6,7 @@ import { format } from "date-fns";
 const RateBookingWidget = () => {
   const [checkIn, setCheckIn] = useState<Date>(new Date());
   const [checkOut, setCheckOut] = useState<Date>(new Date(new Date().setDate(new Date().getDate() + 2)));
-  const [guests, setGuests] = useState({ adults: 2, children: 0, rooms: 1 });
+  const [guests, setGuests] = useState({ adults: 1, children: 0, rooms: 1 });
 
   return (
     <div className="sticky top-32 bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden">

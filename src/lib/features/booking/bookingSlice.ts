@@ -112,10 +112,10 @@ export interface BookingFormData {
   checkOutDate?: string
   adults?: number
   children?: number
-  childrenAges?: number[]
+  childrenAges?: number[] // Add children ages array
   rooms?: any[]
-  cancellationPolicies?: any[]
-  cancellationPolicyId?: number | null
+  cancellationPolicies?: any[] // Cancellation policies from hotel
+  cancellationPolicyId?: number | null // Selected cancellation policy ID
   totalPrice?: number
   discount?: number
   tax?: number
@@ -124,21 +124,21 @@ export interface BookingFormData {
   hotelPrice?: number
   childPrice?: number
   hotelRating?: number
-  hotelCheckInTime?: string
-  hotelCheckOutTime?: string
+  hotelCheckInTime?: string    // e.g. "2:00 PM" from hotel API
+  hotelCheckOutTime?: string   // e.g. "12:00 PM" from hotel API
   originalHotelPrice?: number
   discountPercentage?: number
   taxationDetails?: TaxationDetail[]
   deductionDetails?: DeductionDetail[]
-  perDatePricing?: PriceDetail[]
-  promotionDetails?: any[]
-  pricingSummary?: PricingSummary
-  appliedCoupon?: AppliedCoupon | null
-  memberOnlyPromotion?: MemberOnlyPromotion | null
-  bookingId?: number | string
-  apiSummary?: any
+  perDatePricing?: PriceDetail[] // Per-date pricing from API
+  promotionDetails?: any[] // Promotion details from API
+  pricingSummary?: PricingSummary // Calculated pricing summary from modal
+  appliedCoupon?: AppliedCoupon | null // Applied coupon details
+  memberOnlyPromotion?: MemberOnlyPromotion | null // Applied member-only promotion
+  bookingId?: number | string // Backend Booking ID for state persistence
+  apiSummary?: any // Cached booking summary API response
 
-  // Initial Search Parameters
+  // Initial Search Parameters (for validation)
   initialSearchAdults?: number
   initialSearchChildren?: number
   initialSearchRooms?: number
@@ -177,12 +177,15 @@ const initialState: BookingState = {
   error: null,
 }
 
+// Async thunk for creating a booking
 export const createBooking = createAsyncThunk<Booking, Partial<Booking>, { rejectValue: string }>(
   "booking/createBooking",
   async (bookingData, { rejectWithValue }) => {
     try {
+      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
+      // Random failure for testing (10% chance)
       if (Math.random() < 0.1) {
         return rejectWithValue("Payment failed. Please try again.")
       }
@@ -203,6 +206,7 @@ export const createBooking = createAsyncThunk<Booking, Partial<Booking>, { rejec
         createdAt: new Date().toISOString(),
       }
 
+      // Save to localStorage
       if (typeof window !== "undefined") {
         const existingBookings = JSON.parse(localStorage.getItem("spodia_bookings") || "[]")
         existingBookings.push(booking)
@@ -210,7 +214,7 @@ export const createBooking = createAsyncThunk<Booking, Partial<Booking>, { rejec
       }
 
       return booking
-    } catch {
+    } catch (error) {
       return rejectWithValue("Booking failed. Please try again.")
     }
   },
@@ -261,6 +265,7 @@ const bookingSlice = createSlice({
       const booking = state.bookings.find((b) => b.id === action.payload)
       if (booking) {
         booking.status = "cancelled"
+        // Update localStorage
         if (typeof window !== "undefined") {
           localStorage.setItem("spodia_bookings", JSON.stringify(state.bookings))
         }
@@ -301,5 +306,4 @@ export const {
   cancelBooking, 
   clearError 
 } = bookingSlice.actions
-
 export default bookingSlice.reducer

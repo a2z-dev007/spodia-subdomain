@@ -14,7 +14,7 @@ const bookingData = {
     nights: 3,
   },
   guests: {
-    adults: 2,
+    adults: 1,
     children: 0,
   },
 };

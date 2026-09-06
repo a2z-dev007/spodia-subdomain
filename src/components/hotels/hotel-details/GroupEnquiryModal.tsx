@@ -667,7 +667,7 @@ const GroupEnquiryModal: React.FC<GroupEnquiryModalProps> = ({ isOpen, onClose, 
         }
       `}</style>
 
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6 md:p-10">
+      <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/70 backdrop-blur-md p-4 sm:p-6 md:p-10">
         <div className="bg-white rounded-2xl p-4 sm:p-6 max-w-xl w-full shadow-2xl relative animate-in fade-in zoom-in duration-300 overflow-y-auto max-h-[85vh]">
           {/* Close Button */}
           <button

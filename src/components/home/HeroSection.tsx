@@ -27,8 +27,8 @@ const HeroSection2 = () => {
     const [showLocationSuggestions, setShowLocationSuggestions] = useState(false)
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([])
     const [guestCounts, setGuestCounts] = useState({
-        adults: 2,
-        children: 2,
+        adults: 1,
+        children: 0,
         rooms: 1,
     })
 

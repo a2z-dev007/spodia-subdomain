@@ -4,6 +4,7 @@ import { useState, useMemo } from "react"
 import { useAppSelector } from "@/lib/hooks"
 import { Card, CardContent } from "@/components/ui/card"
 import { ChevronDown, Gift, LogIn, PartyPopper, Tag, Star, TicketPercent } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
 import PriceBreakdownModal from "./PriceBreakdownModal"
 import CouponSelector from "./CouponSelector"
 import MemberOnlyPromotion from "./MemberOnlyPromotion"
@@ -12,11 +13,12 @@ import { mapBookingSummaryToPricing } from "@/utils/mapBookingSummaryToPricing"
 const formatINR = (value: number) => `₹${Math.round(value).toLocaleString("en-IN")}`
 
 const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } = {}) => {
+  const { user } = useAuth()
   const { bookingFormData } = useAppSelector((state) => state?.booking ?? { bookingFormData: {} })
-  const accessToken = useAppSelector((state) => state?.auth?.accessToken ?? null)
   const [showBreakdown, setShowBreakdown] = useState(false)
   const [showDiscounts, setShowDiscounts] = useState(false)
 
+  // Prefer live booking-summary API data; fall back to cached pricingSummary only if needed
   const pricingSummary = useMemo(() => {
     if (bookingFormData.apiSummary) {
       return mapBookingSummaryToPricing(bookingFormData.apiSummary)
@@ -41,6 +43,7 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
   const memberOnlyDiscount = Number(pricingSummary.memberOnlyDiscount || 0)
   const couponDiscount = Number(pricingSummary.couponDiscount || 0)
   const totalDiscount = promotionDiscount + memberOnlyDiscount + couponDiscount
+  // total_base_price from API = price after discounts (before tax/fees)
   const priceAfterDiscount = Number(pricingSummary.subtotal || 0)
   const totalTax = Number(pricingSummary.totalTax || 0)
   const platformFee = Number(pricingSummary.totalDeductions || 0)
@@ -119,7 +122,7 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
             <button
               type="button"
               onClick={() => setShowBreakdown(true)}
-              className="text-[#078ED8] hover:text-[#0679b8] text-xs font-bold flex items-center gap-1 cursor-pointer select-none rounded px-1 py-0.5"
+              className="text-[#078ED8] hover:text-[#0679b8] text-xs font-bold flex items-center gap-1 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#078ED8]/40 rounded px-1 py-0.5"
             >
               <span>View Full Breakup</span>
               <ChevronDown className="w-4 h-4" aria-hidden="true" />
@@ -127,7 +130,8 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
           </div>
 
           {isPricingLoading ? (
-            <div className="p-6 space-y-4 animate-pulse">
+            <div className="p-6 space-y-4 animate-pulse" aria-label="Loading pricing summary">
+              {/* Base price shimmer */}
               <div className="flex justify-between items-center">
                 <div className="space-y-1.5 flex-1">
                   <div className="h-4 bg-gray-200 rounded w-24" />
@@ -135,15 +139,32 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
                 </div>
                 <div className="h-4 bg-gray-200 rounded w-16" />
               </div>
+
+              {/* Total discount shimmer */}
               <div className="flex justify-between items-center py-0.5">
                 <div className="h-4 bg-gray-200 rounded w-28" />
                 <div className="h-4 bg-emerald-200/60 rounded w-16" />
               </div>
+
+              {/* Price after discount shimmer */}
               <div className="flex justify-between items-center">
                 <div className="h-4 bg-gray-200 rounded w-36" />
                 <div className="h-4 bg-gray-200 rounded w-16" />
               </div>
+
+              {/* GST & Platform Fee shimmer */}
+              <div className="flex justify-between items-center">
+                <div className="h-4 bg-gray-200 rounded w-12" />
+                <div className="h-4 bg-gray-200 rounded w-12" />
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="h-4 bg-gray-200 rounded w-24" />
+                <div className="h-4 bg-gray-200 rounded w-12" />
+              </div>
+
               <div className="border-t border-gray-200 my-4" />
+
+              {/* Total amount shimmer */}
               <div className="flex justify-between items-start">
                 <div className="space-y-1 flex-1">
                   <div className="h-5 bg-gray-200 rounded w-28" />
@@ -151,9 +172,13 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
                 </div>
                 <div className="h-7 bg-gray-200 rounded w-24" />
               </div>
+
+              {/* Savings banner shimmer */}
+              <div className="h-9 bg-emerald-100/70 rounded-lg w-full" />
             </div>
           ) : (
             <div className="p-6 space-y-4">
+              {/* Base Price = original_hotel_price */}
               <div className="flex justify-between items-start gap-3">
                 <div className="min-w-0">
                   <span className="text-sm font-semibold text-gray-700 block">Base Price</span>
@@ -166,19 +191,23 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
                 </span>
               </div>
 
+              {/* Total Discount row — expands smoothly to reveal each discount */}
               {discountRows.length > 0 && (
                 <div>
                   <button
                     type="button"
                     onClick={() => setShowDiscounts((s) => !s)}
-                    className="w-full flex justify-between items-center gap-3 text-sm"
+                    aria-expanded={showDiscounts}
+                    aria-controls="discount-breakdown"
+                    className="w-full flex justify-between items-center gap-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 rounded"
                   >
                     <span className="flex items-center gap-1 text-gray-500 font-semibold">
                       Total Discount
                       <ChevronDown
-                        className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                        className={`w-4 h-4 text-gray-400 transition-transform duration-300 motion-reduce:transition-none ${
                           showDiscounts ? "rotate-180" : ""
                         }`}
+                        aria-hidden="true"
                       />
                     </span>
                     <span className="font-extrabold text-emerald-600 tabular-nums shrink-0">
@@ -186,24 +215,32 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
                     </span>
                   </button>
 
-                  {showDiscounts && (
-                    <div className="space-y-2 pt-2.5 pl-3 border-l-2 border-gray-100 ml-0.5 mt-1">
-                      {discountRows.map((row) => (
-                        <div key={row.key} className="flex justify-between items-center gap-3">
-                          <span className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-500 min-w-0 truncate">
-                            {row.icon}
-                            {row.label}
-                          </span>
-                          <span className="text-[13px] font-extrabold text-emerald-600 tabular-nums shrink-0">
-                            -{formatINR(row.amount)}
-                          </span>
-                        </div>
-                      ))}
+                  <div
+                    id="discount-breakdown"
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${
+                      showDiscounts ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="space-y-2 pt-2.5 pl-3 border-l-2 border-gray-100 ml-0.5 mt-1">
+                        {discountRows.map((row) => (
+                          <div key={row.key} className="flex justify-between items-center gap-3">
+                            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-500 min-w-0 truncate">
+                              {row.icon}
+                              {row.label}
+                            </span>
+                            <span className="text-[13px] font-extrabold text-emerald-600 tabular-nums shrink-0">
+                              -{formatINR(row.amount)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
 
+              {/* Price after Discount = total_base_price */}
               {totalDiscount > 0 && (
                 <div className="flex justify-between items-center gap-3 text-sm">
                   <span className="text-gray-500 font-semibold">Price after Discount</span>
@@ -229,6 +266,7 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
 
               <div className="border-t border-gray-200 my-4" />
 
+              {/* Grand Total = grand_total */}
               <div className="flex justify-between items-start gap-3">
                 <div className="min-w-0">
                   <span className="text-base font-extrabold text-gray-900 block">Total Amount</span>
@@ -239,20 +277,24 @@ const BookingSummaryCard = ({ onRequestLogin }: { onRequestLogin?: () => void } 
                 </span>
               </div>
 
+              {/* Savings celebration strip */}
               {totalDiscount > 0 && (
-                <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-3.5 py-2.5 text-white">
-                  <PartyPopper className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  <p className="text-xs font-black">
+                <div
+                  aria-live="polite"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-3.5 py-2.5"
+                >
+                  <PartyPopper className="w-4 h-4 text-white shrink-0" aria-hidden="true" />
+                  <p className="text-xs font-black text-white">
                     You&apos;re saving {formatINR(totalDiscount)} on this booking
                   </p>
                 </div>
               )}
 
-              {!accessToken && onRequestLogin && (
+              {!user && (
                 <button
                   type="button"
                   onClick={onRequestLogin}
-                  className="flex items-center gap-2.5 bg-[#eaf6ff]/70 border border-dashed border-[#badaff] rounded-xl p-3.5 mt-2 w-full text-left hover:bg-[#eaf6ff] transition-colors cursor-pointer"
+                  className="flex items-center gap-2.5 bg-[#eaf6ff]/70 border border-dashed border-[#badaff] rounded-xl p-3.5 mt-2 w-full text-left hover:bg-[#eaf6ff] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#078ED8]/40"
                 >
                   <div className="w-7 h-7 bg-[#badaff]/50 rounded-full flex items-center justify-center shrink-0">
                     <Gift className="w-4 h-4 text-[#078ED8]" aria-hidden="true" />

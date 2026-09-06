@@ -18,7 +18,16 @@ import {
   Car,
   Coffee,
   Utensils,
-  Loader2
+  Loader2,
+  Mail,
+  FileText,
+  Shield,
+  X,
+  ChevronDown,
+  Tag,
+  Sparkles,
+  Ticket,
+  PartyPopper,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -27,11 +36,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from 'react-toastify'
 import Link from "next/link"
-import { getReservationDetails, addReview } from "@/services/api"
+import { getReservationDetails, getManageBooking, getCancellationPreview, addReview } from "@/services/api"
 import { IMAGE_BASE_URL } from "@/lib/api/apiClient"
+import CancelBookingModal, { type CancellationPreview } from "./CancelBookingModal"
 
 interface BookingDetailsContentProps {
-  bookingId: string
+  bookingId?: string
+  manageToken?: string
 }
 
 interface BookingDetails {
@@ -52,15 +63,38 @@ interface BookingDetails {
     tax: string
     service_charge: string
     total_price: string
+    discount?: string
     status: string
     created: string
-    payment_method: string
-    payment_type: string
+    payment_method: string | null
+    payment_type: string | null
     invoice_number: string
     booking_type: string
     message: string
     room_notes: string
     already_reviewed?: number
+    razorpay_payment_id?: string | null
+    house_number?: string | null
+    street?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    country?: string | null
+    gst?: boolean
+    gst_number?: string | null
+    gst_company_name?: string | null
+    gst_phone_number?: string | null
+    gst_address?: string | null
+    cancellation_policy_name?: string | null
+    cancellation_policy_no_of_days?: number | null
+    cancellation_policy_description?: string | null
+    traveller_details?: {
+      email?: string | null
+      first_name?: string | null
+      last_name?: string | null
+      mobile?: string | null
+      full_name?: string | null
+    } | null
     listingdetails: {
       id: number
       name: string
@@ -87,6 +121,7 @@ interface BookingDetails {
         dimensions: string
         no_of_beds: number
         maximum_occupancy: number
+        room_view?: string
         images: Array<{
           id: number
           file: string
@@ -96,6 +131,15 @@ interface BookingDetails {
           id: number
           name: string
           image: string
+        }>
+        plans?: Array<{
+          id: number
+          plan: number
+          plan_name: string
+          plan_items?: Array<{
+            id: number
+            name: string
+          }>
         }>
       }>
       facilitiesDetails: Array<{
@@ -107,7 +151,25 @@ interface BookingDetails {
   }
 }
 
-const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
+/** Returns true when a value is meaningful for UI display */
+const hasValue = (value: unknown): boolean => {
+  if (value === null || value === undefined) return false
+  if (typeof value === "string") return value.trim().length > 0
+  if (typeof value === "number") return !Number.isNaN(value)
+  if (typeof value === "boolean") return value
+  return true
+}
+
+const hasPositiveAmount = (value?: string | null): boolean => {
+  if (!hasValue(value)) return false
+  const num = parseFloat(String(value))
+  return !Number.isNaN(num) && num > 0
+}
+
+const BookingDetailsContent = ({ bookingId, manageToken }: BookingDetailsContentProps) => {
+  const isGuestAccess = Boolean(manageToken)
+  const backHref = isGuestAccess ? "/" : "/my-bookings"
+  const backLabel = isGuestAccess ? "Back to Home" : "Back to My Bookings"
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -125,10 +187,18 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
     recommended: true
   })
   const [submittingReview, setSubmittingReview] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [isLoadingCancel, setIsLoadingCancel] = useState(false)
+  const [cancellationData, setCancellationData] = useState<CancellationPreview | null>(null)
+  const [showDiscounts, setShowDiscounts] = useState(true)
 
   useEffect(() => {
-    // Check if user is authenticated before making API call
-    if (typeof window !== 'undefined') {
+    if (manageToken) {
+      fetchBookingDetails()
+      return
+    }
+
+    if (typeof window !== "undefined") {
       const token = localStorage.getItem("spodia_access_token")
       if (!token) {
         window.location.href = "/login"
@@ -136,20 +206,29 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
       }
       fetchBookingDetails()
     }
-  }, [bookingId])
+  }, [bookingId, manageToken])
 
   const fetchBookingDetails = async () => {
     try {
       setLoading(true)
 
-      if (typeof window === 'undefined') {
+      if (manageToken) {
+        const response = await getManageBooking(manageToken)
+        setBookingDetails(response.data)
+        return
+      }
+
+      if (!bookingId) {
+        setError("Booking not found.")
+        return
+      }
+
+      if (typeof window === "undefined") {
         return
       }
 
       const token = localStorage.getItem("spodia_access_token")
-
       if (!token) {
-        // Redirect to login if not authenticated
         window.location.href = "/login"
         return
       }
@@ -169,6 +248,76 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
     }
   }
 
+  const getBookingRecord = (data: any) => {
+    if (!data) return null
+    if (data.records) return data.records
+    if (data.data) return data.data
+    if (data.id) return data
+    return null
+  }
+
+  const handleCancelClick = async () => {
+    const booking = getBookingRecord(bookingDetails)
+    if (!booking) return
+
+    if (manageToken) {
+      setCancellationData({
+        status: "success",
+        cancellation_type: "",
+        amount_to_refund: 0,
+        hours: 0,
+        reservation_detail: {
+          cancellation_policy_name: booking.cancellation_policy_name,
+          cancellation_policy_description: booking.cancellation_policy_description,
+          cancellation_policy_no_of_days: booking.cancellation_policy_no_of_days,
+        },
+      })
+      setShowCancelModal(true)
+      return
+    }
+
+    if (!booking.id) return
+
+    try {
+      setIsLoadingCancel(true)
+      const response = await getCancellationPreview(booking.id)
+
+      const data = response.data
+      if (data.status === "success" || data.status === true) {
+        setCancellationData(data)
+        setShowCancelModal(true)
+      } else {
+        toast.error(data.message || "Unable to fetch cancellation details", {
+          position: "top-right",
+          autoClose: 4000,
+        })
+      }
+    } catch (err: any) {
+      console.error("Error fetching cancellation preview:", err)
+      const apiErrorMessage =
+        err?.response?.data?.message ||
+        err?.response?.data?.detail ||
+        err?.data?.message ||
+        err?.message
+
+      toast.error(apiErrorMessage || "Failed to load cancellation details. Please try again.", {
+        position: "top-right",
+        autoClose: 4000,
+      })
+    } finally {
+      setIsLoadingCancel(false)
+    }
+  }
+
+  const handleCancelSuccess = () => {
+    fetchBookingDetails()
+  }
+
+  const handleCancelModalClose = () => {
+    setShowCancelModal(false)
+    setCancellationData(null)
+  }
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       weekday: "long",
@@ -178,15 +327,18 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
     })
   }
 
-  const formatPrice = (price: string) => {
+  const formatPrice = (price: string | number) => {
+    const amount = Math.round(typeof price === "number" ? price : parseFloat(price) || 0)
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "INR"
-    }).format(parseFloat(price))
+      currency: "INR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount)
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+  const getStatusColor = (status?: string) => {
+    switch ((status || "").toLowerCase()) {
       case "confirmed":
         return "bg-green-100 text-green-800 border-green-200"
       case "completed":
@@ -202,9 +354,11 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
   }
 
   const getCoverImage = () => {
-    if (!bookingDetails?.records.listingdetails.images) return "/placeholder.svg"
-    const coverImage = bookingDetails.records.listingdetails.images.find(img => img.cover_photo)
-    return coverImage?.file || bookingDetails.records.listingdetails.images[0]?.file || "/placeholder.svg"
+    const booking = getBookingRecord(bookingDetails)
+    const images = booking?.listingdetails?.images
+    if (!images || !Array.isArray(images) || images.length === 0) return "/placeholder.svg"
+    const coverImage = images.find((img: any) => img.cover_photo)
+    return coverImage?.file || images[0]?.file || "/placeholder.svg"
   }
 
   const handleRatingClick = (category: string, rating: number) => {
@@ -239,7 +393,7 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
       console.log("Submitting review data:", reviewData)
       console.log("Booking ID:", bookingId)
 
-      const response = await addReview(bookingId, reviewData)
+      const response = await addReview(bookingId!, reviewData)
       console.log("Response data:", response.data)
 
       if (response.data.status === "success") {
@@ -313,16 +467,25 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
     )
   }
 
-  if (error || !bookingDetails) {
+  const booking = getBookingRecord(bookingDetails)
+
+  if (error || !bookingDetails || !booking) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Booking</h1>
-          <p className="text-gray-600 mb-6">{error || "Booking not found"}</p>
-          <Link href="/my-bookings">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {isGuestAccess ? "Unable to Access Booking" : "Error Loading Booking"}
+          </h1>
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            {error ||
+              (isGuestAccess
+                ? "This link may be invalid or expired. Please open the latest manage-booking link from your confirmation email."
+                : "Booking not found")}
+          </p>
+          <Link href={backHref}>
             <Button className="bg-[#FF9530] hover:bg-[#e8851c] text-white">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to My Bookings
+              {backLabel}
             </Button>
           </Link>
         </div>
@@ -330,32 +493,140 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
     )
   }
 
-  const booking = bookingDetails.records
+  const canCancel = booking.status ? booking.status.toLowerCase() === "confirmed" : false
+
+  // Parse room_notes JSON string to display the actual booked room types, quantities, and plans
+  let bookedRooms: any[] = []
+  let hasParsedRoomNotes = false
+
+  if (booking && booking.room_notes) {
+    try {
+      const parsed = JSON.parse(booking.room_notes)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        bookedRooms = parsed
+        hasParsedRoomNotes = true
+      }
+    } catch (err) {
+      console.error("Failed to parse room_notes:", err)
+    }
+  }
+
+  const findRoomMeta = (bookedRoom: any) => {
+    const rooms = booking.listingdetails?.rooms || []
+    if (bookedRoom?.id != null) {
+      const byId = rooms.find((r) => Number(r.id) === Number(bookedRoom.id))
+      if (byId) return byId
+    }
+    if (hasValue(bookedRoom?.room_name)) {
+      const name = String(bookedRoom.room_name).trim().toLowerCase()
+      return rooms.find((r) => r.room_name?.trim().toLowerCase() === name) || null
+    }
+    return null
+  }
+
+  const promotionDiscount = Number(booking.booking_summary?.promotion_discount || booking.discount || 0)
+  const memberDiscount = Number(booking.booking_summary?.member_only_promotion || 0)
+  const couponDiscount = Number(booking.booking_summary?.coupon_promotion || 0)
+  const totalDiscount = promotionDiscount + memberDiscount + couponDiscount
+
+  const basePrice = Number(booking.booking_summary?.original_hotel_price || booking.price || 0)
+  const priceAfterDiscount = Number(booking.booking_summary?.total_base_price || (basePrice > 0 && totalDiscount > 0 ? basePrice - totalDiscount : 0))
+  const totalTax = Number(booking.booking_summary?.total_tax || booking.tax || 0)
+  const platformFee = Number(booking.booking_summary?.platform_fee || booking.service_charge || 0)
+  const grandTotal = Number(booking.booking_summary?.grand_total || booking.total_price || 0)
+
+  const getPlanIncludesLabel = (plan: any, roomMeta: any): string | null => {
+    if (Array.isArray(plan?.includes) && plan.includes.length > 0) {
+      const labels = plan.includes
+        .map((item: any) => (typeof item === "string" ? item : item?.name))
+        .filter(hasValue)
+      if (labels.length > 0) return labels.join(", ")
+    }
+    if (typeof plan?.includes === "string" && plan.includes.trim()) {
+      return plan.includes.trim()
+    }
+
+    const listingPlan = roomMeta?.plans?.find(
+      (p: any) => p.plan_name?.toUpperCase() === plan?.plan_name?.toUpperCase()
+    )
+    const planItems = listingPlan?.plan_items
+      ?.map((item: any) => item?.name)
+      .filter(hasValue)
+    if (planItems?.length) return planItems.join(", ")
+
+    return null
+  }
+
+  const getPlanPriceInfo = (plan: any) => {
+    const priceInfo = plan?.adults_info?.[0]?.price_info?.[0]
+    if (!priceInfo) return null
+
+    const ratePerNight =
+      Number(priceInfo.price_per_day ?? priceInfo.price_per_qty ?? priceInfo.gross_price) || null
+    const discountValue = Number(priceInfo.discount_value) || 0
+    const gstPerDay = Number(priceInfo.gst_per_day) || 0
+    const totalPrice = Number(priceInfo.total_price) || null
+    const grossPrice = Number(priceInfo.gross_price) || null
+
+    return { ratePerNight, discountValue, gstPerDay, totalPrice, grossPrice, date: priceInfo.date }
+  }
+
+  const getPlanGuestCounts = (plan: any, bookedRoom: any) => {
+    const adultInfo = plan?.adults_info?.[0]
+    const adults = Number(adultInfo?.no_of_adults ?? adultInfo?.no_adults ?? bookedRoom?.room_for_adult ?? booking.no_of_adults) || 0
+    const children = Number(adultInfo?.no_of_child ?? booking.no_of_child) || 0
+    return { adults, children }
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  sm:py-6 lg:py-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <div className="flex flex-col space-y-3">
-          <Link href="/my-bookings">
+          <Link href={backHref}>
             <Button variant="ghost" size="sm" className="w-fit">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to My Bookings
+              {backLabel}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">{booking.listingdetails.name}</h1>
             <p className="text-sm sm:text-base text-gray-600">Booking #{booking.booking_number}</p>
+            {/* {isGuestAccess && (
+              <p className="text-xs text-[#078ED8] font-semibold mt-1">Guest booking access</p>
+            )} */}
           </div>
         </div>
-        <Badge className={`${getStatusColor(booking.status)} w-fit`}>
-          {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-        </Badge>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          {canCancel && (
+            <Button
+              onClick={handleCancelClick}
+              disabled={isLoadingCancel}
+              variant="outline"
+              className="border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-full h-10 px-5 font-semibold"
+            >
+              {isLoadingCancel ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <X className="w-4 h-4 mr-2" />
+                  Cancel Booking
+                </>
+              )}
+            </Button>
+          )}
+          <Badge className={`${getStatusColor(booking.status)} w-fit`}>
+            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6 lg:space-y-8">
+        {/* Hotel details — first on mobile, top-left on desktop */}
+        <div className="order-1 lg:col-span-2">
           {/* Hotel Images */}
           <Card>
             <CardContent className="p-0">
@@ -382,30 +653,49 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
                   </div>
                 </div>
 
-                <div className="flex items-start text-gray-600 mb-4">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm sm:text-base break-words">{booking.listingdetails.address}</span>
-                </div>
+                {([
+                  booking.listingdetails.address,
+                  booking.listingdetails.city_name,
+                  booking.listingdetails.state_name,
+                  booking.listingdetails.country_name,
+                ].some(hasValue)) && (
+                    <div className="flex items-start text-gray-600 mb-4">
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm sm:text-base break-words">
+                        {[
+                          booking.listingdetails.address,
+                          booking.listingdetails.city_name,
+                          booking.listingdetails.state_name,
+                          booking.listingdetails.country_name,
+                        ].filter(hasValue).join(", ")}
+                      </span>
+                    </div>
+                  )}
 
-                <div className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                  {showFullDescription || booking.listingdetails.description.length <= 200 ? (
-                    <p>{booking.listingdetails.description}</p>
-                  ) : (
-                    <p>{booking.listingdetails.description.substring(0, 200)}...</p>
-                  )}
-                  {booking.listingdetails.description.length > 200 && (
-                    <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
-                      className="text-[#078ED8] hover:text-[#0679b8] font-medium mt-2 text-sm"
-                    >
-                      {showFullDescription ? "Show Less" : "Show More"}
-                    </button>
-                  )}
-                </div>
+                {hasValue(booking.listingdetails.description) && (
+                  <div className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                    {showFullDescription || booking.listingdetails.description.length <= 200 ? (
+                      <p>{booking.listingdetails.description}</p>
+                    ) : (
+                      <p>{booking.listingdetails.description.substring(0, 200)}...</p>
+                    )}
+                    {booking.listingdetails.description.length > 200 && (
+                      <button
+                        onClick={() => setShowFullDescription(!showFullDescription)}
+                        className="text-[#078ED8] hover:text-[#0679b8] font-medium mt-2 text-sm"
+                      >
+                        {showFullDescription ? "Show Less" : "Show More"}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
+        </div>
 
+        {/* Timeline + rooms + amenities + review — third on mobile (after summary), left column below hotel on desktop */}
+        <div className="order-3 lg:order-2 lg:col-span-2 space-y-6 lg:space-y-8">
           {/* Booking Timeline */}
           <Card>
             <CardHeader>
@@ -415,34 +705,40 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
+              <div className="flex flex-wrap gap-4 sm:gap-6">
+                <div className="flex items-start gap-3 min-w-[160px] flex-1 basis-[160px]">
                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0">
                     <p className="font-medium text-sm sm:text-base">Booking Confirmed</p>
                     <p className="text-xs sm:text-sm text-gray-500 break-words">{formatDate(booking.created)}</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
+                <div className="flex items-start gap-3 min-w-[160px] flex-1 basis-[160px]">
                   <Calendar className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0">
                     <p className="font-medium text-sm sm:text-base">Check-in</p>
-                    <p className="text-xs sm:text-sm text-gray-500 break-words">{formatDate(booking.arrival_date)} at {booking.listingdetails.check_in}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 break-words">
+                      {formatDate(booking.arrival_date)}
+                      {hasValue(booking.listingdetails?.check_in) && ` at ${booking.listingdetails.check_in}`}
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
+                <div className="flex items-start gap-3 min-w-[160px] flex-1 basis-[160px]">
                   <Calendar className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0">
                     <p className="font-medium text-sm sm:text-base">Check-out</p>
-                    <p className="text-xs sm:text-sm text-gray-500 break-words">{formatDate(booking.departure_date)} by {booking.listingdetails.check_out}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 break-words">
+                      {formatDate(booking.departure_date)}
+                      {hasValue(booking.listingdetails?.check_out) && ` by ${booking.listingdetails.check_out}`}
+                    </p>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Room Details */}
-          {booking.listingdetails.rooms && booking.listingdetails.rooms.length > 0 && (
+          {/* Room Details — only booked rooms from room_notes */}
+          {hasParsedRoomNotes && bookedRooms.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center text-lg sm:text-xl">
@@ -452,49 +748,163 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 sm:space-y-6">
-                  {booking.listingdetails.rooms.map((room) => (
-                    <div key={room.id} className="border rounded-lg p-3 sm:p-4">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-base sm:text-lg break-words">{room.room_name}</h3>
-                          <p className="text-gray-600 text-xs sm:text-sm mt-1 break-words">
-                            {room.description.length > 100
-                              ? `${room.description.substring(0, 100)}...`
-                              : room.description}
-                          </p>
+                  {bookedRooms.map((bookedRoom, idx) => {
+                    const roomMeta = findRoomMeta(bookedRoom)
+                    const roomImage = roomMeta?.images?.[0]?.file || getCoverImage()
+                    const roomCount = Number(bookedRoom.opted_count || bookedRoom.selectedRoomCount || 1)
+                    const activePlans = (bookedRoom.plans || []).filter(
+                      (plan: any) => Number(plan.selectedRoomCount) > 0 || hasValue(plan.plan_name)
+                    )
+                    const primaryPlan = activePlans[0]
+                    const guestCounts = getPlanGuestCounts(primaryPlan, bookedRoom)
+                    const bedType = roomMeta?.bed_type
+                    const roomSize = roomMeta?.dimensions
+                    const bedsCount = roomMeta?.no_of_beds ?? bookedRoom.no_of_beds
+                    const roomView = roomMeta?.room_view
+                    const hasSpecs = hasValue(bedType) || hasValue(roomSize) || hasValue(bedsCount) || guestCounts.adults > 0 || hasValue(roomView)
+
+                    return (
+                      <div key={bookedRoom.id || bookedRoom.room_name || idx} className="border rounded-lg p-3 sm:p-4">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h3 className="font-semibold text-base sm:text-lg break-words">
+                                {bookedRoom.room_name || roomMeta?.room_name}
+                              </h3>
+                              {roomCount > 0 && (
+                                <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+                                  {roomCount} Room{roomCount > 1 ? "s" : ""}
+                                </Badge>
+                              )}
+                            </div>
+                            {hasValue(roomMeta?.description) && (
+                              <p className="text-gray-600 text-xs sm:text-sm mt-1 break-words">
+                                {roomMeta!.description!.length > 100
+                                  ? `${roomMeta!.description!.substring(0, 100)}...`
+                                  : roomMeta!.description}
+                              </p>
+                            )}
+                          </div>
+                          {roomImage && (
+                            <div className="relative w-full sm:w-20 h-16 rounded-lg overflow-hidden sm:ml-4 flex-shrink-0">
+                              <Image
+                                src={roomImage}
+                                alt={bookedRoom.room_name || "Room Image"}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          )}
                         </div>
-                        {room.images && room.images.length > 0 && (
-                          <div className="relative w-full sm:w-20 h-16 rounded-lg overflow-hidden sm:ml-4 flex-shrink-0">
-                            <Image
-                              src={room.images[0].file}
-                              alt={room.room_name}
-                              fill
-                              className="object-cover"
-                            />
+
+                        {hasSpecs && (
+                          <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 ${activePlans.length > 0 ? "border-b pb-4 mb-4" : ""}`}>
+                            {hasValue(bedType) && (
+                              <div>
+                                <p className="text-xs text-gray-500">Bed Type</p>
+                                <p className="font-medium text-xs sm:text-sm break-words">{bedType}</p>
+                              </div>
+                            )}
+                            {hasValue(roomSize) && (
+                              <div>
+                                <p className="text-xs text-gray-500">Room Size</p>
+                                <p className="font-medium text-xs sm:text-sm">{roomSize}</p>
+                              </div>
+                            )}
+                            {hasValue(bedsCount) && (
+                              <div>
+                                <p className="text-xs text-gray-500">Beds</p>
+                                <p className="font-medium text-xs sm:text-sm">{bedsCount}</p>
+                              </div>
+                            )}
+                            {hasValue(roomView) && (
+                              <div>
+                                <p className="text-xs text-gray-500">View</p>
+                                <p className="font-medium text-xs sm:text-sm break-words">{roomView}</p>
+                              </div>
+                            )}
+                            {(guestCounts.adults > 0 || guestCounts.children > 0) && (
+                              <div>
+                                <p className="text-xs text-gray-500">Guests</p>
+                                <p className="font-medium text-xs sm:text-sm">
+                                  {[
+                                    guestCounts.adults > 0 ? `${guestCounts.adults} Adult${guestCounts.adults > 1 ? "s" : ""}` : null,
+                                    guestCounts.children > 0 ? `${guestCounts.children} Child${guestCounts.children > 1 ? "ren" : ""}` : null,
+                                  ]
+                                    .filter(Boolean)
+                                    .join(", ")}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {activePlans.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold text-gray-700">Booked Plans & Meals</p>
+                            {activePlans.map((plan: any, pIdx: number) => {
+                              const includesLabel = getPlanIncludesLabel(plan, roomMeta)
+                              const priceInfo = getPlanPriceInfo(plan)
+                              const planRoomCount = Number(plan.selectedRoomCount) || roomCount || 1
+
+                              return (
+                                <div
+                                  key={plan.plan || plan.plan_name || pIdx}
+                                  className="bg-green-50/50 border border-green-100 rounded-lg p-2.5 flex items-start justify-between gap-4"
+                                >
+                                  <div className="min-w-0">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      {hasValue(plan.plan_name) && (
+                                        <span className="font-bold text-xs text-green-800">{plan.plan_name}</span>
+                                      )}
+                                      {includesLabel && (
+                                        <span className="text-xs text-green-700">({includesLabel})</span>
+                                      )}
+                                    </div>
+                                    {/* {priceInfo && (
+                                      <div className="mt-1 space-y-0.5">
+                                        {priceInfo.ratePerNight != null && (
+                                          <p className="text-[11px] text-gray-600">
+                                            Rate per night: {formatPrice(priceInfo.ratePerNight)}
+                                            {priceInfo.discountValue > 0 && (
+                                              <span className="text-green-600 font-medium ml-2">
+                                                (Saved {formatPrice(priceInfo.discountValue)})
+                                              </span>
+                                            )}
+                                          </p>
+                                        )}
+                                        {priceInfo.grossPrice != null && priceInfo.grossPrice !== priceInfo.ratePerNight && (
+                                          <p className="text-[11px] text-gray-500">
+                                            Original: {formatPrice(priceInfo.grossPrice)}
+                                          </p>
+                                        )}
+                                        {priceInfo.gstPerDay > 0 && (
+                                          <p className="text-[11px] text-gray-500">
+                                            GST: {formatPrice(priceInfo.gstPerDay)}
+                                          </p>
+                                        )}
+                                      </div>
+                                    )} */}
+                                  </div>
+                                  {planRoomCount > 0 && (
+                                    <span className="text-xs font-medium text-gray-600 bg-white px-2 py-0.5 rounded border flex-shrink-0">
+                                      {planRoomCount} Room{planRoomCount > 1 ? "s" : ""}
+                                    </span>
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
+
+                        {hasValue(bookedRoom.extra_bed_type) && (
+                          <div className="mt-3 text-xs bg-yellow-50 border border-yellow-100 text-yellow-800 rounded px-2.5 py-1.5 w-fit">
+                            <strong>Extra Bed:</strong> {bookedRoom.extra_bed_type}
                           </div>
                         )}
                       </div>
-
-                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                        <div>
-                          <p className="text-xs sm:text-sm text-gray-500">Bed Type</p>
-                          <p className="font-medium text-sm sm:text-base break-words">{room.bed_type}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm text-gray-500">Room Size</p>
-                          <p className="font-medium text-sm sm:text-base">{room.dimensions}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs sm:text-sm text-gray-500">Beds</p>
-                          <p className="font-medium text-sm sm:text-base">{room.no_of_beds}</p>
-                        </div>
-                        {/* <div>
-                          <p className="text-xs sm:text-sm text-gray-500">Max Occupancy</p>
-                          <p className="font-medium text-sm sm:text-base">{room.maximum_occupancy} guests</p>
-                        </div> */}
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -530,7 +940,7 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
                                 e.currentTarget.style.display = 'none';
                                 const parent = e.currentTarget.parentElement;
                                 if (parent) {
-                                    parent.innerHTML = '<svg class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>';
+                                  parent.innerHTML = '<svg class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>';
                                 }
                               }}
                             />
@@ -565,9 +975,9 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
             </Card>
           )}
 
-          {/* Review Section - Show for all bookings but only allow submission for completed */}
+          {/* Review Section — authenticated users only */}
           {
-            booking?.already_reviewed !== 1 && (
+            !isGuestAccess && booking?.already_reviewed !== 1 && (
               <Card className="shadow-lg border-0">
                 <CardContent className="p-4 sm:p-6 lg:p-10">
                   {/* {booking.status.toLowerCase() !== 'completed' && (
@@ -775,115 +1185,391 @@ const BookingDetailsContent = ({ bookingId }: BookingDetailsContentProps) => {
 
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-4 sm:space-y-6">
+        {/* Sidebar — second on mobile (below hotel, above timeline); sticky right column on desktop */}
+        <div className="order-2 lg:order-3 lg:col-start-3 lg:row-start-1 lg:row-span-2 space-y-4 sm:space-y-6 lg:sticky lg:top-8 h-fit self-start">
+          {/* Payment & Pricing Summary */}
+          <Card className="overflow-hidden border border-gray-200/80 shadow-sm rounded-2xl">
+            <CardHeader className="pb-3 border-b border-gray-100 bg-gray-50/50">
+              <CardTitle className="text-lg sm:text-xl font-bold text-gray-900 flex items-center justify-between">
+                <span>Payment &amp; Pricing Summary</span>
+                <CreditCard className="w-5 h-5 text-gray-400" />
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 sm:p-6 space-y-4">
+              {/* Room Price Breakdown */}
+              {booking.booking_summary?.rooms && booking.booking_summary.rooms.length > 0 && (
+                <div className="bg-gray-50/80 rounded-xl p-3 sm:p-4 space-y-2 border border-gray-100">
+                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    Room Price Breakdown
+                  </p>
+                  <div className="space-y-1.5">
+                    {booking.booking_summary.rooms.map((r: any, i: number) => (
+                      <div key={i} className="flex justify-between items-center text-xs sm:text-sm text-gray-700">
+                        <span className="truncate max-w-[220px] font-medium">
+                          {(r.quantity || 1) > 1 ? `${r.quantity}x ` : ""}{r.room || "Room"}{r.plan ? ` (${r.plan})` : ""}
+                          {r.adults ? ` • ${r.adults} Guest${r.adults > 1 ? "s" : ""}` : ""}
+                        </span>
+                        <span className="font-bold text-gray-900 tabular-nums">
+                          {formatPrice(r.original_hotel_price || r.total || r.base_price || 0)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3 pt-1">
+                {/* Room Base Price */}
+                {basePrice > 0 && (
+                  <div className="flex justify-between items-center text-sm">
+                    <div>
+                      <span className="font-semibold text-gray-700 block">Room Base Price</span>
+                      {booking.total_rooms > 0 && booking.no_of_days > 0 && (
+                        <span className="text-[11px] text-gray-400 font-medium block">
+                          {booking.total_rooms} Room{booking.total_rooms > 1 ? "s" : ""} × {booking.no_of_days} Night{booking.no_of_days > 1 ? "s" : ""}
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-bold text-gray-900 tabular-nums">
+                      {formatPrice(basePrice)}
+                    </span>
+                  </div>
+                )}
+
+                {/* Total Discount Row */}
+                {totalDiscount > 0 && (
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowDiscounts((s) => !s)}
+                      className="w-full flex justify-between items-center text-sm font-semibold focus:outline-none cursor-pointer"
+                    >
+                      <span className="flex items-center gap-1.5 text-emerald-700">
+                        <Tag className="w-4 h-4 text-emerald-600" />
+                        Total Discount
+                        <ChevronDown
+                          className={`w-4 h-4 text-emerald-600 transition-transform duration-300 ${
+                            showDiscounts ? "rotate-180" : ""
+                          }`}
+                        />
+                      </span>
+                      <span className="font-extrabold text-emerald-600 tabular-nums">
+                        -{formatPrice(totalDiscount)}
+                      </span>
+                    </button>
+
+                    {showDiscounts && (
+                      <div className="space-y-2 pl-5">
+                        {promotionDiscount > 0 && (
+                          <div className="flex justify-between items-center text-sm text-emerald-600">
+                            <span className="flex items-center gap-1.5 font-medium">
+                              <Tag className="w-3.5 h-3.5 text-emerald-500" />
+                              Promotion Discount
+                            </span>
+                            <span className="font-semibold tabular-nums">-{formatPrice(promotionDiscount)}</span>
+                          </div>
+                        )}
+                        {memberDiscount > 0 && (
+                          <div className="flex justify-between items-center text-sm text-emerald-600">
+                            <span className="flex items-center gap-1.5 font-medium">
+                              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                              Member Discount
+                            </span>
+                            <span className="font-semibold tabular-nums">-{formatPrice(memberDiscount)}</span>
+                          </div>
+                        )}
+                        {couponDiscount > 0 && (
+                          <div className="flex justify-between items-center text-sm text-emerald-600">
+                            <span className="flex items-center gap-1.5 font-medium">
+                              <Ticket className="w-3.5 h-3.5 text-purple-500" />
+                              Coupon Discount
+                            </span>
+                            <span className="font-semibold tabular-nums">-{formatPrice(couponDiscount)}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Price after Discount */}
+                {totalDiscount > 0 && priceAfterDiscount > 0 && (
+                  <div className="flex justify-between items-center text-xs sm:text-sm text-gray-500 pt-1">
+                    <span className="font-medium">Price after Discount</span>
+                    <span className="font-bold text-gray-700 tabular-nums">{formatPrice(priceAfterDiscount)}</span>
+                  </div>
+                )}
+
+                {/* Taxes & Fees */}
+                {totalTax > 0 && (
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium text-gray-600">Taxes &amp; Fees (GST)</span>
+                    <span className="font-bold text-gray-900 tabular-nums">{formatPrice(totalTax)}</span>
+                  </div>
+                )}
+
+                {/* Service Charge / Platform Fee */}
+                {platformFee > 0 && (
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium text-gray-600">Platform &amp; Service Fee</span>
+                    <span className="font-bold text-gray-900 tabular-nums">{formatPrice(platformFee)}</span>
+                  </div>
+                )}
+
+                <hr className="my-3 border-gray-200" />
+
+                {/* Grand Total */}
+                {grandTotal > 0 && (
+                  <div className="flex justify-between items-start pt-1">
+                    <div>
+                      <span className="text-base sm:text-lg font-extrabold text-gray-900 block">Total Paid</span>
+                      <span className="text-[11px] text-gray-400 font-medium block">Includes all taxes &amp; fees</span>
+                    </div>
+                    <span className="text-xl sm:text-2xl font-black text-[#FF9530] tracking-tight tabular-nums">
+                      {formatPrice(grandTotal)}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Savings Celebration Banner */}
+              {totalDiscount > 0 && (
+                <div className="flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2.5 shadow-sm text-white mt-2">
+                  <PartyPopper className="w-4 h-4 shrink-0" />
+                  <p className="text-xs font-bold">
+                    You saved {formatPrice(totalDiscount)} on this booking!
+                  </p>
+                </div>
+              )}
+
+              {/* Payment Details Footer */}
+              {(hasValue(booking.payment_method) || hasValue(booking.payment_type) || hasValue(booking.razorpay_payment_id)) && (
+                <div className="pt-3 border-t border-gray-100 space-y-2 bg-gray-50/70 p-3 rounded-xl">
+                  {(hasValue(booking.payment_method) || hasValue(booking.payment_type)) && (
+                    <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+                      <CreditCard className="w-4 h-4 text-gray-400 shrink-0" />
+                      <span className="font-medium">{[booking.payment_method, booking.payment_type].filter(hasValue).join(" • ")}</span>
+                    </div>
+                  )}
+                  {hasValue(booking.razorpay_payment_id) && (
+                    <div className="text-[11px] text-gray-500 font-medium break-all flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>
+                      Payment ID: {booking.razorpay_payment_id}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Booking Summary */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">Booking Summary</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm sm:text-base">Check-in</p>
-                  <p className="text-xs sm:text-sm text-gray-600 break-words">{formatDate(booking.arrival_date)}</p>
-                  <p className="text-xs text-gray-500">{booking.listingdetails.check_in}</p>
-                </div>
-              </div>
+            <CardContent>
+              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-1 gap-x-4 gap-y-4">
+                {hasValue(booking.invoice_number) && (
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base">Invoice</p>
+                      <p className="text-xs sm:text-sm text-gray-600 break-words">{booking.invoice_number}</p>
+                    </div>
+                  </div>
+                )}
 
-              <div className="flex items-start space-x-3">
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm sm:text-base">Check-out</p>
-                  <p className="text-xs sm:text-sm text-gray-600 break-words">{formatDate(booking.departure_date)}</p>
-                  <p className="text-xs text-gray-500">{booking.listingdetails.check_out}</p>
-                </div>
-              </div>
+                {hasValue(booking.arrival_date) && (
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base">Check-in</p>
+                      <p className="text-xs sm:text-sm text-gray-600 break-words">{formatDate(booking.arrival_date)}</p>
+                      {hasValue(booking.listingdetails?.check_in) && (
+                        <p className="text-xs text-gray-500">{booking.listingdetails.check_in}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
 
-              <div className="flex items-start space-x-3">
-                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm sm:text-base">Guests</p>
-                  <p className="text-xs sm:text-sm text-gray-600">
-                    {booking.no_of_adults} Adult{booking.no_of_adults > 1 ? 's' : ''}
-                    {booking.no_of_child > 0 && `, ${booking.no_of_child} Child${booking.no_of_child > 1 ? 'ren' : ''}`}
-                  </p>
-                </div>
-              </div>
+                {hasValue(booking.departure_date) && (
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base">Check-out</p>
+                      <p className="text-xs sm:text-sm text-gray-600 break-words">{formatDate(booking.departure_date)}</p>
+                      {hasValue(booking.listingdetails?.check_out) && (
+                        <p className="text-xs text-gray-500">{booking.listingdetails.check_out}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
 
-              <div className="flex items-start space-x-3">
-                <Bed className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm sm:text-base">Rooms & Duration</p>
-                  <p className="text-xs sm:text-sm text-gray-600">
-                    {booking.total_rooms} Room{booking.total_rooms > 1 ? 's' : ''} • {booking.no_of_days} Night{booking.no_of_days > 1 ? 's' : ''}
-                  </p>
-                </div>
+                {(booking.no_of_adults > 0 || booking.no_of_child > 0) && (
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base">Guests</p>
+                      <p className="text-xs sm:text-sm text-gray-600">
+                        {booking.no_of_adults > 0 && `${booking.no_of_adults} Adult${booking.no_of_adults > 1 ? "s" : ""}`}
+                        {booking.no_of_child > 0 && `${booking.no_of_adults > 0 ? ", " : ""}${booking.no_of_child} Child${booking.no_of_child > 1 ? "ren" : ""}`}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {(booking.total_rooms > 0 || booking.no_of_days > 0) && (
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <Bed className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base">Rooms & Duration</p>
+                      <p className="text-xs sm:text-sm text-gray-600">
+                        {[
+                          booking.total_rooms > 0 ? `${booking.total_rooms} Room${booking.total_rooms > 1 ? "s" : ""}` : null,
+                          booking.no_of_days > 0 ? `${booking.no_of_days} Night${booking.no_of_days > 1 ? "s" : ""}` : null,
+                        ].filter(Boolean).join(" • ")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+
               </div>
             </CardContent>
           </Card>
 
           {/* Guest Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">Guest Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm sm:text-base break-words">{booking.firstname} {booking.lastname}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 break-all">{booking.phone}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Payment Details */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">Payment Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm sm:text-base">
-                  <span className="text-gray-600">Room Price</span>
-                  <span className="font-medium">{formatPrice(booking.price)}</span>
-                </div>
-                <div className="flex justify-between text-sm sm:text-base">
-                  <span className="text-gray-600">Taxes & Fees</span>
-                  <span className="font-medium">{formatPrice(booking.tax)}</span>
-                </div>
-                <div className="flex justify-between text-sm sm:text-base">
-                  <span className="text-gray-600">Service Charge</span>
-                  <span className="font-medium">{formatPrice(booking.service_charge)}</span>
-                </div>
-                <hr className="my-2" />
-                <div className="flex justify-between font-semibold text-base sm:text-lg">
-                  <span>Total Paid</span>
-                  <span className="text-[#FF9530]">{formatPrice(booking.total_price)}</span>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-gray-200">
-                <div className="flex items-start space-x-3">
-                  <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm sm:text-base break-words">{booking.payment_method}</p>
-                    <p className="text-xs sm:text-sm text-gray-600 break-words">{booking.payment_type}</p>
+          {(hasValue(booking.firstname) || hasValue(booking.lastname) || hasValue(booking.phone) || hasValue(booking.traveller_details?.email) || hasValue(booking.street) || hasValue(booking.house_number) || hasValue(booking.city)) && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg sm:text-xl">Guest Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {(hasValue(booking.firstname) || hasValue(booking.lastname)) && (
+                  <div className="flex items-start space-x-3">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base break-words">
+                        {[booking.firstname, booking.lastname].filter(hasValue).join(" ")}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )}
 
-              {/* <div className="text-xs text-gray-500 space-y-1 break-words">
-                <p>Invoice: {booking.invoice_number}</p>
-                <p>Booking Type: {booking.booking_type}</p>
-              </div> */}
-            </CardContent>
-          </Card>
+                {hasValue(booking.phone) && (
+                  <div className="flex items-start space-x-3">
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm text-gray-600 break-all">{booking.phone}</p>
+                    </div>
+                  </div>
+                )}
+
+                {hasValue(booking.traveller_details?.email) && (
+                  <div className="flex items-start space-x-3">
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm text-gray-600 break-all">{booking.traveller_details?.email}</p>
+                    </div>
+                  </div>
+                )}
+
+                {(hasValue(booking.street) || hasValue(booking.house_number) || hasValue(booking.city) || hasValue(booking.state) || hasValue(booking.country)) && (
+                  <div className="flex items-start space-x-3">
+                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base">Billing Address</p>
+                      <div className="text-xs sm:text-sm text-gray-600 break-words space-y-0.5">
+                        {hasValue(booking.street) && <p>{booking.street}</p>}
+                        {(hasValue(booking.house_number) || hasValue(booking.city) || hasValue(booking.state)) && (
+                          <p>
+                            {[booking.house_number, booking.city, booking.state].filter(hasValue).join(", ")}
+                          </p>
+                        )}
+                        {hasValue(booking.country) && <p>{booking.country}</p>}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* GST Details — only when GST data exists */}
+          {(booking.gst || hasValue(booking.gst_number) || hasValue(booking.gst_company_name)) && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg sm:text-xl">GST Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                {hasValue(booking.gst_number) && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-600">GST Number</span>
+                    <span className="font-medium break-all text-right">{booking.gst_number}</span>
+                  </div>
+                )}
+                {hasValue(booking.gst_company_name) && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-600">Company</span>
+                    <span className="font-medium break-words text-right">{booking.gst_company_name}</span>
+                  </div>
+                )}
+                {hasValue(booking.gst_phone_number) && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-600">Phone</span>
+                    <span className="font-medium break-all text-right">{booking.gst_phone_number}</span>
+                  </div>
+                )}
+                {hasValue(booking.gst_address) && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-600 shrink-0">Address</span>
+                    <span className="font-medium break-words text-right">{booking.gst_address}</span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Cancellation Policy */}
+          {(hasValue(booking.cancellation_policy_name) || hasValue(booking.cancellation_policy_description)) && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-gray-500" />
+                  Cancellation Policy
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {hasValue(booking.cancellation_policy_name) && (
+                  <p className="font-semibold text-sm sm:text-base text-gray-900">
+                    {booking.cancellation_policy_name}
+                    {booking.cancellation_policy_no_of_days != null && booking.cancellation_policy_no_of_days > 0 && (
+                      <span className="font-normal text-gray-500 text-xs sm:text-sm"> ({booking.cancellation_policy_no_of_days} days)</span>
+                    )}
+                  </p>
+                )}
+                {hasValue(booking.cancellation_policy_description) && (
+                  <div
+                    className="text-xs sm:text-sm text-gray-600 leading-relaxed prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: booking.cancellation_policy_description || "" }}
+                  />
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
+
+      {cancellationData && (
+        <CancelBookingModal
+          isOpen={showCancelModal}
+          onClose={handleCancelModalClose}
+          reservationId={!isGuestAccess ? booking.id : undefined}
+          manageToken={isGuestAccess ? manageToken : undefined}
+          cancellationData={cancellationData}
+          onCancelSuccess={handleCancelSuccess}
+        />
+      )}
     </div>
   )
 }

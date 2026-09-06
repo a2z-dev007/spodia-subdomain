@@ -52,12 +52,20 @@ const propertyData = {
   ]
 };
 
+import { fetchHotelDetails } from "@/lib/api/hotelDetails";
+
+import HotelDescription from "@/components/hotel/sections/HotelDescription";
+
 export default async function AboutPage({ params }: { params: Promise<{ entityKey: string }> }) {
   const { entityKey } = await params;
+  const hotelData = await fetchHotelDetails(entityKey);
   
-  const { name, location, type } = propertyData;
+  const name = hotelData?.name || propertyData.name;
+  const location = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
+  const type = hotelData?.property_type || propertyData.type;
   const isHotel = type === "Hotel" || type === "Resort";
   const isHomestay = type === "Homestay" || type === "B&B";
+
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -95,10 +103,15 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
         subtitle={`Rooted in sustainability, community, and unmatched excellence. Discover hospitality at ${name}.`}
         badgeText="Our Heritage & Story"
         primaryBtnText="Book Now"
-        primaryBtnHref={`/hotel/${entityKey}/book`}
+        primaryBtnHref={`/hotel/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
         secondaryBtnHref={`/hotel/${entityKey}/rooms`}
       />
+
+      {/* 2. Hotel Overview & Detailed Description */}
+      <section className="py-12 px-6 md:px-12 max-w-[1400px] mx-auto w-full">
+        <HotelDescription hotelData={hotelData} entityKey={entityKey} />
+      </section>
 
       {/* 2. Our Story */}
       <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">

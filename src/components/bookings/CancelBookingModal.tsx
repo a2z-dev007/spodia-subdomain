@@ -3,16 +3,16 @@
 import { useState, useEffect } from "react"
 import { X, AlertCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { cancelReservation } from "@/services/api"
+import { cancelReservation, cancelManageBooking } from "@/services/api"
 import { toast } from "react-toastify"
 
-interface ReservationDetail {
+export interface ReservationDetail {
   cancellation_policy_name?: string
   cancellation_policy_no_of_days?: number
   cancellation_policy_description?: string
 }
 
-interface CancellationPreview {
+export interface CancellationPreview {
   status: string
   cancellation_type: string
   amount_to_refund: number
@@ -23,40 +23,65 @@ interface CancellationPreview {
 interface CancelBookingModalProps {
   isOpen: boolean
   onClose: () => void
-  reservationId: number
+  reservationId?: number
+  manageToken?: string
   cancellationData: CancellationPreview
   onCancelSuccess: () => void
 }
 
-const CancelBookingModal = ({ isOpen, onClose, reservationId, cancellationData, onCancelSuccess }: CancelBookingModalProps) => {
+const CancelBookingModal = ({
+  isOpen,
+  onClose,
+  reservationId,
+  manageToken,
+  cancellationData,
+  onCancelSuccess,
+}: CancelBookingModalProps) => {
   const [step, setStep] = useState<"preview" | "confirm">("preview")
   const [loading, setLoading] = useState(false)
 
   const handleCancelBooking = async () => {
+    if (!manageToken && reservationId == null) {
+      toast.error("Unable to cancel booking.", {
+        position: "top-right",
+        autoClose: 3000,
+      })
+      return
+    }
+
     try {
       setLoading(true)
-      const response = await cancelReservation(reservationId)
+      const response = manageToken
+        ? await cancelManageBooking(manageToken)
+        : await cancelReservation(reservationId!)
       
      
 
-      const data = response.data
-      
-      if (data.status === "success") {
-        toast.success("Booking cancelled successfully!", {
+      const data = response?.data || response
+      const isSuccess =
+        response?.status === 200 ||
+        response?.status === 201 ||
+        data?.status === "success" ||
+        data?.status === true ||
+        data?.status === 200
+
+      if (isSuccess) {
+        toast.success(data?.message || "Booking cancelled successfully!", {
           position: "top-right",
           autoClose: 3000,
         })
         onCancelSuccess()
         onClose()
       } else {
-        toast.error(data.message || "Unable to cancel booking", {
+        toast.error(data?.message || "Unable to cancel booking", {
           position: "top-right",
           autoClose: 3000,
         })
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error cancelling booking:", error)
-      toast.error("Failed to cancel booking. Please try again.", {
+      const errorMsg = error?.response?.data?.message || error?.message || "Failed to cancel booking. Please try again."
+      toast.error(errorMsg, {
         position: "top-right",
         autoClose: 3000,
       })
@@ -87,8 +112,9 @@ const CancelBookingModal = ({ isOpen, onClose, reservationId, cancellationData, 
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0
-    }).format(amount)
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Math.round(amount || 0))
   }
 
   // Extract policy details from API data
@@ -97,22 +123,22 @@ const CancelBookingModal = ({ isOpen, onClose, reservationId, cancellationData, 
   const policyDescription = cancellationData.reservation_detail?.cancellation_policy_description || ""
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full max-h-[92vh] sm:max-h-[88vh] flex flex-col min-h-0 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900">Cancel Reservation</h2>
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100 shrink-0">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Cancel Reservation</h2>
           <button
             onClick={handleClose}
             disabled={loading}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-5 flex-1 min-h-0 overflow-y-auto overscroll-contain scrollbar-hide hide-scrollbar">
           {step === "preview" ? (
             <>
               {/* Cancellation Policy */}
@@ -154,15 +180,16 @@ const CancelBookingModal = ({ isOpen, onClose, reservationId, cancellationData, 
                 </div> */}
               </div>
 
-              {/* Refund Amount */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-semibold text-gray-900">Total refund</span>
-                  <span className="text-2xl font-bold text-green-600">
-                    {formatAmount(cancellationData.amount_to_refund)}
-                  </span>
+              {!manageToken && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold text-gray-900">Total refund</span>
+                    <span className="text-2xl font-bold text-green-600">
+                      {formatAmount(cancellationData.amount_to_refund)}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Action Buttons */}
               <div className="flex gap-3">
@@ -199,31 +226,32 @@ const CancelBookingModal = ({ isOpen, onClose, reservationId, cancellationData, 
                   </div>
                 </div>
 
-                {/* Refund Amount */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-medium text-gray-700">Total refund</span>
-                    <span className="text-xl font-bold text-gray-900">
-                      {formatAmount(cancellationData.amount_to_refund)}
-                    </span>
+                {!manageToken && (
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-base font-medium text-gray-700">Total refund</span>
+                      <span className="text-xl font-bold text-gray-900">
+                        {formatAmount(cancellationData.amount_to_refund)}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Confirmation Buttons */}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   onClick={() => setStep("preview")}
                   variant="outline"
-                  className="flex-1 rounded-full h-12 text-base"
+                  className="flex-1 rounded-full h-12 text-base font-semibold"
                   disabled={loading}
                 >
-                  NO
+                  No, Keep Reservation
                 </Button>
                 <Button
                   onClick={handleCancelBooking}
                   disabled={loading}
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full h-12 text-base"
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-full h-12 text-base font-semibold"
                 >
                   {loading ? (
                     <>
@@ -231,7 +259,7 @@ const CancelBookingModal = ({ isOpen, onClose, reservationId, cancellationData, 
                       Cancelling...
                     </>
                   ) : (
-                    "YES"
+                    "Yes, Cancel"
                   )}
                 </Button>
               </div>

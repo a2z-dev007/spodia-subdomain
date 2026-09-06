@@ -1,0 +1,15 @@
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Manage Your Booking | Spodia",
+  description: "View and manage your hotel booking using your secure email link.",
+  robots: { index: false, follow: false },
+}
+
+export default function ManageBookingLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return children
+}

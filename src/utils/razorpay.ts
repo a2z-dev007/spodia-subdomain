@@ -29,6 +29,23 @@ export const loadRazorpayScript = (): Promise<boolean> => {
 }
 
 /**
+ * Razorpay error response interface
+ */
+export interface RazorpayErrorResponse {
+  error: {
+    code: string
+    description: string
+    source?: string
+    step?: string
+    reason?: string
+    metadata?: {
+      order_id?: string
+      payment_id?: string
+    }
+  }
+}
+
+/**
  * Razorpay payment options interface
  */
 export interface RazorpayOptions {
@@ -40,6 +57,7 @@ export interface RazorpayOptions {
   image?: string
   order_id: string
   handler: (response: RazorpaySuccessResponse) => void
+  onPaymentFailed?: (response: RazorpayErrorResponse) => void
   prefill?: {
     name?: string
     email?: string
@@ -54,6 +72,7 @@ export interface RazorpayOptions {
     escape?: boolean
     backdropclose?: boolean
     confirm_close?: boolean
+    handleback?: boolean
   }
 }
 
@@ -67,31 +86,30 @@ export interface RazorpaySuccessResponse {
 }
 
 /**
- * Razorpay error response interface
- */
-export interface RazorpayErrorResponse {
-  error: {
-    code: string
-    description: string
-    source: string
-    step: string
-    reason: string
-    metadata: {
-      order_id: string
-      payment_id: string
-    }
-  }
-}
-
-/**
  * Open Razorpay payment modal
  */
 export const openRazorpayModal = (options: RazorpayOptions) => {
-  if (!window.Razorpay) {
-    throw new Error('Razorpay SDK not loaded')
+  if (typeof window === 'undefined' || !window.Razorpay) {
+    throw new Error('Razorpay SDK is not loaded')
   }
 
-  const razorpay = new window.Razorpay(options)
-  razorpay.open()
+  const { onPaymentFailed, ...razorpayOptions } = options
+  const razorpay = new window.Razorpay(razorpayOptions)
+
+  if (onPaymentFailed) {
+    razorpay.on('payment.failed', (response: RazorpayErrorResponse) => {
+      console.error('💳 [Razorpay] payment.failed event received:', response)
+      onPaymentFailed(response)
+    })
+  }
+
+  try {
+    razorpay.open()
+  } catch (err) {
+    console.error('💳 [Razorpay] Error executing razorpay.open():', err)
+    throw err
+  }
+
   return razorpay
 }
+

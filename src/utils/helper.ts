@@ -1,6 +1,7 @@
 import { DEMO_STAY_CATEGORIES } from "@/data/taxonomies";
 import { AuthorType, StayDataType, TaxonomyType } from "@/data/types";
-
+import { Facebook, Instagram, Youtube } from "lucide-react";
+import { BsTwitterX } from "react-icons/bs";
 
 export const buildAuthorFromApi = (owner: any): AuthorType => ({
     id: owner?.id || 0,
@@ -38,18 +39,28 @@ export const buildCategoryFromApi = (propertyType: string | undefined): Taxonomy
     };
 };
 
+/** Listing APIs often return sbr_rate as a decimal string (e.g. "3150.00"). */
+export function parseListingSbrRate(value: unknown): number {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string") {
+        const n = parseFloat(value);
+        return Number.isFinite(n) ? n : 0;
+    }
+    return 0;
+}
+
 export const mapApiToStay = (item: any): StayDataType => {
     const category = buildCategoryFromApi(item.property_type);
     const author = buildAuthorFromApi(item.ownerdetails);
-    // redirect link 
-    const hrefWithCity = `${item.name}-${item.city_name}`.replace(/\s+/g, '-').toLowerCase();
-    // console.log("hrefWithCity",hrefWithCity)
+    const hotelSlug = item.slug || `${item.name}-${item.city_name}`.replace(/\s+/g, '-').toLowerCase();
+    const sbrRate = parseListingSbrRate(item.sbr_rate);
+
     return {
         id: item.id,
         author,
         city_name: typeof item.city_name === 'string' ? item.city_name : '',
         date: typeof item.created === 'string' ? item.created : '',
-        href: `/hotels/${hrefWithCity}`,
+        href: `/hotel/${hotelSlug}`,
         title: typeof item.name === 'string' ? item.name : '',
         featuredImage: typeof (item.images?.find((img: any) => img.cover_photo)?.file) === 'string'
             ? item.images?.find((img: any) => img.cover_photo)?.file
@@ -65,7 +76,7 @@ export const mapApiToStay = (item: any): StayDataType => {
         galleryImgs: Array.isArray(item.images)
             ? item.images.map((img: any) => (typeof img.file === 'string' ? img.file : '')).filter(Boolean)
             : [],
-        price: typeof item.sbr_rate === 'number' ? `₹${Math.round(item.sbr_rate)}` : '₹0',
+        price: sbrRate > 0 ? `₹${Math.round(sbrRate)}` : '₹0',
         listingCategory: category,
         maxGuests: typeof item.no_of_rooms === 'number' ? item.no_of_rooms : 2,
         bedrooms: typeof item.no_of_floors === 'number' ? item.no_of_floors : 1,
@@ -79,13 +90,9 @@ export const mapApiToStay = (item: any): StayDataType => {
         // Promotion fields
         has_promotion: typeof item.has_promotion === 'boolean' ? item.has_promotion : false,
         best_promotion: item.best_promotion || null,
-        sbr_rate: typeof item.sbr_rate === 'number' ? item.sbr_rate : 0,
+        sbr_rate: sbrRate,
     };
 };
-
-
-import { Facebook, Instagram, Youtube } from "lucide-react";
-import { BsTwitterX } from "react-icons/bs";
 
 // Dynamic social media links configuration
 interface SocialLinkConfig {
@@ -132,5 +139,4 @@ export const getSocialLinks = (): SocialLinkConfig[] => [
     },
 ];
 
-// For backward compatibility, export static version
 export const SOCIAL_LINKS = getSocialLinks();

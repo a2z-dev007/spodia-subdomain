@@ -24,7 +24,7 @@ export function BookingSummaryCard({ hotel }: BookingSummaryCardProps) {
   const router = useRouter();
   const [checkIn, setCheckIn] = useState('2024-01-15');
   const [checkOut, setCheckOut] = useState('2024-01-18');
-  const [guests, setGuests] = useState({ adults: 2, children: 0 });
+  const [guests, setGuests] = useState({ adults: 1, children: 0 });
 
   // Mock pricing calculation
   const nights = 3;

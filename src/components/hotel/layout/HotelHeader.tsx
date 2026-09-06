@@ -149,8 +149,8 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
       >
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           {/* Logo + Property Identity */}
-          <div className="flex items-center space-x-3 md:space-x-4 shrink-0">
-            <Link href={`/hotel/${entityKey}`} className="flex items-center">
+          <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1 sm:flex-initial shrink">
+            <Link href={`/hotel/${entityKey}`} className="flex items-center shrink-0">
               <Image
                 src={IMAGES.logo.src}
                 alt="Spodia"
@@ -162,28 +162,45 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
                 priority
               />
             </Link>
-            <div className="hidden md:block h-7 w-[1px] bg-gray-200" />
-            <div className="flex flex-col min-w-0">
-              <span className="text-xs md:text-sm xl:text-base font-black text-gray-900 leading-tight truncate">
+            <div className="hidden md:block h-7 w-[1px] bg-gray-200 shrink-0" />
+            <div className="flex flex-col min-w-0 max-w-[120px] sm:max-w-[160px] md:max-w-[190px] lg:max-w-[210px] xl:max-w-[250px] relative group cursor-pointer">
+              <span
+                title={hotelName}
+                className="text-xs md:text-sm xl:text-base font-black text-gray-900 leading-tight truncate tracking-tight"
+              >
                 {hotelName}
               </span>
-              <span className="text-[10px] md:text-[11px] text-gray-500 font-semibold truncate flex items-center gap-1">
+              <span
+                title={location}
+                className="text-[10px] md:text-[11px] text-gray-500 font-semibold truncate flex items-center gap-1 mt-0.5"
+              >
                 <MapPin className="w-3 h-3 text-[#FF9530] shrink-0" />
                 <span className="truncate">{location}</span>
               </span>
+
+              {/* Hover Full Data Overlay Tooltip */}
+              <div className="absolute top-full left-0 mt-2 hidden group-hover:block z-[99999] pointer-events-none">
+                <div className="bg-gray-900/95 backdrop-blur-md text-white text-xs p-3 rounded-xl shadow-2xl border border-gray-800 max-w-[280px] sm:max-w-[320px] font-medium leading-relaxed">
+                  <p className="font-bold text-white mb-1 border-b border-gray-800 pb-1">{hotelName}</p>
+                  <p className="text-gray-300 text-[11px] flex items-start gap-1">
+                    <MapPin className="w-3 h-3 text-[#FF9530] shrink-0 mt-0.5" />
+                    <span>{location}</span>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Desktop Adaptive Navigation Links */}
           <div className="hidden lg:flex items-center space-x-1 xl:space-x-2 relative" ref={dropdownRef}>
             {/* Always visible on lg+ (1024px+) */}
-            {navItems.slice(0, 6).map((item) => {
+            {navItems.slice(0, 4).map((item) => {
               const active = isItemActive(item.href);
               return (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg ${
+                  className={`relative px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
                     active
                       ? "text-[#FF9530] bg-orange-50/80 font-extrabold"
                       : "text-gray-700 hover:text-[#FF9530] hover:bg-gray-50"
@@ -202,13 +219,13 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
             })}
 
             {/* Extended visible on xl+ (1280px+) */}
-            {navItems.slice(6, 8).map((item) => {
+            {navItems.slice(4, 7).map((item) => {
               const active = isItemActive(item.href);
               return (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`hidden xl:inline-flex relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg ${
+                  className={`hidden xl:inline-flex relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
                     active
                       ? "text-[#FF9530] bg-orange-50/80 font-extrabold"
                       : "text-gray-700 hover:text-[#FF9530] hover:bg-gray-50"
@@ -227,13 +244,13 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
             })}
 
             {/* Extended visible on 2xl+ (1536px+) */}
-            {navItems.slice(8, 11).map((item) => {
+            {navItems.slice(7, 10).map((item) => {
               const active = isItemActive(item.href);
               return (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`hidden 2xl:inline-flex relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg ${
+                  className={`hidden 2xl:inline-flex relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
                     active
                       ? "text-[#FF9530] bg-orange-50/80 font-extrabold"
                       : "text-gray-700 hover:text-[#FF9530] hover:bg-gray-50"
@@ -336,7 +353,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
           {/* Book Now Button + Mobile Menu Trigger */}
           <div className="flex items-center space-x-3 shrink-0">
             <Link
-              href={`/hotel/${entityKey}/book`}
+              href={`/hotel/${entityKey}/rooms`}
               className={`bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white font-black text-xs md:text-sm uppercase tracking-wider rounded-xl md:rounded-full transition-all duration-300 shadow-md hover:shadow-orange-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
                 isScrolled ? "px-4 md:px-5 py-2" : "px-5 md:px-6 py-2.5"
               }`}
@@ -424,7 +441,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
 
               <div className="p-5 border-t border-gray-100 bg-gray-50/50 space-y-3">
                 <Link
-                  href={`/hotel/${entityKey}/book`}
+                  href={`/hotel/${entityKey}/rooms`}
                   onClick={() => setIsMenuOpen(false)}
                   className="block w-full bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-center text-white py-3.5 rounded-xl font-black uppercase tracking-wider shadow-lg shadow-orange-500/20 text-sm"
                 >

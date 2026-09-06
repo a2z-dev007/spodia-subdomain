@@ -40,6 +40,7 @@ const CouponSelector = () => {
   const accessToken = useAppSelector((state) => state?.auth?.accessToken ?? null)
   const [coupons, setCoupons] = useState<Coupon[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  // id of the coupon currently being applied, "manual" for typed codes, "remove" while removing
   const [busyAction, setBusyAction] = useState<number | "manual" | "remove" | null>(null)
   const [typedCode, setTypedCode] = useState("")
   const [inputError, setInputError] = useState<string | null>(null)
@@ -55,6 +56,7 @@ const CouponSelector = () => {
   const bookingId = bookingFormData.bookingId
   const isBusy = busyAction !== null
 
+  // Fetch coupons when logged in (including right after modal login) or hotel changes
   useEffect(() => {
     const fetchCoupons = async () => {
       if (!accessToken || !bookingFormData.hotelId) {
@@ -83,6 +85,8 @@ const CouponSelector = () => {
     fetchCoupons()
   }, [bookingFormData.hotelId, accessToken])
 
+  // Restore applied coupon after reload: booking-summary API returns coupon_id
+  // but Redux loses appliedCoupon, so re-select it from the fetched coupon list
   useEffect(() => {
     if (appliedCoupon || coupons.length === 0) return
 
@@ -97,17 +101,16 @@ const CouponSelector = () => {
       updateBookingFormData({
         appliedCoupon: {
           id: matchedCoupon.id,
-          name: matchedCoupon.name,
           coupon_code: matchedCoupon.coupon_code.toUpperCase(),
           type_of_offer: matchedCoupon.type_of_offer,
           rate_or_percentage: matchedCoupon.rate_or_percentage,
-          minimum_order_value: matchedCoupon.minimum_order_value,
           discount_amount: Number(apiSummary.coupon_promotion || 0),
         },
       })
     )
-  }, [coupons, appliedCoupon, bookingFormData, dispatch])
+  }, [coupons, appliedCoupon, (bookingFormData as any).apiSummary, dispatch])
 
+  // Base price for coupon calculation (original hotel price minus hotel promo discount & member-only discount)
   const couponBasePrice = useMemo(() => {
     const original = Number(pricingSummary?.originalHotelPrice || 0)
     const promo = Number(pricingSummary?.totalPromotionalDiscount || 0)
@@ -175,6 +178,7 @@ const CouponSelector = () => {
     return Math.min(coupon.rate_or_percentage, base)
   }
 
+  // Eligible coupons first, sorted by savings (best first); ineligible at the end
   const sortedCoupons = useMemo(() => {
     const withMeta = coupons.map((coupon) => ({
       coupon,
@@ -187,6 +191,7 @@ const CouponSelector = () => {
       }
       return b.discount - a.discount
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coupons, pricingSummary, bookingFormData.rooms, couponBasePrice])
 
   const bestCouponId = sortedCoupons.find((c) => c.validation.isValid)?.coupon.id ?? null
@@ -237,11 +242,9 @@ const CouponSelector = () => {
         updateBookingFormData({
           appliedCoupon: {
             id: coupon.id,
-            name: coupon.name,
             coupon_code: couponCodeDisplay,
             type_of_offer: coupon.type_of_offer,
             rate_or_percentage: coupon.rate_or_percentage,
-            minimum_order_value: coupon.minimum_order_value,
             discount_amount: couponDiscount,
           },
           pricingSummary: pricing,
@@ -339,7 +342,7 @@ const CouponSelector = () => {
   return (
     <section
       aria-label="Coupons and offers"
-      className="border border-gray-150 mt-4 rounded-xl p-5 bg-white space-y-4 shadow-sm"
+      className="border border-gray-150 mt-4 rounded-xl p-5 bg-white space-y-4"
     >
       <div className="flex items-center gap-2">
         <BadgePercent className="w-4 h-4 text-[#078ED8]" aria-hidden="true" />
@@ -348,6 +351,7 @@ const CouponSelector = () => {
         </h4>
       </div>
 
+      {/* Applied coupon banner — the primary state once a code is on the booking */}
       {appliedCoupon ? (
         <div
           aria-live="polite"
@@ -364,7 +368,8 @@ const CouponSelector = () => {
               type="button"
               onClick={removeCoupon}
               disabled={isBusy}
-              className="shrink-0 ml-auto flex items-center gap-1 text-[11px] font-bold text-red-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg px-2 py-1 transition-colors disabled:opacity-50"
+              aria-label={`Remove coupon ${appliedCoupon.coupon_code.toUpperCase()}`}
+              className="shrink-0 ml-auto flex items-center gap-1 text-[11px] font-bold text-red-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg px-2 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:opacity-50"
             >
               {busyAction === "remove" ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
@@ -384,6 +389,9 @@ const CouponSelector = () => {
         <div className="space-y-1.5">
           <div className="flex gap-2">
             <div className="flex-1">
+              <label htmlFor="coupon-code-input" className="sr-only">
+                Coupon code
+              </label>
               <Input
                 id="coupon-code-input"
                 name="coupon-code"
@@ -403,7 +411,8 @@ const CouponSelector = () => {
                 autoComplete="off"
                 spellCheck={false}
                 aria-invalid={!!inputError}
-                className={`h-11 font-extrabold uppercase tracking-wide placeholder:normal-case placeholder:font-semibold ${
+                aria-describedby={inputError ? "coupon-code-error" : undefined}
+                className={`h-11 font-extrabold uppercase tracking-wide placeholder:normal-case placeholder:font-semibold placeholder:tracking-normal ${
                   inputError
                     ? "border-red-300 focus-visible:ring-red-300"
                     : "border-gray-200 focus:border-[#078ED8]"
@@ -424,6 +433,7 @@ const CouponSelector = () => {
           </div>
           {inputError && (
             <p
+              id="coupon-code-error"
               role="alert"
               className="flex items-center gap-1 text-[11px] font-bold text-red-500"
             >
@@ -434,8 +444,9 @@ const CouponSelector = () => {
         </div>
       )}
 
+      {/* Available offers */}
       {isLoading ? (
-        <div className="space-y-3">
+        <div className="space-y-3" aria-hidden="true">
           {[0, 1].map((i) => (
             <div key={i} className="border border-gray-100 rounded-xl p-3.5 animate-pulse">
               <div className="flex items-start gap-3">
@@ -486,6 +497,7 @@ const CouponSelector = () => {
                   )}
 
                   <div className="flex items-start gap-3">
+                    {/* Code + details */}
                     <div className={`flex-1 min-w-0 ${!validation.isValid ? "opacity-60" : ""}`}>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span
@@ -520,6 +532,7 @@ const CouponSelector = () => {
                       )}
                     </div>
 
+                    {/* Savings + action */}
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
                       <span
                         className={`text-sm font-black tabular-nums ${
@@ -534,7 +547,7 @@ const CouponSelector = () => {
                           type="button"
                           onClick={removeCoupon}
                           disabled={isBusy}
-                          className="text-[11px] font-bold text-red-500 hover:text-red-600 hover:underline"
+                          className="text-[11px] font-bold text-red-500 hover:text-red-600 hover:underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 rounded px-1 disabled:opacity-50"
                         >
                           {busyAction === "remove" ? (
                             <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
@@ -547,7 +560,8 @@ const CouponSelector = () => {
                           type="button"
                           onClick={() => applyCoupon(coupon)}
                           disabled={isBusy || !validation.isValid}
-                          className="text-[11px] font-black uppercase tracking-wide text-[#078ED8] hover:text-[#0679b8] hover:underline disabled:opacity-40 disabled:no-underline"
+                          aria-label={`Apply coupon ${coupon.coupon_code.toUpperCase()}`}
+                          className="text-[11px] font-black uppercase tracking-wide text-[#078ED8] hover:text-[#0679b8] hover:underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#078ED8]/40 rounded px-1 disabled:opacity-40 disabled:no-underline disabled:cursor-not-allowed"
                         >
                           {isThisBusy ? (
                             <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
@@ -568,7 +582,7 @@ const CouponSelector = () => {
               <button
                 type="button"
                 onClick={() => setShowAll((s) => !s)}
-                className="w-full flex items-center justify-center gap-1 text-[11px] font-bold text-[#078ED8] hover:text-[#0679b8] py-1.5"
+                className="w-full flex items-center justify-center gap-1 text-[11px] font-bold text-[#078ED8] hover:text-[#0679b8] py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#078ED8]/40 rounded-lg"
               >
                 {showAll ? (
                   <>

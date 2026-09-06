@@ -2,13 +2,14 @@
 
 import { AlertTriangle, RefreshCw, XCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import type { RazorpaySuccessResponse } from "@/utils/razorpay"
 
 const SUPPORT_EMAIL = "support@spodia.in"
 
 export interface PaymentErrorModalProps {
   isBookingOnHold: boolean
   paymentErrorMessage: string
-  razorpayPaymentData?: any
+  razorpayPaymentData?: RazorpaySuccessResponse | null
   onClose: () => void
   onRetry?: () => void
   isRetrying?: boolean
@@ -58,7 +59,7 @@ export default function PaymentErrorModal({
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-3">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain scrollbar-hide hide-scrollbar p-4 sm:p-5 space-y-3">
           <p className="text-gray-600 text-xs sm:text-sm text-center leading-relaxed">
             {paymentErrorMessage ||
               (isOnHold

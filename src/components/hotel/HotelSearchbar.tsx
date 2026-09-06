@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import ReactDatePicker from "react-datepicker";
-import { format } from "date-fns";
-import { ChevronDown, Calendar, Users, X } from "lucide-react";
+import PremiumDatePicker from "@/components/ui/PremiumDatePicker";
+import { Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -36,109 +35,101 @@ const HotelSearchbar: React.FC<HotelSearchbarProps> = ({ onSearch }) => {
     });
   };
 
+  const handleDateChange = (dates: [Date | null, Date | null] | null) => {
+    if (dates) {
+      setArrivalDate(dates[0]);
+      setDepartureDate(dates[1]);
+    } else {
+      setArrivalDate(null);
+      setDepartureDate(null);
+    }
+  };
+
   return (
-    <div className="relative w-full max-w-[1600px] mx-auto z-20 px-4">
-      <div className="bg-white rounded-[1.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] px-6 py-6 lg:py-7 flex flex-col lg:flex-row items-stretch lg:items-center gap-4 lg:gap-6 border border-gray-100/50">
-        {/* Arrival */}
-        <div className="w-full lg:flex-1 relative">
-          <label className="block text-[11px] font-bold text-[#1a1a1a] uppercase tracking-widest mb-3 px-2">
-            Arrival
-          </label>
-          <div className="relative bg-[#F3F6F9] rounded-[14px] hover:bg-[#EDF1F5] transition-colors">
-            <ReactDatePicker
-              selected={arrivalDate}
-              onChange={(date: Date | null) => setArrivalDate(date)}
-              placeholderText="Select Date"
-              className="w-full bg-transparent border-0 rounded-[14px] px-5 h-[56px] text-[15px] font-bold text-[#1a1a1a] cursor-pointer focus:ring-0 outline-none"
-              dateFormat="dd MMM"
-            />
-            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
-              <span className="text-[11px] font-bold text-[#9CA3AF] uppercase">
-                {arrivalDate ? format(arrivalDate, "EEE") : "SUN"}
-              </span>
+    <div className="relative w-full max-w-[1200px] mx-auto z-20 px-2 sm:px-4">
+      <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] p-5 sm:p-6 lg:p-7 border border-gray-100/80">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end gap-4 sm:gap-5 lg:gap-6">
+          
+          {/* Dates of Stay */}
+          <div className="w-full sm:col-span-2 lg:col-span-1">
+            <label className="block text-[11px] font-extrabold text-[#1A202C] uppercase tracking-widest mb-2 px-1">
+              Dates of Stay
+            </label>
+            <div className="bg-[#F8FAFC] border border-gray-200/90 hover:border-[#FF9530] rounded-[14px] h-[52px] px-4 flex items-center transition-colors">
+              <PremiumDatePicker
+                selectsRange
+                startDate={arrivalDate}
+                endDate={departureDate}
+                onChange={handleDateChange}
+                placeholder="Check In - Check Out"
+                label=""
+                className="w-full !p-0"
+                containerClassName="w-full !p-0"
+                showIcon={true}
+              />
             </div>
           </div>
-        </div>
 
-        {/* Departure */}
-        <div className="w-full lg:flex-1 relative">
-          <label className="block text-[11px] font-bold text-[#1a1a1a] uppercase tracking-widest mb-3 px-2">
-            Departure
-          </label>
-          <div className="relative bg-[#F3F6F9] rounded-[14px] hover:bg-[#EDF1F5] transition-colors">
-            <ReactDatePicker
-              selected={departureDate}
-              onChange={(date: Date | null) => setDepartureDate(date)}
-              placeholderText="Select Date"
-              className="w-full bg-transparent border-0 rounded-[14px] px-5 h-[56px] text-[15px] font-bold text-[#1a1a1a] cursor-pointer focus:ring-0 outline-none"
-              dateFormat="dd MMM"
-            />
-            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
-              <span className="text-[11px] font-bold text-[#9CA3AF] uppercase">
-                {departureDate ? format(departureDate, "EEE") : "MON"}
-              </span>
-            </div>
+          {/* Adults */}
+          <div className="w-full">
+            <label className="block text-[11px] font-extrabold text-[#1A202C] uppercase tracking-widest mb-2 px-1">
+              Adults
+            </label>
+            <Select value={adults} onValueChange={setAdults}>
+              <SelectTrigger className="w-full bg-[#F8FAFC] border border-gray-200/90 rounded-[14px] px-4 h-[52px] text-[14px] font-bold text-[#1A202C] focus:ring-0 outline-none hover:bg-[#F1F5F9] hover:border-[#FF9530] transition-colors">
+                <SelectValue placeholder="Adults" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-0 shadow-2xl rounded-xl z-[9999]">
+                {[1, 2, 3, 4, 5, 6].map((num) => (
+                  <SelectItem
+                    key={num}
+                    value={num.toString()}
+                    className="font-bold py-2.5 cursor-pointer"
+                  >
+                    {num} Adult{num > 1 ? "s" : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
 
-        {/* Guests */}
-        <div className="w-full lg:flex-[1.8] relative">
-          <label className="block text-[11px] font-bold text-[#1a1a1a] uppercase tracking-widest mb-3 px-2">
-            Guests
-          </label>
-          <div className="flex gap-3 h-[56px]">
-            <div className="flex-1">
-              <Select value={adults} onValueChange={setAdults}>
-                <SelectTrigger className="w-full bg-[#F3F6F9] border-0 rounded-[14px] px-5 h-full text-[14px] font-bold text-[#1a1a1a] focus:ring-0 outline-none hover:bg-[#EDF1F5] transition-colors">
-                  <SelectValue placeholder="Adults" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-0 shadow-2xl rounded-xl">
-                  {[1, 2, 3, 4, 5, 6].map((num) => (
-                    <SelectItem
-                      key={num}
-                      value={num.toString()}
-                      className="font-bold py-3"
-                    >
-                      {num} Adult{num > 1 ? "s" : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex-1">
-              <Select value={children} onValueChange={setChildren}>
-                <SelectTrigger className="w-full bg-[#F3F6F9] border-0 rounded-[14px] px-5 h-full text-[14px] font-bold text-[#1a1a1a] focus:ring-0 outline-none hover:bg-[#EDF1F5] transition-colors">
-                  <SelectValue placeholder="Children" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-0 shadow-2xl rounded-xl">
-                  {[0, 1, 2, 3, 4].map((num) => (
-                    <SelectItem
-                      key={num}
-                      value={num.toString()}
-                      className="font-bold py-3"
-                    >
-                      {num} Child{num !== 1 ? "ren" : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          {/* Children */}
+          <div className="w-full">
+            <label className="block text-[11px] font-extrabold text-[#1A202C] uppercase tracking-widest mb-2 px-1">
+              Children
+            </label>
+            <Select value={children} onValueChange={setChildren}>
+              <SelectTrigger className="w-full bg-[#F8FAFC] border border-gray-200/90 rounded-[14px] px-4 h-[52px] text-[14px] font-bold text-[#1A202C] focus:ring-0 outline-none hover:bg-[#F1F5F9] hover:border-[#FF9530] transition-colors">
+                <SelectValue placeholder="Children" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-0 shadow-2xl rounded-xl z-[9999]">
+                {[0, 1, 2, 3, 4].map((num) => (
+                  <SelectItem
+                    key={num}
+                    value={num.toString()}
+                    className="font-bold py-2.5 cursor-pointer"
+                  >
+                    {num} Child{num !== 1 ? "ren" : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
 
-        {/* Search Button */}
-        <div className="w-full lg:flex-[1.2] flex flex-col justify-end">
-          <button
-            onClick={handleSearch}
-            className="w-full bg-[#F97316] text-white h-[56px] rounded-[14px] font-bold uppercase tracking-widest text-[13px] hover:bg-[#EA580C] transition-all"
-          >
-            Check Availability
-          </button>
-        </div>
+          {/* Search Button */}
+          <div className="w-full sm:col-span-2 lg:col-span-1">
+            <label className="hidden lg:block text-[11px] font-extrabold uppercase tracking-widest mb-2 px-1 opacity-0 pointer-events-none select-none">
+              Search
+            </label>
+            <button
+              onClick={handleSearch}
+              className="w-full bg-gradient-to-r from-[#FF9530] to-[#FF8000] hover:from-[#FF8000] hover:to-[#F97316] text-white h-[52px] rounded-[14px] font-bold uppercase tracking-wider text-[13px] sm:text-[14px] shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <Search className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={2.5} />
+              <span>Check Availability</span>
+            </button>
+          </div>
 
-        {/* Close Button */}
-        <div className="absolute -top-2.5 -right-0.5 flex items-center justify-center w-8 h-8 bg-white border border-gray-100 rounded-full shadow-lg text-gray-800 cursor-pointer hover:bg-gray-50 transition-all z-30">
-          <X size={15} strokeWidth={3} />
         </div>
       </div>
     </div>

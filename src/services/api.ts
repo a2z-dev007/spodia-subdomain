@@ -17,10 +17,10 @@ export const searchListings = (params: { page_number?: number; show_landing?: bo
 
 
 export const getPropertyByName = (name: string) =>
-    handleApiCall(() => apiClient.get(`/listing/find-by-name/${name}`));
+    handleApiCall(() => apiClient.get(`/listing/find-by-name/${encodeURIComponent(name)}/`));
 
-export const getPropertyById = (id: string) =>
-    handleApiCall(() => apiClient.get(`/listing/detail/${id}`));
+export const getPropertyById = (id: string | number) =>
+    handleApiCall(() => apiClient.get(`/listing/detail/${id}/`));
 
 export const searchRoomTypes = (params: { page_number?: number; number_of_records?: number; name?: string }) =>
     handleApiCall(() => apiClient.get("/room-types/", { params }));
@@ -407,8 +407,22 @@ export const cancelReservation = (reservationId: string | number) => {
 }
 
 // Reservation Details API
+export const getReservationBasicDetails = (reservationId: string | number) => {
+    return handleApiCall(() => apiClient.get(`/reservation-basic-details/${reservationId}/`))
+}
+
 export const getReservationDetails = (reservationId: string | number) => {
-    return handleApiCall(() => apiClient.get(`/reservation-details/${reservationId}/`))
+    return getReservationBasicDetails(reservationId)
+}
+
+/** Guest booking details via email link token */
+export const getManageBooking = (token: string) => {
+    return handleApiCall(() => apiClient.get(`/manage-booking/${token}/`))
+}
+
+/** Cancel guest booking via manage-booking token */
+export const cancelManageBooking = (token: string) => {
+    return handleApiCall(() => apiClient.post(`/manage-booking/${token}/cancel/`))
 }
 
 // Add Review API
