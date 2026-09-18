@@ -1,7 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 
-export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
-export const IMAGE_BASE_URL = "https://api.spodia.com"
+export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+export const getV1Prefix = (): string => "/v1";
+
+function imageBaseFromApiBase(apiBase: string | undefined): string {
+  if (!apiBase?.trim()) return "https://api.spodia.com";
+  const origin = apiBase.trim().replace(/\/+$/, "").replace(/\/api$/, "");
+  return origin || "https://api.spodia.com";
+}
+
+const explicitImageBase = process.env.NEXT_PUBLIC_IMAGE_BASE_URL?.trim().replace(/\/+$/, "");
+export const IMAGE_BASE_URL =
+  explicitImageBase || imageBaseFromApiBase(process.env.NEXT_PUBLIC_API_BASE_URL);
 
 // Custom error class for API errors
 export class ApiError extends Error {

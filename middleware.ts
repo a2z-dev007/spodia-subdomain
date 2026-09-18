@@ -57,6 +57,7 @@ const SHARED_APP_ROUTE_PREFIXES = [
   "/forgot-password",
   "/recover_password",
   "/bookings",
+  "/search-results",
 ] as const;
 
 function isSharedAppRoute(pathname: string): boolean {
@@ -76,9 +77,13 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = getPublicHost(req);
 
-  // If path starts with /hotels/, alias/rewrite to /hotel/ for compatibility
+  // If path starts with /hotels/ or /hotel-details/, alias/rewrite to /hotel/ for compatibility
   if (url.pathname.startsWith("/hotels/")) {
     const newPathname = url.pathname.replace(/^\/hotels\//, "/hotel/");
+    return NextResponse.rewrite(new URL(newPathname, req.url));
+  }
+  if (url.pathname.startsWith("/hotel-details/")) {
+    const newPathname = url.pathname.replace(/^\/hotel-details\//, "/hotel/");
     return NextResponse.rewrite(new URL(newPathname, req.url));
   }
 

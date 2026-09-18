@@ -118,6 +118,17 @@ export const searchHotelsApi = (filters: {
     sortBy?: string
     page_number?: number
     number_of_records?: number
+    lat?: number | string
+    lng?: number | string
+    instant_booking?: boolean
+    show_landing?: boolean
+    show_landing2?: boolean
+    show_featured?: boolean
+    show_popular?: boolean
+    show_top_rated?: boolean
+    show_best_deals?: boolean
+    meta_name?: string
+    random?: boolean
 }) => {
     const payload: Record<string, any> = {}
 
@@ -133,6 +144,19 @@ export const searchHotelsApi = (filters: {
     if (filters.noOfAdult) payload.no_of_adult = filters.noOfAdult
     if (filters.noOfChild) payload.no_of_child = filters.noOfChild
     if (filters.childInfo !== undefined) payload.childInfo = filters.childInfo
+
+    // Geolocation & flags
+    if (filters.lat) payload.lat = filters.lat
+    if (filters.lng) payload.lng = filters.lng
+    if (filters.instant_booking !== undefined) payload.instant_booking = filters.instant_booking
+    if (filters.show_landing !== undefined) payload.show_landing = filters.show_landing
+    if (filters.show_landing2 !== undefined) payload.show_landing2 = filters.show_landing2
+    if (filters.show_featured !== undefined) payload.show_featured = filters.show_featured
+    if (filters.show_popular !== undefined) payload.show_popular = filters.show_popular
+    if (filters.show_top_rated !== undefined) payload.show_top_rated = filters.show_top_rated
+    if (filters.show_best_deals !== undefined) payload.show_best_deals = filters.show_best_deals
+    if (filters.meta_name) payload.meta_name = filters.meta_name
+    if (filters.random !== undefined) payload.random = filters.random
 
     // ✅ Fix sortBy mapping
     if (filters.sortBy) {

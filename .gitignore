@@ -12,6 +12,8 @@ package-lock.json
 .agents
 # production
 /build
+.DS_Store
+
 
 # debug
 npm-debug.log*
