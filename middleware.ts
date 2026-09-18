@@ -1,5 +1,4 @@
-import { NextResponse } from "next";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { isDiscoveryCountrySegment } from "@/lib/resolver/discoveryCountry";
 
 /**
