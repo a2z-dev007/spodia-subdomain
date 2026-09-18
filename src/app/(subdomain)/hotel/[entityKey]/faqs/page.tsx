@@ -103,10 +103,9 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
         pillIcon={<HelpCircle className="w-4 h-4 text-[#FF9530]" />}
         pillText="24/7 Guest Support & Policies"
         title={
-          <>
-            {name} FAQs – <br className="hidden sm:inline" />
-            <span className="text-[#FF9530]">Your Complete Stay Guide.</span>
-          </>
+          <span className="text-3xl sm:text-4xl md:text-5xl font-black">
+            {name} FAQs – <span className="text-[#FF9530]">Your Complete Stay Guide.</span>
+          </span>
         }
         subtitle={`Everything you need to know about stay policies, check-in rules, amenities, and booking details at ${name}.`}
         primaryBtnText="Book Stay Now"
@@ -121,24 +120,24 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
       />
 
       {/* 2. Interactive Search & Category Filter Bar */}
-      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/95 backdrop-blur-2xl border-b border-gray-150 shadow-sm print:hidden py-4 px-4 sm:px-8">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-[540px]">
+      <div className="sticky top-[var(--hotel-header-height,115px)] z-30 bg-white/95 backdrop-blur-2xl border-b border-gray-150 shadow-sm print:hidden py-6 px-4 sm:px-8">
+        <div className="max-w-[1400px] mx-auto flex flex-col items-center justify-center gap-6">
+          <div className="relative w-full max-w-[700px]">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input 
               type="text" 
               placeholder="Search FAQs (e.g. check-in time, WiFi, cancellation)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-50/90 border border-gray-200/80 rounded-2xl py-3 pl-12 pr-4 font-bold text-sm sm:text-base focus:ring-2 focus:ring-[#FF9530] focus:bg-white transition-all outline-none"
+              className="w-full bg-gray-50/90 border border-gray-200/80 rounded-2xl py-4 pl-12 pr-4 font-bold text-sm sm:text-base focus:ring-2 focus:ring-[#FF9530] focus:bg-white transition-all outline-none text-center md:text-left shadow-sm"
             />
           </div>
 
           {/* Quick Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 overflow-x-auto max-w-full w-full md:w-auto pb-1 md:pb-0">
+          <div className="flex flex-row flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-2 overflow-x-auto scrollbar-hide w-full max-w-full pb-2 px-2">
             <button
               onClick={() => setActiveCategory("All")}
-              className={`px-4 py-2 rounded-full text-xs font-black transition-all shrink-0 ${
+              className={`px-5 py-2.5 rounded-full text-xs md:text-sm font-black transition-all shrink-0 whitespace-nowrap ${
                 activeCategory === "All"
                   ? "bg-[#FF9530] text-white shadow-md shadow-orange-500/20"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -150,7 +149,7 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs font-black transition-all shrink-0 ${
+                className={`px-5 py-2.5 rounded-full text-xs md:text-sm font-black transition-all shrink-0 whitespace-nowrap ${
                   activeCategory === cat.id
                     ? "bg-[#FF9530] text-white shadow-md shadow-orange-500/20"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"

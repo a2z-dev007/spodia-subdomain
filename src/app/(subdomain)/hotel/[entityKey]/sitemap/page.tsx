@@ -204,7 +204,7 @@ export default async function SitemapPage({ params }: Props) {
 
       {/* Bottom CTA */}
       <section className="py-32 px-6 bg-gray-50">
-         <div className="max-w-[1000px] mx-auto text-center bg-white p-20 rounded-[64px] shadow-2xl border border-gray-100 relative overflow-hidden">
+         <div className="max-w-[1000px] mx-auto text-center bg-white p-20 rounded-[64px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-orange-50 rounded-full -mr-[200px] -mt-[200px]" />
             <div className="relative z-10">
                <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">Need Immediate <br/> <span className="text-[#FF9530]">Assistance?</span></h2>

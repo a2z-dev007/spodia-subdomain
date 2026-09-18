@@ -36,7 +36,7 @@ const HotelHeroPremium: React.FC<HotelHeroPremiumProps> = ({
   secondaryBtnHref = "#",
 }) => {
   return (
-    <section className="relative min-h-[380px] h-[52vh] max-h-[500px] w-full flex items-center justify-center overflow-hidden pb-12 font-manrope">
+    <section className="relative min-h-[380px] h-[52vh] max-h-[500px] w-full flex items-center justify-center overflow-hidden py-12 font-manrope">
       {/* Background Image & Overlays */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -77,7 +77,7 @@ const HotelHeroPremium: React.FC<HotelHeroPremiumProps> = ({
         </div>
 
         {/* Heading */}
-        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight leading-tight">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-5 tracking-tight leading-relaxed">
           {title}
         </h1>
 

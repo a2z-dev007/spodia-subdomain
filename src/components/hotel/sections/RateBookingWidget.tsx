@@ -66,7 +66,7 @@ const RateBookingWidget = () => {
             </div>
           </div>
 
-          <button className="w-full bg-[#FF9530] text-white py-6 rounded-[24px] font-black text-lg shadow-xl shadow-orange-500/20 hover:bg-gray-900 transition-all flex items-center justify-center gap-3 group">
+          <button className="w-full bg-[#FF9530] text-white py-4 md:py-5 rounded-[24px] font-black text-sm md:text-base shadow-xl shadow-orange-500/20 hover:bg-gray-900 transition-all flex items-center justify-center gap-3 group">
             Book Now & Pay Later
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>

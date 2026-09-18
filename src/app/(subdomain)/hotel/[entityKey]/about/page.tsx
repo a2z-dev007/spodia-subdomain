@@ -6,6 +6,9 @@ import {
   Leaf, Heart, Trophy, MapPin, CheckCircle2, ChevronDown, 
   CalendarDays, Star, Banknote
 } from "lucide-react";
+import { fetchHotelDetails } from "@/lib/api/hotelDetails";
+import HotelDescription from "@/components/hotel/sections/HotelDescription";
+import AboutMap from "@/components/hotel/sections/AboutMap";
 
 // Mock data based on the provided prompt structure
 const propertyData = {
@@ -52,19 +55,19 @@ const propertyData = {
   ]
 };
 
-import { fetchHotelDetails } from "@/lib/api/hotelDetails";
 
-import HotelDescription from "@/components/hotel/sections/HotelDescription";
 
 export default async function AboutPage({ params }: { params: Promise<{ entityKey: string }> }) {
   const { entityKey } = await params;
   const hotelData = await fetchHotelDetails(entityKey);
   
   const name = hotelData?.name || propertyData.name;
-  const location = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
-  const type = hotelData?.property_type || propertyData.type;
-  const isHotel = type === "Hotel" || type === "Resort";
-  const isHomestay = type === "Homestay" || type === "B&B";
+  const fullAddress = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
+  const location = hotelData?.city_name || propertyData.location || "Assam";
+  
+  const type = (hotelData?.property_type || propertyData.type).toLowerCase();
+  const isHomestay = type.includes("homestay") || type.includes("b&b") || type.includes("guest");
+  const isHotel = !isHomestay; // Default to hotel layout for any other type (Hotel, Resort, Inn, etc.)
 
 
   const jsonLd = {
@@ -75,7 +78,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
     "image": IMAGES.bgSection.src,
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": location,
+      "addressLocality": fullAddress,
       "addressCountry": "India"
     },
     "amenityFeature": propertyData.amenities.map(a => ({
@@ -232,44 +235,64 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
             <p className="text-gray-600 max-w-[600px] mx-auto text-lg">Everything you need for a memorable stay.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 items-stretch">
             {/* Accommodations */}
-            <div className="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-[#FFF4ED] rounded-2xl flex items-center justify-center mb-8">
-                <CalendarDays className="w-7 h-7 text-[#F97316]" strokeWidth={1.5} />
+            <div className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
+              <div className="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8 relative z-10 group-hover:bg-[#F97316] transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:-rotate-3">
+                <CalendarDays className="w-7 h-7 md:w-8 md:h-8 text-[#F97316] transition-colors duration-500 group-hover:text-white" strokeWidth={1.5} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Accommodations</h3>
-              <p className="text-gray-600 font-medium leading-relaxed">
-                {isHomestay ? propertyData.accommodations.homestay : propertyData.accommodations.hotel}
-              </p>
+              <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-6 relative z-10 group-hover:text-[#F97316] transition-colors">Accommodations</h3>
+              <ul className="space-y-4 relative z-10 mt-auto">
+                {(isHomestay ? propertyData.accommodations.homestay : propertyData.accommodations.hotel).split(" · ").map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <div className="mt-0.5 w-5 h-5 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0 border border-orange-100 group-hover:bg-[#F97316] transition-colors duration-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#F97316] group-hover:text-white transition-colors duration-300" strokeWidth={2.5} />
+                    </div>
+                    <span className="text-gray-600 font-medium text-[15px]">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Amenities */}
             {propertyData.amenities && propertyData.amenities.length > 0 && (
-              <div className="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-                <div className="w-14 h-14 bg-[#FFF4ED] rounded-2xl flex items-center justify-center mb-8">
-                  <CheckCircle2 className="w-7 h-7 text-[#F97316]" strokeWidth={1.5} />
+              <div className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8 relative z-10 group-hover:bg-[#F97316] transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:-rotate-3">
+                  <CheckCircle2 className="w-7 h-7 md:w-8 md:h-8 text-[#F97316] transition-colors duration-500 group-hover:text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Premium Amenities</h3>
-                <div className="flex flex-wrap gap-2">
-                  {propertyData.amenities.slice(0,6).map((amenity, idx) => (
-                    <span key={idx} className="bg-gray-50 text-gray-700 text-sm px-4 py-2 rounded-xl border border-gray-100 font-medium">
-                      {amenity}
-                    </span>
+                <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-6 relative z-10 group-hover:text-[#F97316] transition-colors">Premium Amenities</h3>
+                <ul className="grid grid-cols-2 gap-y-4 gap-x-1 relative z-10 mt-auto">
+                  {propertyData.amenities.slice(0,6).map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5 md:gap-2">
+                      <div className="mt-0.5 w-4 h-4 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0 border border-orange-100 group-hover:bg-[#F97316] transition-colors duration-300">
+                        <CheckCircle2 className="w-2.5 h-2.5 text-[#F97316] group-hover:text-white transition-colors duration-300" strokeWidth={2.5} />
+                      </div>
+                      <span className="text-gray-600 font-medium text-[12px] lg:text-[13px] leading-tight whitespace-nowrap tracking-tight">{item}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
 
             {/* Experiences */}
-            <div className="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-[#FFF4ED] rounded-2xl flex items-center justify-center mb-8">
-                <MapPin className="w-7 h-7 text-[#F97316]" strokeWidth={1.5} />
+            <div className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
+              <div className="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8 relative z-10 group-hover:bg-[#F97316] transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:-rotate-3">
+                <MapPin className="w-7 h-7 md:w-8 md:h-8 text-[#F97316] transition-colors duration-500 group-hover:text-white" strokeWidth={1.5} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Unique Experiences</h3>
-              <p className="text-gray-600 font-medium leading-relaxed">
-                {isHomestay ? propertyData.experiences.homestay : propertyData.experiences.resort}
-              </p>
+              <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-6 relative z-10 group-hover:text-[#F97316] transition-colors">Unique Experiences</h3>
+              <ul className="space-y-4 relative z-10 mt-auto">
+                {(isHomestay ? propertyData.experiences.homestay : propertyData.experiences.resort).split(" · ").map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <div className="mt-0.5 w-5 h-5 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0 border border-orange-100 group-hover:bg-[#F97316] transition-colors duration-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#F97316] group-hover:text-white transition-colors duration-300" strokeWidth={2.5} />
+                    </div>
+                    <span className="text-gray-600 font-medium text-[15px]">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -285,8 +308,10 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-[800px] mx-auto">
             {propertyData.team.map(member => (
               <div key={member.id} className="text-center group">
-                <div className="relative w-56 h-56 mx-auto rounded-[2rem] bg-gray-200 mb-8 overflow-hidden transition-transform duration-300 group-hover:scale-105">
-                  <Image src={IMAGES.placeholder.src} alt={member.name} fill className="object-cover" />
+                <div className="relative w-56 h-56 mx-auto rounded-[2rem] bg-gradient-to-br from-orange-50 to-orange-100/50 mb-8 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg border border-orange-100 shadow-sm">
+                  <span className="text-5xl font-black text-[#F97316] uppercase tracking-widest drop-shadow-sm">
+                    {member.name.split(' ').map(n => n[0]).join('')}
+                  </span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{member.name}</h3>
                 <p className="text-[#F97316] font-bold text-sm uppercase tracking-wider mb-4">{member.role}</p>
@@ -388,12 +413,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
             </div>
           </div>
           <div className="md:w-1/2 w-full h-[500px] bg-white border border-gray-200 rounded-[32px] overflow-hidden relative shadow-sm">
-            {/* Placeholder for map */}
-            <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-400 bg-gray-50">
-               <MapPin className="w-16 h-16 mb-4 opacity-40 text-gray-400" />
-               <p className="font-bold text-lg">Interactive Map Integration</p>
-               <p className="text-sm mt-2 opacity-60">To be replaced with a live map component</p>
-            </div>
+            <AboutMap hotelData={propertyData as any} />
           </div>
         </div>
       </section>

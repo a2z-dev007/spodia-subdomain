@@ -89,23 +89,23 @@ const SpecialOffers = () => {
         >
           {offers.map((offer, i) => (
             <SwiperSlide key={i}>
-              <div className={`${offer.color} p-10 rounded-[48px] h-[450px] text-white flex flex-col relative overflow-hidden group`}>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 group-hover:scale-125 transition-transform duration-700" />
+              <div className={`${offer.color} p-8 md:p-10 rounded-[40px] md:rounded-[48px] min-h-[480px] md:min-h-[500px] h-full text-white flex flex-col relative overflow-hidden group`}>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 group-hover:scale-125 transition-transform duration-700 z-0" />
                 
-                <div className="mb-8 p-4 bg-white/20 rounded-[24px] w-fit backdrop-blur-md">
+                <div className="mb-8 p-4 bg-white/20 rounded-[24px] w-fit backdrop-blur-md relative z-10">
                    {offer.icon}
                 </div>
                 
-                <h3 className="text-3xl font-black mb-4 leading-tight">{offer.title}</h3>
-                <p className="text-white/80 font-bold mb-10 text-lg">{offer.subtitle}</p>
+                <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight relative z-10 pr-12">{offer.title}</h3>
+                <p className="text-white/80 font-bold mb-10 text-base md:text-lg relative z-10">{offer.subtitle}</p>
                 
-                <div className="mt-auto">
+                <div className="mt-auto relative z-10 pb-2">
                    <p className="text-[10px] font-black uppercase tracking-widest text-white/60 mb-4">Offer Ends In:</p>
                    <CountdownTimer hours={offer.hours} />
                 </div>
                 
-                <button className="absolute bottom-10 right-10 w-16 h-16 bg-white text-gray-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl">
-                   <Sparkles className="w-6 h-6" />
+                <button className="absolute bottom-8 md:bottom-10 right-6 md:right-10 w-14 h-14 md:w-16 md:h-16 bg-white text-gray-900 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl z-20">
+                   <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
               </div>
             </SwiperSlide>

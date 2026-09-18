@@ -26,7 +26,7 @@ export default function HotelHeroSimple({
   secondaryBtnHref,
 }: Props) {
   return (
-    <section className="relative min-h-[380px] h-[52vh] max-h-[500px] w-full flex items-center justify-center overflow-hidden pb-12 font-manrope">
+    <section className="relative min-h-[400px] h-[52vh] max-h-[550px] w-full flex flex-col items-center justify-center overflow-hidden py-12 font-manrope">
       {/* Hero Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -52,7 +52,7 @@ export default function HotelHeroSimple({
         </div>
 
         {/* Heading */}
-        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight leading-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-5 tracking-tight leading-relaxed">
           {title}
         </h1>
 

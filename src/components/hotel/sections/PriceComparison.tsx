@@ -34,7 +34,7 @@ const PriceComparison = () => {
                   {item.platform}
                 </h4>
                 <p className="text-4xl font-black mb-4">{item.price}</p>
-                <div className={`text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block ${item.highlight ? "bg-white/10 text-white" : "bg-gray-100 text-gray-500"}`}>
+                <div className={`text-[10px] xl:text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full inline-block whitespace-nowrap ${item.highlight ? "bg-white/10 text-white" : "bg-gray-100 text-gray-500"}`}>
                   {item.note}
                 </div>
                 {item.highlight && (

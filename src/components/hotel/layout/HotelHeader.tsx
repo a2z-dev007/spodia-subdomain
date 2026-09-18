@@ -82,13 +82,13 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
     { label: "Rooms", href: `/hotel/${entityKey}/rooms`, icon: <Bed className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
     { label: "Dining", href: `/hotel/${entityKey}/dine`, icon: <Utensils className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
     { label: "Events", href: `/hotel/${entityKey}/events`, icon: <Calendar className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Packages", href: `/hotel/${entityKey}/tariff`, icon: <Sparkles className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Gallery", href: `/hotel/${entityKey}/gallery`, icon: <ImageIcon className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Packages", href: `/hotel/${entityKey}/tariff`, icon: <Sparkles className="w-4 h-4 text-gray-400" />, minBreakpoint: "xl" },
+    { label: "Gallery", href: `/hotel/${entityKey}/gallery`, icon: <ImageIcon className="w-4 h-4 text-gray-400" />, minBreakpoint: "xl" },
     { label: "Facilities", href: `/hotel/${entityKey}/services`, icon: <ShieldCheck className="w-4 h-4 text-gray-400" />, description: "Pools, spas, gym & amenities", minBreakpoint: "xl" },
-    { label: "Places to Visit", href: `/hotel/${entityKey}/explore`, icon: <Compass className="w-4 h-4 text-gray-400" />, description: "Sightseeing near property", minBreakpoint: "xl" },
+    { label: "Places to Visit", href: `/hotel/${entityKey}/explore`, icon: <Compass className="w-4 h-4 text-gray-400" />, description: "Sightseeing near property", minBreakpoint: "2xl" },
     { label: "Reviews", href: `/hotel/${entityKey}/reviews`, icon: <Star className="w-4 h-4 text-gray-400" />, description: "Ratings & guest reviews", minBreakpoint: "2xl" },
     { label: "About Us", href: `/hotel/${entityKey}/about`, icon: <Info className="w-4 h-4 text-gray-400" />, description: "Our story & heritage", minBreakpoint: "2xl" },
-    { label: "FAQs", href: `/hotel/${entityKey}/faqs`, icon: <HelpCircle className="w-4 h-4 text-gray-400" />, description: "Policies, check-in & FAQs", minBreakpoint: "2xl" },
+    { label: "FAQs", href: `/hotel/${entityKey}/faqs`, icon: <HelpCircle className="w-4 h-4 text-gray-400" />, description: "Policies, check-in & FAQs" },
     { label: "Contact", href: `/hotel/${entityKey}/contact`, icon: <MapPin className="w-4 h-4 text-gray-400" />, description: "Location, phone & directions" },
     { label: "Sitemap", href: `/hotel/${entityKey}/sitemap`, icon: <FileText className="w-4 h-4 text-gray-400" />, description: "Overview of all links" },
   ];
@@ -149,7 +149,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
       >
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           {/* Logo + Property Identity */}
-          <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1 sm:flex-initial shrink">
+          <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-[200px] xl:min-w-[220px] shrink-0">
             <Link href={`/hotel/${entityKey}`} className="flex items-center shrink-0">
               <Image
                 src={IMAGES.logo.src}
@@ -192,7 +192,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
           </div>
 
           {/* Desktop Adaptive Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-1 xl:space-x-2 relative" ref={dropdownRef}>
+          <div className="hidden lg:flex items-center space-x-1 xl:space-x-0.5 relative" ref={dropdownRef}>
             {/* Always visible on lg+ (1024px+) */}
             {navItems.slice(0, 4).map((item) => {
               const active = isItemActive(item.href);
@@ -200,7 +200,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`relative px-2 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
+                  className={`relative px-2 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
                     active
                       ? "text-[#FF9530] bg-orange-50/80 font-extrabold"
                       : "text-gray-700 hover:text-[#FF9530] hover:bg-gray-50"
@@ -225,7 +225,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`hidden xl:inline-flex relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
+                  className={`hidden xl:inline-flex relative px-2 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
                     active
                       ? "text-[#FF9530] bg-orange-50/80 font-extrabold"
                       : "text-gray-700 hover:text-[#FF9530] hover:bg-gray-50"
@@ -250,7 +250,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`hidden 2xl:inline-flex relative px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
+                  className={`hidden 2xl:inline-flex relative px-2 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg whitespace-nowrap ${
                     active
                       ? "text-[#FF9530] bg-orange-50/80 font-extrabold"
                       : "text-gray-700 hover:text-[#FF9530] hover:bg-gray-50"
@@ -273,7 +273,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
               <button
                 type="button"
                 onClick={() => setIsMoreDropdownOpen((prev) => !prev)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg ${
+                className={`flex items-center gap-1 px-2 py-1.5 text-xs xl:text-sm font-bold transition-all rounded-lg ${
                   isMoreDropdownOpen
                     ? "text-[#078ED8] bg-blue-50/80 font-extrabold"
                     : "text-gray-700 hover:text-[#078ED8] hover:bg-gray-50"
@@ -307,7 +307,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
                     </div>
 
                     <div className="pt-3 grid grid-cols-2 gap-2">
-                      {navItems.slice(6).map((item) => {
+                      {navItems.slice(4).map((item) => {
                         const active = isItemActive(item.href);
                         const hideClass =
                           item.minBreakpoint === "xl"
@@ -350,17 +350,8 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
             </div>
           </div>
 
-          {/* Book Now Button + Mobile Menu Trigger */}
+          {/* Mobile Menu Trigger */}
           <div className="flex items-center space-x-3 shrink-0">
-            <Link
-              href={`/hotel/${entityKey}/rooms`}
-              className={`bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white font-black text-xs md:text-sm uppercase tracking-wider rounded-xl md:rounded-full transition-all duration-300 shadow-md hover:shadow-orange-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
-                isScrolled ? "px-4 md:px-5 py-2" : "px-5 md:px-6 py-2.5"
-              }`}
-            >
-              Book Now
-            </Link>
-
             <button
               type="button"
               className="lg:hidden text-gray-800 p-2 hover:bg-gray-100 rounded-xl transition-colors"

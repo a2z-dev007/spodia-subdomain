@@ -69,6 +69,23 @@ const defaultAmenitiesList: AmenityItemData[] = [
   { id: "21", name: "Seating Area", desc: "RELAX SPACE", icon: <Armchair size={24} className="text-[#F97316]" /> },
 ];
 
+const AmenityIcon = ({ src, alt }: { src: string; alt: string }) => {
+  const [error, setError] = useState(false);
+  // Using text-gray-700 to match the dark grey outline style of the other API image icons
+  if (error || !src) return <CheckCircle size={24} className="text-gray-700" />;
+  
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={24}
+      height={24}
+      className="w-6 h-6 object-contain"
+      onError={() => setError(true)}
+    />
+  );
+};
+
 export default function HotelAmenities({ hotelData }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -92,15 +109,12 @@ export default function HotelAmenities({ hotelData }: Props) {
         name: item.name,
         desc: item.description || "AVAILABLE",
         icon: item.image ? (
-          <Image
-            src={`${IMAGE_BASE_URL}${item.image.startsWith("/") ? "" : "/"}${item.image}`}
-            alt={item.name}
-            width={24}
-            height={24}
-            className="w-6 h-6 object-contain"
+          <AmenityIcon 
+            src={`${IMAGE_BASE_URL}${item.image.startsWith("/") ? "" : "/"}${item.image}`} 
+            alt={item.name} 
           />
         ) : (
-          <CheckCircle size={24} className="text-[#F97316]" />
+          <CheckCircle size={24} className="text-gray-700" />
         ),
       }))
     : defaultAmenitiesList;
@@ -178,44 +192,50 @@ export default function HotelAmenities({ hotelData }: Props) {
           setIsModalOpen(false);
           setSearchTerm("");
         }}
-        title="Amenities"
-        maxWidth="2xl"
-      >
-        {/* Search Input */}
-        <div className="mb-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search amenities..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm text-gray-800 transition-all bg-gray-50/50"
-            />
-            <Search className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+        title={
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4">
+            <span className="text-xl md:text-2xl font-bold text-gray-900">Hotel Amenities</span>
+            {/* Search Input */}
+            <div className="relative w-full sm:max-w-xs md:max-w-sm">
+              <input
+                type="text"
+                placeholder="Search amenities..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm text-gray-800 transition-all bg-gray-50/50"
+              />
+              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-
+        }
+        maxWidth="7xl"
+      >
         {/* Modal Amenities Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 max-h-[60vh] overflow-y-auto pr-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-h-[75vh] overflow-y-auto pr-2 pb-4 pt-2">
           {filteredAmenities.map((item) => (
             <div
               key={item.id}
-              className="bg-gray-50/90 p-4 rounded-xl border border-gray-100 flex items-center gap-3 hover:bg-orange-50/50 hover:border-orange-200 transition-all"
+              className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 flex items-center gap-4 hover:border-orange-200 transition-all shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md group"
             >
-              <div className="w-10 h-10 rounded-lg bg-white shadow-xs flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-full bg-orange-50/80 flex items-center justify-center shrink-0 border border-orange-100/50 group-hover:scale-110 transition-transform">
                 {item.icon}
               </div>
-              <span className="text-xs sm:text-sm font-bold text-gray-800 leading-tight">
-                {item.name}
-              </span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider truncate mb-0.5">
+                  {item.desc || "AMENITY"}
+                </span>
+                <span className="text-sm sm:text-base font-bold text-gray-900 leading-tight truncate">
+                  {item.name}
+                </span>
+              </div>
             </div>
           ))}
 

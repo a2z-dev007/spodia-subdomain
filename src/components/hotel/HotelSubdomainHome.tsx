@@ -96,12 +96,14 @@ export default async function HotelSubdomainHome({ entityKey, initialHotelData }
           </h1>
 
           {/* Subtitle / Location */}
-          <p className="text-xs sm:text-base md:text-lg text-white/95 max-w-[750px] mx-auto mb-8 leading-relaxed font-semibold drop-shadow-sm flex items-center justify-center gap-1">
-            <MapPin className="inline-block w-4 h-4 md:w-5 md:h-5 text-[#FF9530] shrink-0" />
-            <span>{location}</span>
-            <span className="mx-1 text-white/60">·</span>
-            <span className="text-orange-300 font-bold">Best Price Guarantee</span>
-          </p>
+          <div className="text-xs sm:text-base md:text-lg text-white/95 max-w-[800px] mx-auto mb-8 leading-relaxed font-semibold drop-shadow-sm flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            <div className="flex items-center gap-1 text-center md:text-left">
+              <MapPin className="inline-block w-4 h-4 md:w-5 md:h-5 text-[#FF9530] shrink-0" />
+              <span>{location}</span>
+            </div>
+            <span className="hidden sm:inline-block text-white/60">·</span>
+            <span className="text-orange-300 font-bold whitespace-nowrap">Best Price Guarantee</span>
+          </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-row items-center justify-center gap-3 sm:gap-4">

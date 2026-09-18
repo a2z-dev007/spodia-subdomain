@@ -40,12 +40,20 @@ const PaymentTrust = () => {
 
           <div className="grid grid-cols-2 gap-6">
             {methods.map((method, index) => (
-              <div key={index} className="bg-white p-10 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div className="text-[#FF9530] mb-6">
-                  {method.icon}
+              <div key={index} className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(255,149,48,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden">
+                {/* Decorative background element */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
+                
+                {/* Icon Container */}
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-[#FF9530] mb-6 relative z-10 group-hover:bg-[#FF9530] group-hover:text-white transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:rotate-3">
+                  {React.cloneElement(method.icon, { className: "w-6 h-6 md:w-8 md:h-8 transition-transform duration-300 group-hover:scale-110" })}
                 </div>
-                <h4 className="text-xl font-black text-gray-900 mb-2">{method.title}</h4>
-                <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">{method.desc}</p>
+                
+                {/* Text Content */}
+                <div className="relative z-10">
+                  <h4 className="text-lg md:text-xl font-black text-gray-900 mb-2 group-hover:text-[#FF9530] transition-colors">{method.title}</h4>
+                  <p className="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-widest leading-relaxed">{method.desc}</p>
+                </div>
               </div>
             ))}
             

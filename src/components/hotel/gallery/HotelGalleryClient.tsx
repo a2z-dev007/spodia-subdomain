@@ -118,14 +118,8 @@ export default function HotelGalleryClient({
       });
     });
 
-    if (propCount > 0) {
-      catMap.set("property", {
-        id: "property",
-        name: propertyCategoryName,
-        count: propCount,
-        type: "property",
-      });
-    }
+    // Property category pill removed as requested by user.
+    // The images will still load under "All Photos", but won't have a dedicated pill.
 
     // B. Room images
     if (Array.isArray(hotelData?.rooms)) {
@@ -545,7 +539,7 @@ export default function HotelGalleryClient({
       >
         <div className="max-w-[1360px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-3 sm:gap-4">
           {/* Horizontal Category Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full lg:w-auto py-1 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto w-full lg:w-auto py-1 pb-3 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-gray-50 [&::-webkit-scrollbar-thumb]:bg-orange-300 [&::-webkit-scrollbar-thumb]:rounded-full">
             {categories.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
@@ -587,35 +581,7 @@ export default function HotelGalleryClient({
               />
             </div>
 
-            {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200 flex-shrink-0">
-              <button
-                onClick={() => setViewMode("editorial")}
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === "editorial"
-                    ? "bg-white text-gray-900 shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-                title="Bento Editorial Layout"
-                aria-label="Editorial View"
-              >
-                <Layers className="w-4 h-4" />
-                <span className="hidden sm:inline-block">Editorial</span>
-              </button>
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === "grid"
-                    ? "bg-white text-gray-900 shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-                title="Standard Grid Layout"
-                aria-label="Grid View"
-              >
-                <LayoutGrid className="w-4 h-4" />
-                <span className="hidden sm:inline-block">Grid</span>
-              </button>
-            </div>
+            {/* View Mode Toggle Removed */}
           </div>
         </div>
       </section>
