@@ -33,7 +33,7 @@ export async function buildHotelSegmentMetadata(opts: {
       : opts.segment.charAt(0).toUpperCase() + opts.segment.slice(1);
 
   const pathname =
-    opts.segment === "home" ? `/hotel/${opts.entityKey}` : `/hotel/${opts.entityKey}/${opts.segment}`;
+    opts.segment === "home" ? `/hotels/${opts.entityKey}` : `/hotels/${opts.entityKey}/${opts.segment}`;
 
   const protocol = host.includes("localhost") ? "http" : "https";
   const canonical = `${protocol}://${host}${pathname}`;

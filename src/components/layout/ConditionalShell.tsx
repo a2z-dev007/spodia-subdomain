@@ -9,7 +9,7 @@ interface ConditionalShellProps {
 
 export default function ConditionalShell({ children }: ConditionalShellProps) {
   const pathname = usePathname();
-  const isHotelPage = pathname.startsWith("/hotel/");
+  const isHotelPage = pathname.startsWith("/hotel/") || pathname.startsWith("/hotels/");
 
   if (isHotelPage) {
     return null;

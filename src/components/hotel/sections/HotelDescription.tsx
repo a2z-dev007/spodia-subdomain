@@ -272,7 +272,7 @@ export default function HotelDescription({ hotelData, entityKey }: Props) {
           {/* View Rooms & Rates Action CTA */}
           <div className="pt-2 flex justify-end">
             <Link
-              href={`/hotel/${entityKey || "hm-resort-dibrugarh"}/rooms`}
+              href={`/hotels/${entityKey || "hm-resort-dibrugarh"}/rooms`}
               className="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-[#FF9530] to-[#FF8000] hover:from-[#FF8000] hover:to-[#F97316] text-white font-black text-xs uppercase tracking-wider shadow-md hover:shadow-orange-500/25 transition-all flex items-center justify-center gap-2 active:scale-98"
             >
               <span>VIEW ROOMS &amp; RATES</span>

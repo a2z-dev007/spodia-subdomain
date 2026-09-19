@@ -27,8 +27,8 @@ export default async function ContactPage({ params }: Props) {
   const hotelData = await fetchHotelDetails(entityKey);
   const name = hotelData?.name || propertyData.name;
   const location = hotelData?.address || (hotelData?.city_name ? `${hotelData.city_name}, ${hotelData.state_name || ''}` : propertyData.location);
-  const phone = hotelData?.mobile_number || "+91 7399888855";
-  const email = hotelData?.email || `bookings@spodia.com`;
+  const phone = (hotelData as any)?.mobile_number || "+91 7399888855";
+  const email = (hotelData as any)?.email || `bookings@spodia.com`;
 
   const jsonLd = {
     "@context": "https://schema.org",

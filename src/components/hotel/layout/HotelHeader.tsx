@@ -78,19 +78,19 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
 
   // Consistent muted gray icon styling (No multi-color)
   const navItems: NavItem[] = [
-    { label: "Overview", href: `/hotel/${entityKey}`, icon: <Info className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Rooms", href: `/hotel/${entityKey}/rooms`, icon: <Bed className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Dining", href: `/hotel/${entityKey}/dine`, icon: <Utensils className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Events", href: `/hotel/${entityKey}/events`, icon: <Calendar className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Packages", href: `/hotel/${entityKey}/tariff`, icon: <Sparkles className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Gallery", href: `/hotel/${entityKey}/gallery`, icon: <ImageIcon className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
-    { label: "Facilities", href: `/hotel/${entityKey}/services`, icon: <ShieldCheck className="w-4 h-4 text-gray-400" />, description: "Pools, spas, gym & amenities", minBreakpoint: "xl" },
-    { label: "Places to Visit", href: `/hotel/${entityKey}/explore`, icon: <Compass className="w-4 h-4 text-gray-400" />, description: "Sightseeing near property", minBreakpoint: "xl" },
-    { label: "Reviews", href: `/hotel/${entityKey}/reviews`, icon: <Star className="w-4 h-4 text-gray-400" />, description: "Ratings & guest reviews", minBreakpoint: "2xl" },
-    { label: "About Us", href: `/hotel/${entityKey}/about`, icon: <Info className="w-4 h-4 text-gray-400" />, description: "Our story & heritage", minBreakpoint: "2xl" },
-    { label: "FAQs", href: `/hotel/${entityKey}/faqs`, icon: <HelpCircle className="w-4 h-4 text-gray-400" />, description: "Policies, check-in & FAQs", minBreakpoint: "2xl" },
-    { label: "Contact", href: `/hotel/${entityKey}/contact`, icon: <MapPin className="w-4 h-4 text-gray-400" />, description: "Location, phone & directions" },
-    { label: "Sitemap", href: `/hotel/${entityKey}/sitemap`, icon: <FileText className="w-4 h-4 text-gray-400" />, description: "Overview of all links" },
+    { label: "Overview", href: `/hotels/${entityKey}`, icon: <Info className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Rooms", href: `/hotels/${entityKey}/rooms`, icon: <Bed className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Dining", href: `/hotels/${entityKey}/dine`, icon: <Utensils className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Events", href: `/hotels/${entityKey}/events`, icon: <Calendar className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Packages", href: `/hotels/${entityKey}/tariff`, icon: <Sparkles className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Gallery", href: `/hotels/${entityKey}/gallery`, icon: <ImageIcon className="w-4 h-4 text-gray-400" />, minBreakpoint: "lg" },
+    { label: "Facilities", href: `/hotels/${entityKey}/services`, icon: <ShieldCheck className="w-4 h-4 text-gray-400" />, description: "Pools, spas, gym & amenities", minBreakpoint: "xl" },
+    { label: "Places to Visit", href: `/hotels/${entityKey}/explore`, icon: <Compass className="w-4 h-4 text-gray-400" />, description: "Sightseeing near property", minBreakpoint: "xl" },
+    { label: "Reviews", href: `/hotels/${entityKey}/reviews`, icon: <Star className="w-4 h-4 text-gray-400" />, description: "Ratings & guest reviews", minBreakpoint: "2xl" },
+    { label: "About Us", href: `/hotels/${entityKey}/about`, icon: <Info className="w-4 h-4 text-gray-400" />, description: "Our story & heritage", minBreakpoint: "2xl" },
+    { label: "FAQs", href: `/hotels/${entityKey}/faqs`, icon: <HelpCircle className="w-4 h-4 text-gray-400" />, description: "Policies, check-in & FAQs", minBreakpoint: "2xl" },
+    { label: "Contact", href: `/hotels/${entityKey}/contact`, icon: <MapPin className="w-4 h-4 text-gray-400" />, description: "Location, phone & directions" },
+    { label: "Sitemap", href: `/hotels/${entityKey}/sitemap`, icon: <FileText className="w-4 h-4 text-gray-400" />, description: "Overview of all links" },
   ];
 
   const isItemActive = (href: string) => pathname === href || pathname === `${href}/`;
@@ -150,7 +150,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           {/* Logo + Property Identity */}
           <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1 sm:flex-initial shrink">
-            <Link href={`/hotel/${entityKey}`} className="flex items-center shrink-0">
+            <Link href={`/hotels/${entityKey}`} className="flex items-center shrink-0">
               <Image
                 src={IMAGES.logo.src}
                 alt="Spodia"
@@ -353,7 +353,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
           {/* Book Now Button + Mobile Menu Trigger */}
           <div className="flex items-center space-x-3 shrink-0">
             <Link
-              href={`/hotel/${entityKey}/rooms`}
+              href={`/hotels/${entityKey}/rooms`}
               className={`bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white font-black text-xs md:text-sm uppercase tracking-wider rounded-xl md:rounded-full transition-all duration-300 shadow-md hover:shadow-orange-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
                 isScrolled ? "px-4 md:px-5 py-2" : "px-5 md:px-6 py-2.5"
               }`}
@@ -441,7 +441,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
 
               <div className="p-5 border-t border-gray-100 bg-gray-50/50 space-y-3">
                 <Link
-                  href={`/hotel/${entityKey}/rooms`}
+                  href={`/hotels/${entityKey}/rooms`}
                   onClick={() => setIsMenuOpen(false)}
                   className="block w-full bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-center text-white py-3.5 rounded-xl font-black uppercase tracking-wider shadow-lg shadow-orange-500/20 text-sm"
                 >
@@ -457,7 +457,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
                     Call Hotel
                   </a>
                   <a
-                    href={`/hotel/${entityKey}/contact`}
+                    href={`/hotels/${entityKey}/contact`}
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center justify-center gap-1.5 p-2 bg-white rounded-lg border border-gray-200 hover:border-[#078ED8]"
                   >

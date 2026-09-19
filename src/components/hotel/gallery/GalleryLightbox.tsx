@@ -404,7 +404,7 @@ export default function GalleryLightbox({
           {/* Quick CTA if this photo is linked to a room */}
           {currentPhoto?.categoryType === "room" && (
             <Link
-              href={`/hotel/${entityKey}/rooms`}
+              href={`/hotels/${entityKey}/rooms`}
               onClick={onClose}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >

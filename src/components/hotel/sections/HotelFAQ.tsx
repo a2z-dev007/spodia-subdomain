@@ -189,7 +189,7 @@ export default function HotelFAQ({ hotelData, entityKey }: Props) {
         {/* Centered See All FAQs CTA Button */}
         <div className="flex flex-col items-center justify-center pt-2">
           <Link
-            href={`/hotel/${slug}/faqs`}
+            href={`/hotels/${slug}/faqs`}
             className="group px-8 py-3.5 rounded-full bg-gradient-to-r from-[#FF9530] to-[#FF8000] hover:from-[#FF8000] hover:to-[#F97316] text-white font-black text-sm uppercase tracking-wider shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2.5"
           >
             <span>See All FAQs ({displayFaqs.length} Total Questions)</span>

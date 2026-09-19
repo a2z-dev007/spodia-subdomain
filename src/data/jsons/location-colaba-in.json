@@ -16,7 +16,7 @@
       "reviews": 2100,
       "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
       "tags": ["Sea View", "Business Focal", "Walking Distance Landmarks"],
-      "cta": "/hotel/trident-nariman-point"
+      "cta": "/hotels/trident-nariman-point"
     },
     {
       "id": "taj-mahal-palace-colaba",
@@ -28,7 +28,7 @@
       "reviews": 5400,
       "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
       "tags": ["Heritage Icon", "Full Sea Front"],
-      "cta": "/hotel/taj-mahal-palace"
+      "cta": "/hotels/taj-mahal-palace"
     }
   ],
   "whySpodia": [

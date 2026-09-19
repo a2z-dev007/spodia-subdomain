@@ -393,7 +393,7 @@ export default function HotelGalleryClient({
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <Link
-              href={`/hotel/${entityKey}/rooms`}
+              href={`/hotels/${entityKey}/rooms`}
               className="px-7 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider bg-gradient-to-r from-[#FF9530] to-[#FF8000] hover:from-[#FF8000] hover:to-[#F97316] text-white shadow-xl hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
             >
               <span>Book Your Stay</span>
@@ -820,7 +820,7 @@ export default function HotelGalleryClient({
                       </button>
 
                       <Link
-                        href={`/hotel/${entityKey}/rooms`}
+                        href={`/hotels/${entityKey}/rooms`}
                         className="flex-1 py-2.5 rounded-xl bg-[#FF9530] hover:bg-[#FF8000] text-white font-extrabold text-xs transition-colors text-center shadow-md shadow-orange-500/20"
                       >
                         Book Room
@@ -875,7 +875,7 @@ export default function HotelGalleryClient({
 
           <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto">
             <Link
-              href={`/hotel/${entityKey}/rooms`}
+              href={`/hotels/${entityKey}/rooms`}
               className="px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white shadow-xl hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all text-center flex items-center justify-center gap-2"
             >
               <span>Check Room Availability</span>
@@ -883,7 +883,7 @@ export default function HotelGalleryClient({
             </Link>
 
             <Link
-              href={`/hotel/${entityKey}/contact`}
+              href={`/hotels/${entityKey}/contact`}
               className="px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-white/10 hover:bg-white/15 text-white border border-white/20 transition-all text-center flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-4 h-4 text-[#FF9530]" />
