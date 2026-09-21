@@ -26,17 +26,17 @@ export default async function DiningPage({ params }: Props) {
         subtitle="Experience fine culinary flavors and traditional regional cuisine"
       />
 
-      <section className="py-16 px-6 max-w-[1200px] mx-auto w-full text-center">
-        <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <h2 className="text-3xl font-black text-gray-900">Culinary & Restaurant Menu</h2>
+      <section className="py-8 md:py-16 px-4 md:px-6 max-w-[1200px] mx-auto w-full text-center">
+        <div className="bg-white rounded-[24px] md:rounded-[32px] p-5 md:p-12 shadow-sm border border-gray-100">
+          <div className="flex flex-col items-center justify-center gap-3 mb-4">
+            <h2 className="text-[26px] md:text-3xl font-black text-gray-900 leading-[1.2]">Culinary & Restaurant Menu</h2>
             <StaticDataBadge text="static data - need this data on the api" />
           </div>
           <p className="text-gray-600 text-base max-w-[700px] mx-auto leading-relaxed">
             Multi-cuisine dining options with local and international dishes prepared fresh at {name}.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
             <div className="bg-gray-50 p-6 rounded-[20px] border border-gray-100">
               <h3 className="font-bold text-gray-900 text-lg mb-1">In-House Restaurant</h3>
               <p className="text-xs text-gray-500 mb-3">07:00 AM – 10:30 PM</p>

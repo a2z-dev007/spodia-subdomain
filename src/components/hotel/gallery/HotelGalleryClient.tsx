@@ -305,7 +305,7 @@ export default function HotelGalleryClient({
   return (
     <div className="flex flex-col w-full bg-white font-manrope">
       {/* 1. HERO SECTION WITH HOTEL'S ACTUAL COVER PHOTO */}
-      <section className="relative min-h-[460px] lg:min-h-[520px] w-full flex items-center justify-center overflow-hidden font-manrope">
+      <section className="relative min-h-[380px] sm:min-h-[420px] lg:min-h-[520px] w-full flex items-center justify-center overflow-hidden font-manrope">
         {/* Background Image with Cinematic Dark Gradient */}
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
@@ -320,7 +320,7 @@ export default function HotelGalleryClient({
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center flex flex-col items-center">
+        <div className="relative z-10 max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20 text-center flex flex-col items-center">
           {/* Breadcrumb & Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-5">
             <span className="bg-white/15 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-sm">
@@ -343,7 +343,7 @@ export default function HotelGalleryClient({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 tracking-tight leading-tight max-w-[1000px]">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-tight max-w-[1000px] px-2">
             Photo Gallery –{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9530] via-[#FFA44D] to-[#FF8000]">
               {hotelName}
@@ -351,35 +351,35 @@ export default function HotelGalleryClient({
           </h1>
 
           {/* Location & Description */}
-          <div className="flex items-center justify-center gap-2 text-white/90 text-sm sm:text-base font-semibold max-w-[700px] mb-8">
-            <MapPin className="w-4 h-4 text-[#FF9530] flex-shrink-0" />
-            <span className="truncate">{hotelAddress}</span>
+          <div className="flex items-start sm:items-center justify-center gap-1.5 text-white/90 text-xs sm:text-base font-semibold max-w-[700px] w-full px-4 mb-6 sm:mb-8 text-left sm:text-center">
+            <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF9530] flex-shrink-0 mt-[2px] sm:mt-0" />
+            <span className="break-words leading-tight">{hotelAddress}</span>
           </div>
 
           {/* Live Stats Strip */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-6 bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:p-5 max-w-[650px] w-full mb-8 shadow-2xl">
-            <div className="flex flex-col items-center">
-              <span className="text-2xl sm:text-3xl font-black text-white">
+          <div className="grid grid-cols-3 gap-2 sm:gap-6 bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:p-5 max-w-[650px] w-full mb-8 shadow-2xl mx-auto">
+            <div className="flex flex-col items-center justify-center text-center">
+              <span className="text-xl sm:text-3xl font-black text-white">
                 {allPhotos.length}
               </span>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
-                High-Res Photos
+              <span className="text-[8px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider text-white/70 leading-tight mt-0.5">
+                High-Res<br className="sm:hidden" /> Photos
               </span>
             </div>
-            <div className="flex flex-col items-center border-x border-white/15">
-              <span className="text-2xl sm:text-3xl font-black text-white">
+            <div className="flex flex-col items-center justify-center text-center border-x border-white/15">
+              <span className="text-xl sm:text-3xl font-black text-white">
                 {roomCollections.length || 1}
               </span>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
-                Room Types
+              <span className="text-[8px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider text-white/70 leading-tight mt-0.5">
+                Room<br className="sm:hidden" /> Types
               </span>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-2xl sm:text-3xl font-black text-[#FF9530]">
+            <div className="flex flex-col items-center justify-center text-center">
+              <span className="text-xl sm:text-3xl font-black text-[#FF9530]">
                 100%
               </span>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
-                Real Imagery
+              <span className="text-[8px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider text-white/70 leading-tight mt-0.5">
+                Real<br className="sm:hidden" /> Imagery
               </span>
             </div>
           </div>

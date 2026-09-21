@@ -57,19 +57,19 @@ const HotelFooter: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-[#F9F9F9] pt-20 pb-10 font-manrope">
+    <footer className="bg-[#F9F9F9] pt-10 pb-24 md:pt-14 md:pb-10 font-manrope">
       <div className="max-w-[1600px] mx-auto px-6 md:px-12">
         {/* Main Footer Links */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20 text-center sm:text-left">
           {footerSections.map((section) => (
-            <div key={section.title} className="flex flex-col space-y-8">
+            <div key={section.title} className="flex flex-col space-y-6 sm:space-y-8 items-center sm:items-start">
               <h3 className="text-[18px] font-black text-[#2D3142]">{section.title}</h3>
-              <ul className="flex flex-col space-y-4">
+              <ul className="flex flex-col space-y-4 items-center sm:items-start">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className={`text-[14px] transition-all flex items-center ${
+                      className={`text-[14px] transition-all flex items-center justify-center sm:justify-start ${
                         link.isAction 
                           ? "text-[#F97316] font-bold" 
                           : "text-[#64748B] hover:text-[#2D3142]"
@@ -93,8 +93,8 @@ const HotelFooter: React.FC = () => {
         {/* Bottom Bar */}
         <div className="flex flex-col space-y-12">
            {/* Logo and Secondary Links */}
-           <div className="flex flex-col md:flex-row items-center justify-between gap-10">
-             <div className="flex items-center shrink-0">
+           <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10">
+             <div className="flex items-center shrink-0 w-full lg:w-auto justify-center lg:justify-start mb-2 lg:mb-0">
                <Image
                  src={IMAGES.logo.src}
                  alt="Spodia Logo"
@@ -104,13 +104,15 @@ const HotelFooter: React.FC = () => {
                />
              </div>
              
-             <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-               <Link href="#" className="text-[14px] font-medium text-[#64748B] hover:text-[#2D3142] transition-colors">Privacy Policy</Link>
-               <Link href="#" className="text-[14px] font-medium text-[#64748B] hover:text-[#2D3142] transition-colors">Terms of Service</Link>
-               <Link href="#" className="text-[14px] font-medium text-[#64748B] hover:text-[#2D3142] transition-colors">Cookie Settings</Link>
+             <div className="flex flex-row items-center justify-center lg:justify-end gap-3 sm:gap-5 w-full order-3 lg:order-2">
+               <Link href="#" className="text-[12px] sm:text-[13px] font-medium text-[#64748B] hover:text-[#2D3142] transition-colors whitespace-nowrap">Privacy Policy</Link>
+               <span className="text-gray-300 text-xs">•</span>
+               <Link href="#" className="text-[12px] sm:text-[13px] font-medium text-[#64748B] hover:text-[#2D3142] transition-colors whitespace-nowrap">Terms of Service</Link>
+               <span className="text-gray-300 text-xs">•</span>
+               <Link href="#" className="text-[12px] sm:text-[13px] font-medium text-[#64748B] hover:text-[#2D3142] transition-colors whitespace-nowrap">Cookie Settings</Link>
              </div>
 
-             <div className="flex items-center space-x-4">
+             <div className="flex items-center justify-center space-x-4 shrink-0 w-full lg:w-auto order-2 lg:order-3 mb-2 lg:mb-0">
                <Link href="#" className="w-10 h-10 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center text-[#2D3142] hover:bg-[#F97316] hover:text-white hover:border-[#F97316] transition-all transform hover:scale-110">
                  <Facebook size={18} />
                </Link>
@@ -124,8 +126,8 @@ const HotelFooter: React.FC = () => {
            </div>
 
            {/* Copyright */}
-           <div className="text-center">
-             <p className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-[0.2em] leading-relaxed">
+           <div className="text-center px-4 md:px-0">
+             <p className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-[0.2em] leading-relaxed max-w-[80%] md:max-w-none mx-auto">
                © {currentYear} SPODIA ACCOMMODATION SERVICES. ALL RIGHTS RESERVED.
              </p>
            </div>

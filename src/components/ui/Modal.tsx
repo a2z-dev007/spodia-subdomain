@@ -70,11 +70,11 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = '7x
       <div className={`relative bg-white rounded-2xl shadow-2xl w-full ${maxWidthClasses[maxWidth]} max-h-[85vh] flex flex-col`}>
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-start sm:items-center justify-between p-4 sm:p-6 border-b border-gray-200 gap-4">
             {typeof title === 'string' ? (
-              <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{title}</h2>
             ) : (
-              <div className="flex-1 mr-4">{title}</div>
+              <div className="flex-1 min-w-0">{title}</div>
             )}
             <button
               onClick={onClose}

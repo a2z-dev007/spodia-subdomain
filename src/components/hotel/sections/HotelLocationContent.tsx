@@ -225,9 +225,9 @@ export default function HotelLocationContent({ hotelData }: Props) {
 
               <div className="space-y-3.5">
                 {landmarks.slice(0, 3).map((item, index) => (
-                  <div key={index} className="flex justify-between items-center bg-white p-3.5 rounded-xl border border-gray-100 shadow-2xs">
+                  <div key={index} className="flex justify-between items-start sm:items-center bg-white p-3.5 rounded-xl border border-gray-100 shadow-2xs gap-3">
                     <span className="text-xs sm:text-sm font-bold text-gray-700">{item.name}</span>
-                    <span className="bg-orange-50 text-[#FF9530] text-xs font-black px-2.5 py-1 rounded-md border border-orange-200/50">{item.distance}</span>
+                    <span className="bg-orange-50 text-[#FF9530] text-xs font-black px-2.5 py-1 rounded-md border border-orange-200/50 whitespace-nowrap shrink-0 mt-0.5 sm:mt-0">{item.distance}</span>
                   </div>
                 ))}
               </div>
@@ -248,9 +248,9 @@ export default function HotelLocationContent({ hotelData }: Props) {
 
               <div className="space-y-3.5">
                 {transportOptions.slice(0, 3).map((item, index) => (
-                  <div key={index} className="flex justify-between items-center bg-white p-3.5 rounded-xl border border-gray-100 shadow-2xs">
+                  <div key={index} className="flex justify-between items-start sm:items-center bg-white p-3.5 rounded-xl border border-gray-100 shadow-2xs gap-3">
                     <span className="text-xs sm:text-sm font-bold text-gray-700">{item.name}</span>
-                    <span className="bg-orange-50 text-[#FF9530] text-xs font-black px-2.5 py-1 rounded-md border border-orange-200/50">{item.distance}</span>
+                    <span className="bg-orange-50 text-[#FF9530] text-xs font-black px-2.5 py-1 rounded-md border border-orange-200/50 whitespace-nowrap shrink-0 mt-0.5 sm:mt-0">{item.distance}</span>
                   </div>
                 ))}
               </div>

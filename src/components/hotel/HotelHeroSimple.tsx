@@ -26,7 +26,7 @@ export default function HotelHeroSimple({
   secondaryBtnHref,
 }: Props) {
   return (
-    <section className="relative min-h-[400px] h-[52vh] max-h-[550px] w-full flex flex-col items-center justify-center overflow-hidden py-12 font-manrope">
+    <section className="relative min-h-[480px] md:min-h-[400px] h-[52vh] max-h-[550px] w-full flex flex-col items-center justify-center overflow-hidden py-16 font-manrope">
       {/* Hero Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -52,22 +52,22 @@ export default function HotelHeroSimple({
         </div>
 
         {/* Heading */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-5 tracking-tight leading-relaxed">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 md:mb-5 tracking-tight leading-tight">
           {title}
         </h1>
 
         {/* Subtitle */}
         {subtitle && (
-          <p className="text-xs sm:text-sm md:text-base text-white/90 max-w-[700px] mx-auto mb-6 leading-relaxed font-semibold">
+          <p className="text-[13px] sm:text-sm md:text-base text-white/90 max-w-[700px] mx-auto mb-4 md:mb-6 leading-snug md:leading-relaxed font-semibold">
             {subtitle}
           </p>
         )}
 
         {/* Standardized Primary & Glass UI Secondary Buttons */}
-        <div className="flex flex-row items-center justify-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-[280px] sm:max-w-none mx-auto mt-4">
           <Link
             href={primaryBtnHref || "#"}
-            className="px-6 py-2.5 sm:px-7 sm:py-3 rounded-xl font-black text-xs md:text-sm uppercase tracking-wider bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white shadow-lg hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+            className="w-full sm:w-auto px-6 py-3 sm:px-7 sm:py-3.5 rounded-xl font-black text-xs md:text-sm uppercase tracking-wider bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white shadow-lg hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
           >
             <span>{primaryBtnText}</span>
             <ArrowRight className="w-4 h-4" />
@@ -75,7 +75,7 @@ export default function HotelHeroSimple({
 
           <Link
             href={secondaryBtnHref || "#"}
-            className="px-6 py-2.5 sm:px-7 sm:py-3 rounded-xl font-black text-xs md:text-sm uppercase tracking-wider bg-white/15 backdrop-blur-md text-white border border-white/30 hover:bg-white/25 active:scale-[0.98] transition-all"
+            className="w-full sm:w-auto px-6 py-3 sm:px-7 sm:py-3.5 rounded-xl font-black text-xs md:text-sm uppercase tracking-wider bg-white/15 backdrop-blur-md text-white border border-white/30 hover:bg-white/25 active:scale-[0.98] transition-all text-center flex items-center justify-center"
           >
             {secondaryBtnText}
           </Link>

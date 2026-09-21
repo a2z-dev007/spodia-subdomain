@@ -259,7 +259,7 @@ const StickyBookingBar = ({
       </div>
 
       {/* Mobile Sticky Bar - Bottom */}
-      <div className={`lg:hidden fixed bottom-16 left-0 right-0 z-40 transition-all duration-300 ${
+      <div className={`lg:hidden fixed bottom-0 left-0 right-0 z-[60] transition-all duration-300 ${
         isSticky ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
       }`}>
         <div className="bg-white border-t border-orange-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">

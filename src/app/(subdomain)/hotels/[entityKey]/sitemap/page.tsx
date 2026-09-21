@@ -203,19 +203,19 @@ export default async function SitemapPage({ params }: Props) {
       </div>
 
       {/* Bottom CTA */}
-      <section className="py-32 px-6 bg-gray-50">
-         <div className="max-w-[1000px] mx-auto text-center bg-white p-20 rounded-[64px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-orange-50 rounded-full -mr-[200px] -mt-[200px]" />
+      <section className="py-16 md:py-32 px-4 sm:px-6 bg-gray-50">
+         <div className="max-w-[1000px] mx-auto text-center bg-white p-8 sm:p-12 md:p-20 rounded-[32px] sm:rounded-[48px] md:rounded-[64px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-orange-50 rounded-full -mr-[200px] -mt-[200px] pointer-events-none" />
             <div className="relative z-10">
-               <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 leading-tight">Need Immediate <br/> <span className="text-[#FF9530]">Assistance?</span></h2>
-               <p className="text-gray-600 text-xl font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+               <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4 sm:mb-8 leading-tight">Need Immediate <br/> <span className="text-[#FF9530]">Assistance?</span></h2>
+               <p className="text-gray-600 text-sm sm:text-base md:text-xl font-medium mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed">
                   If you can't find what you're looking for, our support team is available 24/7 to help you navigate our services.
                </p>
-               <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-                  <button className="bg-gray-900 text-white px-12 py-6 rounded-[24px] font-black text-xl hover:bg-[#FF9530] transition-all shadow-xl shadow-gray-200">
+               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 md:gap-6">
+                  <button className="w-full sm:w-auto bg-gray-900 text-white px-6 sm:px-8 lg:px-12 py-3.5 sm:py-4 lg:py-6 rounded-xl sm:rounded-2xl md:rounded-[24px] font-black text-sm sm:text-base lg:text-xl hover:bg-[#FF9530] transition-all shadow-xl shadow-gray-200 whitespace-nowrap">
                      Contact Support
                   </button>
-                  <button className="bg-white text-gray-900 border-2 border-gray-100 px-12 py-6 rounded-[24px] font-black text-xl hover:bg-gray-50 transition-all">
+                  <button className="w-full sm:w-auto bg-white text-gray-900 border-2 border-gray-100 px-6 sm:px-8 lg:px-12 py-3.5 sm:py-4 lg:py-6 rounded-xl sm:rounded-2xl md:rounded-[24px] font-black text-sm sm:text-base lg:text-xl hover:bg-gray-50 transition-all whitespace-nowrap">
                      Back to Homepage
                   </button>
                </div>

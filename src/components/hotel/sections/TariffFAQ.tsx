@@ -25,11 +25,11 @@ const TariffFAQ = () => {
   ];
 
   return (
-    <section className="py-24 bg-white px-6">
+    <section className="py-12 md:py-24 bg-white px-4 md:px-6">
       <div className="max-w-[800px] mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">Booking Queries?</h2>
-          <p className="text-gray-600 text-lg font-medium">Everything you need to know about rates, payments, and policies.</p>
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="text-[28px] md:text-4xl font-black text-gray-900 mb-3 md:mb-6 leading-[1.2]">Booking Queries?</h2>
+          <p className="text-gray-600 text-base md:text-lg font-medium">Everything you need to know about rates, payments, and policies.</p>
         </div>
 
         <div className="space-y-4">

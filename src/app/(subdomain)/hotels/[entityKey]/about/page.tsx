@@ -117,7 +117,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
       </section>
 
       {/* 2. Our Story */}
-      <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
+      <section className="py-12 md:py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
         <div className="text-center mb-16">
            <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">OUR JOURNEY</span>
            <h2 className="text-3xl md:text-[44px] font-bold text-gray-900">Our Story</h2>
@@ -194,7 +194,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
 
       {/* 3. Mission & Values (Dark Theme) */}
       {propertyData.values && propertyData.values.length > 0 && (
-        <section className="bg-[#0A0A0A] py-24 px-6 w-full overflow-hidden relative">
+        <section className="bg-[#0A0A0A] py-12 md:py-24 px-6 w-full overflow-hidden relative">
           <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[600px] h-[600px] bg-[#EA580C]/10 rounded-full blur-[120px] -ml-[300px] pointer-events-none" />
           <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[600px] h-[600px] bg-[#EA580C]/10 rounded-full blur-[120px] -mr-[300px] pointer-events-none" />
           
@@ -227,7 +227,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
       )}
 
       {/* 4. Property Highlights */}
-      <section className="py-24 px-6 md:px-12 bg-gray-50 w-full">
+      <section className="py-12 md:py-24 px-6 md:px-12 bg-gray-50 w-full">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-16">
             <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">DISCOVER MORE</span>
@@ -235,9 +235,9 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
             <p className="text-gray-600 max-w-[600px] mx-auto text-lg">Everything you need for a memorable stay.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10 items-stretch">
             {/* Accommodations */}
-            <div className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
+            <div className="group bg-white p-6 sm:p-8 lg:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
               <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
               <div className="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8 relative z-10 group-hover:bg-[#F97316] transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:-rotate-3">
                 <CalendarDays className="w-7 h-7 md:w-8 md:h-8 text-[#F97316] transition-colors duration-500 group-hover:text-white" strokeWidth={1.5} />
@@ -257,7 +257,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
 
             {/* Amenities */}
             {propertyData.amenities && propertyData.amenities.length > 0 && (
-              <div className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
+              <div className="group bg-white p-6 sm:p-8 lg:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8 relative z-10 group-hover:bg-[#F97316] transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:-rotate-3">
                   <CheckCircle2 className="w-7 h-7 md:w-8 md:h-8 text-[#F97316] transition-colors duration-500 group-hover:text-white" strokeWidth={1.5} />
@@ -269,7 +269,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
                       <div className="mt-0.5 w-4 h-4 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0 border border-orange-100 group-hover:bg-[#F97316] transition-colors duration-300">
                         <CheckCircle2 className="w-2.5 h-2.5 text-[#F97316] group-hover:text-white transition-colors duration-300" strokeWidth={2.5} />
                       </div>
-                      <span className="text-gray-600 font-medium text-[12px] lg:text-[13px] leading-tight whitespace-nowrap tracking-tight">{item}</span>
+                      <span className="text-gray-600 font-medium text-[12px] lg:text-[13px] leading-tight tracking-tight">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -277,7 +277,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
             )}
 
             {/* Experiences */}
-            <div className="group bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
+            <div className="group bg-white p-6 sm:p-8 lg:p-10 rounded-[32px] border border-gray-100 hover:border-orange-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.15)] hover:-translate-y-1.5 transition-all duration-500 relative overflow-hidden h-full flex flex-col">
               <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110" />
               <div className="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8 relative z-10 group-hover:bg-[#F97316] transition-colors duration-500 shadow-sm group-hover:shadow-orange-500/30 group-hover:-rotate-3">
                 <MapPin className="w-7 h-7 md:w-8 md:h-8 text-[#F97316] transition-colors duration-500 group-hover:text-white" strokeWidth={1.5} />
@@ -300,7 +300,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
 
       {/* 5. Team Section */}
       {propertyData.team && propertyData.team.length > 0 && (
-        <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
+        <section className="py-12 md:py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
           <div className="text-center mb-20">
             <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">FACES BEHIND THE MAGIC</span>
             <h2 className="text-3xl md:text-[44px] font-bold text-gray-900">Meet Our Team</h2>
@@ -327,7 +327,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
 
       {/* 6. Sustainability & Awards */}
       {(propertyData.certifications?.length > 0 || propertyData.awards?.length > 0) && (
-        <section className="py-24 bg-[#0A0A0A] text-white w-full relative overflow-hidden">
+        <section className="py-12 md:py-24 bg-[#0A0A0A] text-white w-full relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-600/5 rounded-full blur-[120px] -mr-[400px] -mt-[400px] pointer-events-none" />
           
           <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-16 relative z-10">
@@ -360,7 +360,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
 
       {/* 7. Guest Love */}
       {propertyData.reviews && propertyData.reviews.length > 0 && (
-        <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
+        <section className="py-12 md:py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
           <div className="text-center mb-16">
             <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">TESTIMONIALS</span>
             <h2 className="text-3xl md:text-[44px] font-bold text-gray-900">Guest Love</h2>
@@ -393,7 +393,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
       )}
 
       {/* 8. Explore Location */}
-      <section className="py-24 px-6 bg-gray-50 w-full">
+      <section className="py-12 md:py-24 px-6 bg-gray-50 w-full">
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-16 items-center">
           <div className="md:w-1/2">
             <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">NEIGHBORHOOD</span>
@@ -436,7 +436,7 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
 
       {/* 10. FAQs */}
       {propertyData.faqs && propertyData.faqs.length > 0 && (
-        <section className="py-24 px-6 max-w-[800px] mx-auto w-full">
+        <section className="py-12 md:py-24 px-6 max-w-[800px] mx-auto w-full">
           <div className="text-center mb-16">
             <span className="text-[#F97316] text-[13px] font-bold uppercase tracking-[0.15em] block mb-4">SUPPORT</span>
             <h2 className="text-3xl md:text-[44px] font-bold text-gray-900">Frequently Asked Questions</h2>

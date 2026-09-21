@@ -148,21 +148,21 @@ export default function HotelAmenities({ hotelData }: Props) {
         </div>
 
         {/* 2 Rows Amenities Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8">
           {visibleAmenities.map((item) => (
             <div
               key={item.id}
-              className="bg-gray-50/80 hover:bg-white p-4 sm:p-6 rounded-2xl border border-gray-100/80 hover:border-orange-200 flex items-center gap-4 transition-all duration-300 shadow-sm hover:shadow-md group"
+              className="bg-gray-50/80 hover:bg-white p-4 lg:p-6 rounded-2xl border border-gray-100/80 hover:border-orange-200 flex flex-col xl:flex-row items-center text-center xl:text-left gap-3 lg:gap-4 transition-all duration-300 shadow-sm hover:shadow-md group h-full justify-center"
             >
-              <div className="w-12 h-12 rounded-xl bg-orange-50/80 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                {item.icon}
+              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-orange-50/80 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <div className="scale-75 lg:scale-100 flex items-center justify-center">{item.icon}</div>
               </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="text-xs sm:text-sm font-bold text-gray-900 truncate">
+              <div className="min-w-0 flex flex-col justify-center w-full">
+                <h3 className="text-[11px] sm:text-sm font-bold text-gray-900 leading-tight line-clamp-2 xl:truncate">
                   {item.name}
                 </h3>
                 {item.desc && (
-                  <p className="text-[10px] sm:text-xs text-gray-400 font-semibold uppercase tracking-wider truncate mt-0.5">
+                  <p className="text-[9px] sm:text-xs text-gray-400 font-semibold uppercase tracking-wide truncate mt-1 xl:mt-0.5">
                     {item.desc}
                   </p>
                 )}
@@ -173,13 +173,14 @@ export default function HotelAmenities({ hotelData }: Props) {
 
         {/* Centered See More Button */}
         {hasMore && (
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-6 sm:mt-8">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-8 py-3.5 rounded-full bg-orange-50 hover:bg-orange-100 text-[#F97316] font-bold text-sm border border-orange-200/70 hover:border-orange-300 transition-all flex items-center gap-2 shadow-sm hover:shadow active:scale-95"
+              className="px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-orange-50 hover:bg-orange-100 text-[#F97316] font-bold text-[13px] sm:text-sm border border-orange-200/70 hover:border-orange-300 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm hover:shadow active:scale-95 whitespace-nowrap"
             >
-              <span>See More Amenities ({allAmenities.length - initialDisplayCount} More)</span>
-              <ChevronDown className="w-4 h-4" />
+              <span className="sm:hidden">See All ({allAmenities.length - initialDisplayCount})</span>
+              <span className="hidden sm:inline">See More Amenities ({allAmenities.length - initialDisplayCount} More)</span>
+              <ChevronDown className="w-4 h-4 shrink-0" />
             </button>
           </div>
         )}

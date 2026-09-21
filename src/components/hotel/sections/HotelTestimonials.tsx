@@ -67,14 +67,14 @@ export default function HotelTestimonials({ hotelData }: Props) {
     <section className="bg-[#F9FBFF] pt-16 pb-20 w-full">
       <div className="max-w-[1600px] mx-auto px-6">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-baseline md:items-center mb-10 gap-4 px-2">
-          <div className="flex items-center gap-3">
-            <h2 className="text-[36px] font-black text-[#2D3142]">
+        <div className="flex flex-col md:flex-row justify-center md:justify-between items-center mb-10 gap-4 px-2 text-center md:text-left">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+            <h2 className="text-[32px] sm:text-[36px] font-black text-[#2D3142]">
               Guest Experiences
             </h2>
-            {isUsingStatic && <StaticDataBadge text="static data - need this data on the api" />}
+            {isUsingStatic && <StaticDataBadge text="static data - need this data on the api" className="text-[10px]" />}
           </div>
-          {hotelData?.review_rating && (
+          {Number(hotelData?.review_rating) > 0 && (
             <div className="flex items-center gap-2 bg-white px-4 py-1.5 rounded-full border border-gray-100 shadow-xs">
               <Star size={16} className="text-[#FBBF24] fill-[#FBBF24]" />
               <span className="font-black text-gray-900 text-sm">

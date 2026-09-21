@@ -52,11 +52,11 @@ export default function HotelSpecialServices({ hotelData }: Props) {
         {/* Section Header */}
         <div className="mb-10 px-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-3">
-              <h2 className="text-[36px] font-black text-[#2D3142]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <h2 className="text-[32px] sm:text-[36px] font-black text-[#2D3142] leading-tight whitespace-nowrap">
                 Special Services
               </h2>
-              {!hasDynamicServices && <StaticDataBadge text="static data - need this data on the api" />}
+              {!hasDynamicServices && <StaticDataBadge text="static data - need this data on the api" className="text-[10px]" />}
             </div>
             <p className="text-[#9CA3AF] font-medium text-[15px]">
               {hasDynamicServices ? "Services available at property" : "Click on any service to view details"}
