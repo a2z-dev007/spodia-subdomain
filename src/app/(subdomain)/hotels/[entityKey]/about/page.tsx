@@ -106,9 +106,9 @@ export default async function AboutPage({ params }: { params: Promise<{ entityKe
         subtitle={`Rooted in sustainability, community, and unmatched excellence. Discover hospitality at ${name}.`}
         badgeText="Our Heritage & Story"
         primaryBtnText="Book Now"
-        primaryBtnHref={`/hotel/${entityKey}/rooms`}
+        primaryBtnHref={`/hotels/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
-        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+        secondaryBtnHref={`/hotels/${entityKey}/rooms`}
       />
 
       {/* 2. Hotel Overview & Detailed Description */}

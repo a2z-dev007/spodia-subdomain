@@ -76,14 +76,14 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = getPublicHost(req);
 
-  // If path starts with /hotels/ or /hotel-details/, alias/rewrite to /hotel/ for compatibility
-  if (url.pathname.startsWith("/hotels/")) {
-    const newPathname = url.pathname.replace(/^\/hotels\//, "/hotel/");
-    return NextResponse.rewrite(new URL(newPathname, req.url));
+  // If path starts with /hotel/ or /hotel-details/, redirect to /hotels/
+  if (url.pathname.startsWith("/hotel/") && !url.pathname.startsWith("/hotels/")) {
+    const newPathname = url.pathname.replace(/^\/hotel\//, "/hotels/");
+    return NextResponse.redirect(new URL(newPathname, req.url), 308);
   }
   if (url.pathname.startsWith("/hotel-details/")) {
-    const newPathname = url.pathname.replace(/^\/hotel-details\//, "/hotel/");
-    return NextResponse.rewrite(new URL(newPathname, req.url));
+    const newPathname = url.pathname.replace(/^\/hotel-details\//, "/hotels/");
+    return NextResponse.redirect(new URL(newPathname, req.url), 308);
   }
 
   if (isMainMarketingHost(hostname)) {
@@ -115,7 +115,7 @@ export function middleware(req: NextRequest) {
   }
 
   const hotelSlug = parts.join("-");
-  const newPath = `/hotel/${hotelSlug}${url.pathname}`;
+  const newPath = `/hotels/${hotelSlug}${url.pathname}`;
   return NextResponse.rewrite(new URL(newPath, req.url), {
     request: { headers: withTenantRequestHeaders(req, hotelSlug) },
   });

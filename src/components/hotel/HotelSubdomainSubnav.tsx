@@ -22,7 +22,7 @@ type Props = { entityKey: string };
 
 export default function HotelSubdomainSubnav({ entityKey }: Props) {
   const pathname = usePathname();
-  const base = `/hotel/${entityKey}`;
+  const base = `/hotels/${entityKey}`;
 
   return (
     <nav

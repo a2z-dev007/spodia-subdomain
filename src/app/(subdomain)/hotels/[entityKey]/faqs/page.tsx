@@ -109,9 +109,9 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
         }
         subtitle={`Everything you need to know about stay policies, check-in rules, amenities, and booking details at ${name}.`}
         primaryBtnText="Book Stay Now"
-        primaryBtnHref={`/hotel/${entityKey}/rooms`}
+        primaryBtnHref={`/hotels/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
-        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+        secondaryBtnHref={`/hotels/${entityKey}/rooms`}
         badges={[
           { icon: <Clock className="w-4 h-4" />, text: "24/7 Support" },
           { icon: <Star className="w-4 h-4" />, text: "Best Price Guarantee" },
@@ -285,7 +285,7 @@ const FAQPage = ({ params }: { params: Promise<{ entityKey: string }> }) => {
                   Our dedicated guest support team is available 24/7 to assist you with special requests, room customization, or direct booking queries.
                 </p>
                 <a
-                  href={`/hotel/${entityKey}/contact`}
+                  href={`/hotels/${entityKey}/contact`}
                   className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white px-8 py-4 rounded-2xl font-black text-base shadow-xl shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   <span>Contact Front Desk</span>

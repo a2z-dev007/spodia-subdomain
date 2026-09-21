@@ -45,7 +45,7 @@
       "reviews": 1250,
       "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
       "tags": ["5-Star Luxury", "Ocean View"],
-      "cta": "/hotel/taj-lands-end"
+      "cta": "/hotels/taj-lands-end"
     },
     {
       "id": "hotel-2",
@@ -57,7 +57,7 @@
       "reviews": 840,
       "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
       "tags": ["Business Hotel", "Top Rated"],
-      "cta": "/hotel/hyatt-regency-pune"
+      "cta": "/hotels/hyatt-regency-pune"
     }
   ],
   "whySpodia": [

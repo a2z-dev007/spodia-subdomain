@@ -32,28 +32,28 @@ export default async function SitemapPage({ params }: Props) {
         {
           subTitle: "Rooms & Rates",
           links: [
-            { label: "All Rooms", href: `/hotel/${entityKey}/rooms` },
-            { label: "Suite Options", href: `/hotel/${entityKey}/rooms` },
-            { label: "Seasonal Offers", href: `/hotel/${entityKey}/tariff` },
-            { label: "Price Comparison", href: `/hotel/${entityKey}/tariff` }
+            { label: "All Rooms", href: `/hotels/${entityKey}/rooms` },
+            { label: "Suite Options", href: `/hotels/${entityKey}/rooms` },
+            { label: "Seasonal Offers", href: `/hotels/${entityKey}/tariff` },
+            { label: "Price Comparison", href: `/hotels/${entityKey}/tariff` }
           ]
         },
         {
           subTitle: "Amenities",
           links: [
-            { label: "Spa & Wellness", href: `/hotel/${entityKey}/services`, condition: amenities.includes("Spa") },
-            { label: "Dining Menus", href: `/hotel/${entityKey}/dine` },
-            { label: "Event Venues", href: `/hotel/${entityKey}/events`, condition: true },
-            { label: "Pool & Gym", href: `/hotel/${entityKey}/services`, condition: amenities.includes("Pool") }
+            { label: "Spa & Wellness", href: `/hotels/${entityKey}/services`, condition: amenities.includes("Spa") },
+            { label: "Dining Menus", href: `/hotels/${entityKey}/dine` },
+            { label: "Event Venues", href: `/hotels/${entityKey}/events`, condition: true },
+            { label: "Pool & Gym", href: `/hotels/${entityKey}/services`, condition: amenities.includes("Pool") }
           ]
         },
         {
           subTitle: "Booking",
           links: [
-            { label: "Check Availability", href: `/hotel/${entityKey}/rooms` },
-            { label: "Special Packages", href: `/hotel/${entityKey}/tariff` },
-            { label: "Group Bookings", href: `/hotel/${entityKey}/contact` },
-            { label: "Cancellation Policy", href: `/hotel/${entityKey}/tariff` }
+            { label: "Check Availability", href: `/hotels/${entityKey}/rooms` },
+            { label: "Special Packages", href: `/hotels/${entityKey}/tariff` },
+            { label: "Group Bookings", href: `/hotels/${entityKey}/contact` },
+            { label: "Cancellation Policy", href: `/hotels/${entityKey}/tariff` }
           ]
         }
       ]
@@ -65,19 +65,19 @@ export default async function SitemapPage({ params }: Props) {
         {
           subTitle: "Local Attractions",
           links: [
-            { label: "Places to Visit", href: `/hotel/${entityKey}/explore` },
-            { label: "Guided Tours", href: `/hotel/${entityKey}/explore` },
-            { label: "Adventure Activities", href: `/hotel/${entityKey}/explore` },
-            { label: "Cultural Experiences", href: `/hotel/${entityKey}/explore` }
+            { label: "Places to Visit", href: `/hotels/${entityKey}/explore` },
+            { label: "Guided Tours", href: `/hotels/${entityKey}/explore` },
+            { label: "Adventure Activities", href: `/hotels/${entityKey}/explore` },
+            { label: "Cultural Experiences", href: `/hotels/${entityKey}/explore` }
           ]
         },
         {
           subTitle: "On-Site Experiences",
           links: [
-            { label: "Cooking Classes", href: `/hotel/${entityKey}/about` },
-            { label: "Yoga Sessions", href: `/hotel/${entityKey}/services` },
-            { label: "Theme Nights", href: `/hotel/${entityKey}/events` },
-            { label: "Workshops", href: `/hotel/${entityKey}/events` }
+            { label: "Cooking Classes", href: `/hotels/${entityKey}/about` },
+            { label: "Yoga Sessions", href: `/hotels/${entityKey}/services` },
+            { label: "Theme Nights", href: `/hotels/${entityKey}/events` },
+            { label: "Workshops", href: `/hotels/${entityKey}/events` }
           ]
         }
       ]
@@ -89,19 +89,19 @@ export default async function SitemapPage({ params }: Props) {
         {
           subTitle: "Planning Tools",
           links: [
-            { label: "FAQs", href: `/hotel/${entityKey}/faqs` },
-            { label: "Reviews", href: `/hotel/${entityKey}/reviews` },
-            { label: "Travel Guides", href: `/hotel/${entityKey}/explore` },
-            { label: "Packing Tips", href: `/hotel/${entityKey}/faqs` }
+            { label: "FAQs", href: `/hotels/${entityKey}/faqs` },
+            { label: "Reviews", href: `/hotels/${entityKey}/reviews` },
+            { label: "Travel Guides", href: `/hotels/${entityKey}/explore` },
+            { label: "Packing Tips", href: `/hotels/${entityKey}/faqs` }
           ]
         },
         {
           subTitle: "Support",
           links: [
-            { label: "Contact Us", href: `/hotel/${entityKey}/contact` },
+            { label: "Contact Us", href: `/hotels/${entityKey}/contact` },
             { label: "Live Chat", href: `#` },
-            { label: "Emergency Numbers", href: `/hotel/${entityKey}/contact` },
-            { label: "Feedback Form", href: `/hotel/${entityKey}/contact` }
+            { label: "Emergency Numbers", href: `/hotels/${entityKey}/contact` },
+            { label: "Feedback Form", href: `/hotels/${entityKey}/contact` }
           ]
         }
       ]
@@ -121,9 +121,9 @@ export default async function SitemapPage({ params }: Props) {
         {
           subTitle: "Corporate",
           links: [
-            { label: "About Us", href: `/hotel/${entityKey}/about` },
+            { label: "About Us", href: `/hotels/${entityKey}/about` },
             { label: "Careers", href: "#" },
-            { label: "Sustainability", href: `/hotel/${entityKey}/about` },
+            { label: "Sustainability", href: `/hotels/${entityKey}/about` },
             { label: "Press Kit", href: "#" }
           ]
         }
@@ -187,9 +187,9 @@ export default async function SitemapPage({ params }: Props) {
         }
         subtitle="Find everything you need in one place. Jump to any page quickly!"
         primaryBtnText="Book Now"
-        primaryBtnHref={`/hotel/${entityKey}/rooms`}
+        primaryBtnHref={`/hotels/${entityKey}/rooms`}
         secondaryBtnText="Explore Rooms"
-        secondaryBtnHref={`/hotel/${entityKey}/rooms`}
+        secondaryBtnHref={`/hotels/${entityKey}/rooms`}
         badges={[
           { icon: <ShieldCheck className="w-5 h-5" />, text: "Secure Booking" },
           { icon: <ShieldCheck className="w-5 h-5" />, text: "Verified Reviews" },

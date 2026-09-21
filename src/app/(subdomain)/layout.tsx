@@ -13,7 +13,7 @@ export default function SubdomainShellLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isHotelPage = pathname.startsWith("/hotel/");
+  const isHotelPage = pathname.startsWith("/hotel/") || pathname.startsWith("/hotels/");
 
   if (isHotelPage) {
     return <>{children}</>;

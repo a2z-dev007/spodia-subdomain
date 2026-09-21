@@ -60,7 +60,7 @@ export const mapApiToStay = (item: any): StayDataType => {
         author,
         city_name: typeof item.city_name === 'string' ? item.city_name : '',
         date: typeof item.created === 'string' ? item.created : '',
-        href: `/hotel/${hotelSlug}`,
+        href: `/hotels/${hotelSlug}`,
         title: typeof item.name === 'string' ? item.name : '',
         featuredImage: typeof (item.images?.find((img: any) => img.cover_photo)?.file) === 'string'
             ? item.images?.find((img: any) => img.cover_photo)?.file

@@ -108,7 +108,7 @@ export default async function HotelSubdomainHome({ entityKey, initialHotelData }
           {/* CTA Buttons */}
           <div className="flex flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
-              href={`/hotel/${entityKey}/rooms`}
+              href={`/hotels/${entityKey}/rooms`}
               className="px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl font-black text-xs md:text-sm uppercase tracking-wider bg-gradient-to-r from-[#FF9530] to-[#FF8000] hover:from-[#FF8000] hover:to-[#F97316] text-white shadow-xl shadow-orange-500/30 hover:scale-[1.03] active:scale-[0.98] transition-all flex items-center gap-2"
             >
               <span>Book Now</span>
@@ -116,7 +116,7 @@ export default async function HotelSubdomainHome({ entityKey, initialHotelData }
             </Link>
 
             <Link
-              href={`/hotel/${entityKey}/rooms`}
+              href={`/hotels/${entityKey}/rooms`}
               className="px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl font-black text-xs md:text-sm uppercase tracking-wider bg-white/20 backdrop-blur-md text-white border border-white/40 hover:bg-white/30 active:scale-[0.98] transition-all"
             >
               View Rooms
