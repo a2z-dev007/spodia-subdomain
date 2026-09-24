@@ -195,7 +195,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
           isScrolled ? "max-h-0 py-0 opacity-0" : "max-h-16 py-2 opacity-100"
         } px-4 md:px-8 border-b border-white/10`}
       >
-        <div className="max-w-[1440px] mx-auto flex justify-between items-center text-[11px] md:text-xs font-semibold">
+        <div className="w-full flex justify-between items-center text-[11px] md:text-xs font-semibold">
           <div className="flex items-center space-x-6">
             <a
               href="tel:+917399888855"
@@ -238,9 +238,9 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
           isScrolled ? "shadow-md py-2.5" : "py-3.5"
         } px-4 md:px-8 border-b border-gray-150`}
       >
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
+        <div className="w-full flex items-center justify-between gap-4">
           {/* Logo + Property Identity */}
-          <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1 sm:flex-initial shrink">
+          <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1 shrink">
             <Link
               href={`/hotel/${entityKey}`}
               className="flex items-center shrink-0"
@@ -257,7 +257,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
               />
             </Link>
             <div className="hidden md:block h-7 w-[1px] bg-gray-200 shrink-0" />
-            <div className="flex flex-col min-w-0 max-w-[120px] sm:max-w-[160px] md:max-w-[190px] lg:max-w-[210px] xl:max-w-[250px] relative group cursor-pointer">
+            <div className="flex flex-col min-w-0 max-w-[200px] sm:max-w-[350px] md:max-w-[450px] lg:max-w-[320px] xl:max-w-[400px] relative group cursor-pointer">
               <span
                 title={hotelName}
                 className="text-xs md:text-sm xl:text-base font-black text-gray-900 leading-tight truncate tracking-tight"
@@ -289,7 +289,7 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
 
           {/* Desktop Adaptive Navigation Links */}
           <div
-            className="hidden lg:flex items-center space-x-1 xl:space-x-0.5 relative"
+            className="hidden lg:flex items-center justify-center space-x-1 xl:space-x-0.5 relative shrink-0"
             ref={dropdownRef}
           >
             {/* Always visible on lg+ (1024px+) */}
@@ -466,10 +466,10 @@ const HotelHeader: React.FC<HotelHeaderProps> = ({
           </div>
 
           {/* Mobile Menu Trigger */}
-          <div className="flex items-center space-x-3 shrink-0">
+          <div className="flex items-center justify-end space-x-3 shrink-0">
             <Link
-              href={`/hotels/${entityKey}/rooms`}
-              className={`bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white font-black text-xs md:text-sm uppercase tracking-wider rounded-xl md:rounded-full transition-all duration-300 shadow-md hover:shadow-orange-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
+              href={`/hotel/${entityKey}/rooms`}
+              className={`hidden lg:inline-flex items-center justify-center bg-gradient-to-r from-[#FF9530] to-[#FF8000] text-white font-black text-xs md:text-sm uppercase tracking-wider rounded-xl md:rounded-full transition-all duration-300 shadow-md hover:shadow-orange-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
                 isScrolled ? "px-4 md:px-5 py-2" : "px-5 md:px-6 py-2.5"
               }`}
             >
