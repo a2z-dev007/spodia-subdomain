@@ -4,7 +4,7 @@ import PremiumHotelSearchBar from "@/components/home/PremiumHotelSearchBar";
 import HotelFiltersClient from "@/components/hotels/HotelFiltersClient";
 import MobileFiltersClient from "@/components/hotels/MobileFiltersClient";
 import HotelResults from "@/components/hotels/HotelResults";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { searchHotelsApi, searchListings } from "@/services/api";
 import { format } from "date-fns";
@@ -64,6 +64,7 @@ export default function SearchResultsClient({ initialData, searchParams: searchP
     const { searchFilters } = useAppSelector((state) => state?.hotels ?? { searchFilters: {} });
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
     const hotelListRef = useRef<HTMLDivElement>(null);
     const isButtonsVisible = useScrollDirection();
 
@@ -306,7 +307,7 @@ export default function SearchResultsClient({ initialData, searchParams: searchP
         if (params.childrenAges && params.childrenAges.length > 0) {
             currentParams.set("childInfo", params.childrenAges.join(','))
         }
-        router.push(`/search-results?${currentParams.toString()}`)
+        router.push(`${pathname || '/hotels'}?${currentParams.toString()}`)
     }
 
     const hasActiveFilters =

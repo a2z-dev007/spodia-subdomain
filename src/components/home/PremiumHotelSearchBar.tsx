@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks";
 import { setSearchFilters } from "@/lib/features/hotels/hotelSlice";
 import { Search } from "lucide-react";
@@ -39,6 +39,7 @@ export default function PremiumHotelSearchBar({
   containerClassName,
 }: PremiumHotelSearchBarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
 
   const [location, setLocation] = useState<any>(
@@ -126,7 +127,8 @@ export default function PremiumHotelSearchBar({
       currentParams.set("cityName", location.label);
     }
 
-    router.push(`/search-results?${currentParams.toString()}`);
+    const targetPath = pathname === "/hotels" ? "/hotels" : "/search-results";
+    router.push(`${targetPath}?${currentParams.toString()}`);
   };
 
   const isMinimal = variant === "minimal";
