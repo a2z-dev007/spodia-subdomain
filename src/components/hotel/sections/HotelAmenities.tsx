@@ -69,6 +69,23 @@ const defaultAmenitiesList: AmenityItemData[] = [
   { id: "21", name: "Seating Area", desc: "RELAX SPACE", icon: <Armchair size={24} className="text-[#F97316]" /> },
 ];
 
+const AmenityIcon = ({ src, alt }: { src: string; alt: string }) => {
+  const [error, setError] = useState(false);
+  // Using text-gray-700 to match the dark grey outline style of the other API image icons
+  if (error || !src) return <CheckCircle size={24} className="text-gray-700" />;
+  
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={24}
+      height={24}
+      className="w-6 h-6 object-contain"
+      onError={() => setError(true)}
+    />
+  );
+};
+
 export default function HotelAmenities({ hotelData }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -92,15 +109,12 @@ export default function HotelAmenities({ hotelData }: Props) {
         name: item.name,
         desc: item.description || "AVAILABLE",
         icon: item.image ? (
-          <Image
-            src={`${IMAGE_BASE_URL}${item.image.startsWith("/") ? "" : "/"}${item.image}`}
-            alt={item.name}
-            width={24}
-            height={24}
-            className="w-6 h-6 object-contain"
+          <AmenityIcon 
+            src={`${IMAGE_BASE_URL}${item.image.startsWith("/") ? "" : "/"}${item.image}`} 
+            alt={item.name} 
           />
         ) : (
-          <CheckCircle size={24} className="text-[#F97316]" />
+          <CheckCircle size={24} className="text-gray-700" />
         ),
       }))
     : defaultAmenitiesList;
@@ -134,21 +148,21 @@ export default function HotelAmenities({ hotelData }: Props) {
         </div>
 
         {/* 2 Rows Amenities Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8">
           {visibleAmenities.map((item) => (
             <div
               key={item.id}
-              className="bg-gray-50/80 hover:bg-white p-4 sm:p-6 rounded-2xl border border-gray-100/80 hover:border-orange-200 flex items-center gap-4 transition-all duration-300 shadow-sm hover:shadow-md group"
+              className="bg-gray-50/80 hover:bg-white p-4 lg:p-6 rounded-2xl border border-gray-100/80 hover:border-orange-200 flex flex-col xl:flex-row items-center text-center xl:text-left gap-3 lg:gap-4 transition-all duration-300 shadow-sm hover:shadow-md group h-full justify-center"
             >
-              <div className="w-12 h-12 rounded-xl bg-orange-50/80 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                {item.icon}
+              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-orange-50/80 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <div className="scale-75 lg:scale-100 flex items-center justify-center">{item.icon}</div>
               </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="text-xs sm:text-sm font-bold text-gray-900 truncate">
+              <div className="min-w-0 flex flex-col justify-center w-full">
+                <h3 className="text-[11px] sm:text-sm font-bold text-gray-900 leading-tight line-clamp-2 xl:truncate">
                   {item.name}
                 </h3>
                 {item.desc && (
-                  <p className="text-[10px] sm:text-xs text-gray-400 font-semibold uppercase tracking-wider truncate mt-0.5">
+                  <p className="text-[9px] sm:text-xs text-gray-400 font-semibold uppercase tracking-wide truncate mt-1 xl:mt-0.5">
                     {item.desc}
                   </p>
                 )}
@@ -159,13 +173,14 @@ export default function HotelAmenities({ hotelData }: Props) {
 
         {/* Centered See More Button */}
         {hasMore && (
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-6 sm:mt-8">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-8 py-3.5 rounded-full bg-orange-50 hover:bg-orange-100 text-[#F97316] font-bold text-sm border border-orange-200/70 hover:border-orange-300 transition-all flex items-center gap-2 shadow-sm hover:shadow active:scale-95"
+              className="px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-orange-50 hover:bg-orange-100 text-[#F97316] font-bold text-[13px] sm:text-sm border border-orange-200/70 hover:border-orange-300 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm hover:shadow active:scale-95 whitespace-nowrap"
             >
-              <span>See More Amenities ({allAmenities.length - initialDisplayCount} More)</span>
-              <ChevronDown className="w-4 h-4" />
+              <span className="sm:hidden">See All ({allAmenities.length - initialDisplayCount})</span>
+              <span className="hidden sm:inline">See More Amenities ({allAmenities.length - initialDisplayCount} More)</span>
+              <ChevronDown className="w-4 h-4 shrink-0" />
             </button>
           </div>
         )}
@@ -178,44 +193,50 @@ export default function HotelAmenities({ hotelData }: Props) {
           setIsModalOpen(false);
           setSearchTerm("");
         }}
-        title="Amenities"
-        maxWidth="2xl"
-      >
-        {/* Search Input */}
-        <div className="mb-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search amenities..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm text-gray-800 transition-all bg-gray-50/50"
-            />
-            <Search className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+        title={
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4">
+            <span className="text-xl md:text-2xl font-bold text-gray-900">Hotel Amenities</span>
+            {/* Search Input */}
+            <div className="relative w-full sm:max-w-xs md:max-w-sm">
+              <input
+                type="text"
+                placeholder="Search amenities..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm text-gray-800 transition-all bg-gray-50/50"
+              />
+              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-
+        }
+        maxWidth="7xl"
+      >
         {/* Modal Amenities Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 max-h-[60vh] overflow-y-auto pr-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-h-[75vh] overflow-y-auto pr-2 pb-4 pt-2">
           {filteredAmenities.map((item) => (
             <div
               key={item.id}
-              className="bg-gray-50/90 p-4 rounded-xl border border-gray-100 flex items-center gap-3 hover:bg-orange-50/50 hover:border-orange-200 transition-all"
+              className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 flex items-center gap-4 hover:border-orange-200 transition-all shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md group"
             >
-              <div className="w-10 h-10 rounded-lg bg-white shadow-xs flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-full bg-orange-50/80 flex items-center justify-center shrink-0 border border-orange-100/50 group-hover:scale-110 transition-transform">
                 {item.icon}
               </div>
-              <span className="text-xs sm:text-sm font-bold text-gray-800 leading-tight">
-                {item.name}
-              </span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider truncate mb-0.5">
+                  {item.desc || "AMENITY"}
+                </span>
+                <span className="text-sm sm:text-base font-bold text-gray-900 leading-tight truncate">
+                  {item.name}
+                </span>
+              </div>
             </div>
           ))}
 

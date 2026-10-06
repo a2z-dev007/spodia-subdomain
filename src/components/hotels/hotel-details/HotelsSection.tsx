@@ -2763,7 +2763,7 @@ export default function HotelRoomBooking({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-[1287px] mx-auto relative pb-20 font-manrope">
+    <div className="flex flex-col gap-4 w-full max-w-[1287px] mx-auto relative pb-48 md:pb-28 font-manrope">
       
       <Suspense fallback={null}>
         <ChangeDatesGuestsSearch

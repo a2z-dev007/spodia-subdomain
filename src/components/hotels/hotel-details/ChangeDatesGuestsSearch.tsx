@@ -319,7 +319,7 @@ export default function ChangeDatesGuestsSearch({
 
   return (
     <section
-      className={`mt-8 relative w-full mx-auto z-40 bg-white rounded-[20px] shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-gray-100 p-4 md:p-5 group/search-bar overflow-hidden ${className}`}
+      className={`mt-2 md:mt-8 relative w-full mx-auto z-40 bg-white rounded-[20px] shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-gray-100 p-4 md:p-5 group/search-bar overflow-hidden ${className}`}
       id={id}
     >
       <div className="w-full min-w-0">

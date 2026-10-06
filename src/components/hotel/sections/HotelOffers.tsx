@@ -45,9 +45,11 @@ const offers = [
 export default function HotelOffers({ hotelData }: Props) {
   return (
     <section className="pt-12 pb-4 px-4 max-w-[1600px] mx-auto w-full">
-      <div className="flex items-center justify-between mb-4 px-4">
-        <h3 className="text-lg font-bold text-gray-800">Special Bank & Member Offers</h3>
-        <StaticDataBadge text="static data - need this data on the api" />
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between mb-6 px-4 gap-3 sm:gap-0">
+        <h3 className="text-xl sm:text-2xl font-black text-gray-900 text-center sm:text-left">
+          Special Bank &amp; Member Offers
+        </h3>
+        <StaticDataBadge text="static data - need this data on the api" className="text-[10px]" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

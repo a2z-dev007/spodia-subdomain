@@ -104,6 +104,11 @@ export default function RootLayout({
           }}
         />
         <div id="datepicker-portal" />
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCceQMy1CtM2Cgz8A42W3roEKhUpHhSRSA&libraries=places"
+          async
+          defer
+        ></script>
       </body>
     </html>
   );

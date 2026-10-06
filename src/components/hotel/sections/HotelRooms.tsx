@@ -15,9 +15,9 @@ export default function HotelRooms({ hotelData, entityKey }: Props) {
   const hasDynamicRooms = dynamicRooms.length > 0;
 
   return (
-    <section id="rooms" className="pt-10 pb-20 px-4 max-w-[1400px] mx-auto w-full">
+    <section id="rooms" className="pt-6 md:pt-10 pb-2 md:pb-20 px-4 max-w-[1400px] mx-auto w-full">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center mb-10 px-2">
+      <div className="flex flex-col items-center text-center mb-4 md:mb-10 px-2">
         <div className="flex items-center gap-2 mb-2">
           <h2 className="text-[32px] sm:text-[42px] md:text-[52px] font-black text-[#2D3142] leading-none">
             Rooms &amp; <span className="text-[#F97316]">Suites</span>

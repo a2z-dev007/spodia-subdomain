@@ -69,13 +69,13 @@ export default async function TariffPage({ params }: Props) {
       />
 
       {/* 2. Room Rates & Booking Widget */}
-      <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto">
-        <div className="flex flex-col lg:flex-row gap-16">
+      <section className="py-12 md:py-24 px-4 md:px-12 max-w-[1440px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
           {/* Left: Room Rates */}
           <div className="w-full lg:w-2/3">
-             <div className="mb-12">
-                <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Select Your Room</h2>
-                <p className="text-gray-500 text-xl font-medium">Compare categories and find the perfect match for your stay.</p>
+             <div className="mb-10 text-center lg:text-left">
+                <h2 className="text-[28px] md:text-4xl font-black text-gray-900 mb-3 md:mb-4 leading-[1.2]">Select Your Room</h2>
+                <p className="text-gray-500 text-base md:text-lg font-medium">Compare categories and find the perfect match for your stay.</p>
              </div>
              
              <div className="space-y-12">
@@ -99,11 +99,11 @@ export default async function TariffPage({ params }: Props) {
       <PriceComparison />
 
       {/* 5. Add-Ons & Upsells */}
-      <section className="py-24 bg-white px-6">
+      <section className="py-12 md:py-24 bg-white px-4 md:px-6">
          <div className="max-w-[1200px] mx-auto">
-            <div className="text-center mb-16">
-               <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">Enhance Your Stay</h2>
-               <p className="text-gray-600 text-xl font-medium">Add these exclusive services to your booking for a seamless experience.</p>
+            <div className="text-center mb-10 md:mb-16">
+               <h2 className="text-[28px] md:text-4xl font-black text-gray-900 mb-3 md:mb-6 leading-[1.2]">Enhance Your Stay</h2>
+               <p className="text-gray-600 text-base md:text-lg font-medium max-w-2xl mx-auto">Add these exclusive services to your booking for a seamless experience.</p>
             </div>
             <RateAddOns />
          </div>
@@ -124,8 +124,8 @@ export default async function TariffPage({ params }: Props) {
             <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Starting From</p>
             <p className="text-xl font-black text-gray-900">₹{rooms[0]?.price.toLocaleString()} <span className="text-xs font-bold text-gray-400">/night</span></p>
          </div>
-         <button className="bg-[#FF9530] text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-orange-500/20 flex items-center gap-2">
-            Book Now <ArrowRight className="w-4 h-4" />
+         <button className="bg-[#FF9530] text-white px-5 py-3 rounded-xl font-bold text-[11px] md:text-xs uppercase tracking-widest shadow-lg shadow-orange-500/20 flex items-center justify-center gap-1.5 whitespace-nowrap">
+            Book Now <ArrowRight className="w-3.5 h-3.5" />
          </button>
       </div>
 

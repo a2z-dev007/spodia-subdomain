@@ -118,14 +118,8 @@ export default function HotelGalleryClient({
       });
     });
 
-    if (propCount > 0) {
-      catMap.set("property", {
-        id: "property",
-        name: propertyCategoryName,
-        count: propCount,
-        type: "property",
-      });
-    }
+    // Property category pill removed as requested by user.
+    // The images will still load under "All Photos", but won't have a dedicated pill.
 
     // B. Room images
     if (Array.isArray(hotelData?.rooms)) {
@@ -253,7 +247,6 @@ export default function HotelGalleryClient({
         count: photos.length,
         type: "all",
       },
-      ...Array.from(catMap.values()),
     ];
 
     const cover =
@@ -311,7 +304,7 @@ export default function HotelGalleryClient({
   return (
     <div className="flex flex-col w-full bg-white font-manrope">
       {/* 1. HERO SECTION WITH HOTEL'S ACTUAL COVER PHOTO */}
-      <section className="relative min-h-[460px] lg:min-h-[520px] w-full flex items-center justify-center overflow-hidden font-manrope">
+      <section className="relative min-h-[380px] sm:min-h-[420px] lg:min-h-[520px] w-full flex items-center justify-center overflow-hidden font-manrope">
         {/* Background Image with Cinematic Dark Gradient */}
         <div className="absolute inset-0 z-0">
           <ImageWithFallback
@@ -326,7 +319,7 @@ export default function HotelGalleryClient({
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center flex flex-col items-center">
+        <div className="relative z-10 max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20 text-center flex flex-col items-center">
           {/* Breadcrumb & Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-5">
             <span className="bg-white/15 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-sm">
@@ -349,7 +342,7 @@ export default function HotelGalleryClient({
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 tracking-tight leading-tight max-w-[1000px]">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-tight max-w-[1000px] px-2">
             Photo Gallery –{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9530] via-[#FFA44D] to-[#FF8000]">
               {hotelName}
@@ -357,35 +350,35 @@ export default function HotelGalleryClient({
           </h1>
 
           {/* Location & Description */}
-          <div className="flex items-center justify-center gap-2 text-white/90 text-sm sm:text-base font-semibold max-w-[700px] mb-8">
-            <MapPin className="w-4 h-4 text-[#FF9530] flex-shrink-0" />
-            <span className="truncate">{hotelAddress}</span>
+          <div className="flex items-start sm:items-center justify-center gap-1.5 text-white/90 text-xs sm:text-base font-semibold max-w-[700px] w-full px-4 mb-6 sm:mb-8 text-left sm:text-center">
+            <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF9530] flex-shrink-0 mt-[2px] sm:mt-0" />
+            <span className="break-words leading-tight">{hotelAddress}</span>
           </div>
 
           {/* Live Stats Strip */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-6 bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:p-5 max-w-[650px] w-full mb-8 shadow-2xl">
-            <div className="flex flex-col items-center">
-              <span className="text-2xl sm:text-3xl font-black text-white">
+          <div className="grid grid-cols-3 gap-2 sm:gap-6 bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl p-3 sm:p-5 max-w-[650px] w-full mb-8 shadow-2xl mx-auto">
+            <div className="flex flex-col items-center justify-center text-center">
+              <span className="text-xl sm:text-3xl font-black text-white">
                 {allPhotos.length}
               </span>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
-                High-Res Photos
+              <span className="text-[8px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider text-white/70 leading-tight mt-0.5">
+                High-Res<br className="sm:hidden" /> Photos
               </span>
             </div>
-            <div className="flex flex-col items-center border-x border-white/15">
-              <span className="text-2xl sm:text-3xl font-black text-white">
+            <div className="flex flex-col items-center justify-center text-center border-x border-white/15">
+              <span className="text-xl sm:text-3xl font-black text-white">
                 {roomCollections.length || 1}
               </span>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
-                Room Types
+              <span className="text-[8px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider text-white/70 leading-tight mt-0.5">
+                Room<br className="sm:hidden" /> Types
               </span>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-2xl sm:text-3xl font-black text-[#FF9530]">
+            <div className="flex flex-col items-center justify-center text-center">
+              <span className="text-xl sm:text-3xl font-black text-[#FF9530]">
                 100%
               </span>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
-                Real Imagery
+              <span className="text-[8px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider text-white/70 leading-tight mt-0.5">
+                Real<br className="sm:hidden" /> Imagery
               </span>
             </div>
           </div>
@@ -538,88 +531,6 @@ export default function HotelGalleryClient({
         </section>
       )}
 
-      {/* 3. STICKY CATEGORY & FILTER TOOLBAR */}
-      <section
-        ref={gallerySectionRef}
-        className="sticky top-[var(--hotel-header-height,100px)] z-20 bg-white/95 backdrop-blur-md border-y border-gray-200 shadow-xs py-3.5 px-4 sm:px-6 lg:px-8 transition-all"
-      >
-        <div className="max-w-[1360px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-3 sm:gap-4">
-          {/* Horizontal Category Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full lg:w-auto py-1 scrollbar-none">
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => handleCategoryClick(cat.id)}
-                  className={`px-4 sm:px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 flex items-center gap-2 flex-shrink-0 ${
-                    isActive
-                      ? "bg-gray-900 text-white shadow-md shadow-gray-900/20"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
-                  }`}
-                >
-                  <span>{cat.name}</span>
-                  <span
-                    className={`text-[11px] px-2 py-0.5 rounded-full font-black ${
-                      isActive
-                        ? "bg-[#FF9530] text-white"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
-                  >
-                    {cat.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Toolbar: Search & View Mode Switcher */}
-          <div className="flex items-center justify-between lg:justify-end gap-3 w-full lg:w-auto">
-            {/* Search Input */}
-            <div className="relative flex-1 sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Filter by photo or room..."
-                className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 hover:border-gray-300 focus:border-[#FF9530] focus:ring-1 focus:ring-[#FF9530] rounded-xl text-xs font-bold text-gray-800 placeholder-gray-400 outline-none transition-all"
-              />
-            </div>
-
-            {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200 flex-shrink-0">
-              <button
-                onClick={() => setViewMode("editorial")}
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === "editorial"
-                    ? "bg-white text-gray-900 shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-                title="Bento Editorial Layout"
-                aria-label="Editorial View"
-              >
-                <Layers className="w-4 h-4" />
-                <span className="hidden sm:inline-block">Editorial</span>
-              </button>
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === "grid"
-                    ? "bg-white text-gray-900 shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-                title="Standard Grid Layout"
-                aria-label="Grid View"
-              >
-                <LayoutGrid className="w-4 h-4" />
-                <span className="hidden sm:inline-block">Grid</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* 4. MAIN PHOTO GALLERY GRID */}
       <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-[1360px] mx-auto w-full">
         {/* Active Filter Info Counter */}
@@ -665,27 +576,27 @@ export default function HotelGalleryClient({
 
         {/* Grid Display */}
         {filteredPhotos.length > 0 && (
-          <div
-            className={`grid gap-4 sm:gap-6 ${
-              viewMode === "editorial"
-                ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-                : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4"
-            }`}
-          >
+          <div className="grid grid-flow-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
             {filteredPhotos.map((photo, index) => {
-              // In editorial mode, make every 7th item span 2 columns on larger screens
-              const isFeatureTile =
-                viewMode === "editorial" && index % 7 === 0 && index !== 0;
+              // Create a beautiful asymmetrical masonry-like pattern
+              const pattern = index % 8;
+              let spanClass = "col-span-1 aspect-square";
+              
+              if (pattern === 0) {
+                spanClass = "col-span-2 aspect-[4/3] md:aspect-[16/10]";
+              } else if (pattern === 3) {
+                spanClass = "col-span-1 md:col-span-2 aspect-square md:aspect-[16/10]";
+              } else if (pattern === 5) {
+                spanClass = "col-span-1 aspect-[3/4]"; // Tall portrait
+              } else if (pattern === 7) {
+                spanClass = "col-span-2 md:col-span-1 aspect-[16/9] md:aspect-[3/4]";
+              }
 
               return (
                 <div
                   key={photo.id || index}
                   onClick={() => handleOpenLightbox(index)}
-                  className={`relative group cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl bg-gray-100 border border-gray-200/80 shadow-2xs hover:shadow-xl transition-all duration-300 ${
-                    isFeatureTile
-                      ? "col-span-2 aspect-[16/10]"
-                      : "aspect-square"
-                  }`}
+                  className={`relative group cursor-pointer overflow-hidden rounded-2xl md:rounded-3xl bg-gray-100 hover:shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-1 ${spanClass}`}
                 >
                   {/* Photo Image */}
                   <ImageWithFallback
@@ -693,31 +604,34 @@ export default function HotelGalleryClient({
                     alt={photo.title}
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                   />
 
+                  {/* Persistent Subtle Gradient for Depth */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none" />
+
                   {/* Gradient Overlay on Hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 sm:p-5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-between p-4 sm:p-5 md:p-6">
                     {/* Top Row: Category tag and Expand icon */}
-                    <div className="flex items-center justify-between">
-                      <span className="bg-[#FF9530] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
+                    <div className="flex items-start justify-between transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                      <span className="bg-[#FF9530]/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg border border-white/10">
                         {photo.category}
                       </span>
-                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 hover:bg-[#FF9530] transition-colors">
+                      <div className="w-9 h-9 rounded-full bg-black/30 backdrop-blur-md flex items-center justify-center text-white border border-white/30 hover:bg-white hover:text-black transition-colors shadow-xl">
                         <Expand className="w-4 h-4" />
                       </div>
                     </div>
 
                     {/* Bottom Row: Title and Room specs */}
-                    <div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                      <h4 className="text-white text-xs sm:text-sm font-black line-clamp-2 leading-tight mb-1">
+                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                      <h4 className="text-white text-sm sm:text-base md:text-lg font-black line-clamp-2 leading-tight mb-1.5 drop-shadow-md">
                         {photo.title}
                       </h4>
                       {photo.roomDetails && (
-                        <p className="text-white/70 text-[10px] sm:text-xs font-medium truncate">
-                          {photo.roomDetails.bedType} ·{" "}
-                          {photo.roomDetails.dimensions}
-                        </p>
+                         <div className="flex items-center gap-2 text-white/80 text-[10px] sm:text-xs font-semibold">
+                          <span className="bg-black/30 backdrop-blur-sm px-2 py-1 rounded-md border border-white/10">{photo.roomDetails.bedType}</span>
+                          <span className="bg-black/30 backdrop-blur-sm px-2 py-1 rounded-md border border-white/10">{photo.roomDetails.dimensions}</span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -730,7 +644,7 @@ export default function HotelGalleryClient({
 
       {/* 5. EXPLORE BY ROOM CATEGORY (Curated Showcase) */}
       {roomCollections.length > 0 && (
-        <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 border-t border-gray-200">
+        <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-[1360px] mx-auto">
             {/* Section Header */}
             <div className="text-center max-w-2xl mx-auto mb-12">

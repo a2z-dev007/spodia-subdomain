@@ -28,9 +28,9 @@ export default async function OverviewPage({ params }: Props) {
       />
 
       {/* Property Overview & Description */}
-      <section className="py-16 px-6 max-w-[1200px] mx-auto w-full">
-        <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-gray-100 mb-12">
-          <h2 className="text-3xl font-black text-gray-900 mb-6">About {name}</h2>
+      <section className="py-8 md:py-16 px-4 md:px-6 max-w-[1200px] mx-auto w-full">
+        <div className="bg-white rounded-[24px] md:rounded-[32px] p-5 md:p-12 shadow-sm border border-gray-100 mb-12">
+          <h2 className="text-[26px] md:text-3xl font-black text-gray-900 mb-6 text-center md:text-left">About {name}</h2>
           <p className="text-gray-600 text-lg leading-relaxed font-medium mb-8">
             {hotelData?.description || `${name} offers hospitality in ${hotelData?.city_name || 'prime location'}.`}
           </p>
@@ -52,7 +52,7 @@ export default async function OverviewPage({ params }: Props) {
             </div>
 
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-2 mb-4 text-center md:text-left">
                 <h3 className="text-xl font-bold text-gray-900">House Rules</h3>
                 {!hotelData?.other_rules && <StaticDataBadge text="static data - need this data on the api" />}
               </div>

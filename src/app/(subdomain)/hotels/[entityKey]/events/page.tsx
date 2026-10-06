@@ -26,17 +26,17 @@ export default async function EventsPage({ params }: Props) {
         subtitle="Weddings · Corporate Events · Social Gatherings"
       />
 
-      <section className="py-16 px-6 max-w-[1200px] mx-auto w-full">
-        <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-sm border border-gray-100 text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">Event Venues & Packages</h2>
+      <section className="py-8 md:py-16 px-4 md:px-6 max-w-[1200px] mx-auto w-full">
+        <div className="bg-white rounded-[24px] md:rounded-[32px] p-5 md:p-12 shadow-sm border border-gray-100 text-center">
+          <div className="flex flex-col items-center justify-center gap-3 mb-4">
+            <h2 className="text-[26px] md:text-4xl font-black text-gray-900 leading-[1.2]">Event Venues & Packages</h2>
             <StaticDataBadge text="static data - need this data on the api" />
           </div>
           <p className="text-gray-600 text-base max-w-[700px] mx-auto leading-relaxed">
             Spacious banquet halls, lawns, and conference rooms designed for weddings, seminars, and social functions at {name}.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             <div className="bg-gray-50 p-8 rounded-[24px] border border-gray-100 flex flex-col items-center">
               <h3 className="text-xl font-bold text-gray-900 mb-2">Grand Ballroom</h3>
               <p className="text-sm text-gray-500 mb-4">Seated: 200 · Cocktail: 300</p>

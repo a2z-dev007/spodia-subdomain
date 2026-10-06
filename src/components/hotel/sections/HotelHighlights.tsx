@@ -48,13 +48,13 @@ export default function HotelHighlights({ hotelData }: Props) {
         <div className="bg-white rounded-[32px] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.08)] border border-gray-100 overflow-hidden">
           {/* Header Area */}
           <div className="bg-gradient-to-r from-[#F97316] to-[#FB923C] p-6 sm:p-8 md:p-10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-4 sm:gap-5 text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-5 text-center md:text-left">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shrink-0">
                 <BadgeCheck size={30} className="text-white" />
               </div>
-              <div>
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
-                  <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-black leading-tight">
+              <div className="flex flex-col items-center md:items-start">
+                <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-2 sm:gap-2.5">
+                  <h2 className="text-white text-2xl sm:text-2xl md:text-3xl font-black leading-tight whitespace-nowrap">
                     Stay Highlights
                   </h2>
                   {!hasDynamicHighlights && (
@@ -91,10 +91,11 @@ export default function HotelHighlights({ hotelData }: Props) {
               <div className="flex justify-center mt-8 pt-4 border-t border-gray-100">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="px-8 py-3 rounded-full bg-orange-50 hover:bg-orange-100 text-[#F97316] font-bold text-sm border border-orange-200/70 hover:border-orange-300 transition-all flex items-center gap-2 shadow-sm hover:shadow active:scale-95"
+                  className="px-6 sm:px-8 py-3 rounded-full bg-orange-50 hover:bg-orange-100 text-[#F97316] font-bold text-[13px] sm:text-sm border border-orange-200/70 hover:border-orange-300 transition-all flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm hover:shadow active:scale-95 whitespace-nowrap"
                 >
-                  <span>See More Highlights ({displayHighlights.length - initialCount} More)</span>
-                  <ChevronDown className="w-4 h-4" />
+                  <span className="sm:hidden">See All ({displayHighlights.length - initialCount})</span>
+                  <span className="hidden sm:inline">See More Highlights ({displayHighlights.length - initialCount} More)</span>
+                  <ChevronDown className="w-4 h-4 shrink-0" />
                 </button>
               </div>
             )}

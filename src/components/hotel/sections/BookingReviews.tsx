@@ -24,12 +24,12 @@ const BookingReviews = () => {
   ];
 
   return (
-    <section className="py-24 bg-gray-50 px-6">
+    <section className="py-12 md:py-24 bg-gray-50 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
            <div>
-              <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Trusted by Thousands</h2>
-              <p className="text-gray-600 text-xl font-medium">Read why travelers prefer booking directly with us.</p>
+              <h2 className="text-[28px] md:text-4xl font-black text-gray-900 mb-3 md:mb-4 leading-[1.2]">Trusted by Thousands</h2>
+              <p className="text-gray-600 text-base md:text-lg font-medium">Read why travelers prefer booking directly with us.</p>
            </div>
            <button className="flex items-center gap-3 bg-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-gray-900 hover:text-white transition-all shadow-sm">
               Read 500+ Verified Reviews
